@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AgreaseApp</string>
+
+    <string name="home_nav">Home</string>
 </resources>
