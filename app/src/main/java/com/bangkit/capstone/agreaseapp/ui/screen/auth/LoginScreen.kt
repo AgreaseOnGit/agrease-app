@@ -118,8 +118,7 @@ fun LoginScreen(
                             contentDescription = "Back"
                         )
                     }
-                }
-
+                },
             )
         },
     ) { paddingValue ->
@@ -130,6 +129,7 @@ fun LoginScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
@@ -142,7 +142,7 @@ fun LoginScreen(
                         .size(150.dp)
                         .align(Alignment.CenterHorizontally)
                 )
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = error,
                     style = MaterialTheme.typography.titleMedium,
@@ -173,7 +173,7 @@ fun LoginScreen(
                             .padding(20.dp),
                     )
                     {
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = "LogIn",
                             style = MaterialTheme.typography.titleLarge,
@@ -181,7 +181,7 @@ fun LoginScreen(
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimary,
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
                             TextField(
                                 value = email,
@@ -228,7 +228,7 @@ fun LoginScreen(
 
                         Button(
                             onClick = {
-//                                if (logIn != "Loading...") viewModel.login(email, password)
+                                if (logIn != "Loading...") viewModel.login(email, password)
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF0E7B75),

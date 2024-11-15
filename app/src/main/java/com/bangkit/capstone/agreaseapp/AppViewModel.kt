@@ -17,8 +17,8 @@ class AppViewModel (
 
     fun checkToken() {
         viewModelScope.launch {
-//            _isHaveToken.value = UiState.Success(userRepository.getToken().isNotEmpty())
-            _isHaveToken.value = UiState.Success(true)
+            _isHaveToken.value = UiState.Success(userRepository.getToken().isNotEmpty())
+//            _isHaveToken.value = UiState.Success(true)
         }
     }
 }

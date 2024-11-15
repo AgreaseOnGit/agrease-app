@@ -76,7 +76,7 @@ fun RegisterScreen(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
 ) {
-    var name by remember { mutableStateOf("") }
+//    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirm_password by remember { mutableStateOf("") }
@@ -133,6 +133,7 @@ fun RegisterScreen(
                 .background(MaterialTheme.colorScheme.background)
         ) {
             Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
@@ -145,7 +146,7 @@ fun RegisterScreen(
                         .size(150.dp)
                         .align(Alignment.CenterHorizontally)
                 )
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = error,
                     style = MaterialTheme.typography.titleMedium,
@@ -171,7 +172,7 @@ fun RegisterScreen(
                             .padding(20.dp),
                     )
                     {
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = "Register",
                             style = MaterialTheme.typography.titleLarge,
@@ -179,29 +180,24 @@ fun RegisterScreen(
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onPrimary,
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
 //                        Box(modifier = Modifier.fillMaxWidth()) {
-//
+//                            TextField(
+//                                value = name,
+//                                onValueChange = { name = it },
+//                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+//                                shape = RoundedCornerShape(7.dp),
+//                                placeholder = { Text("Name", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+//                                colors = TextFieldDefaults.textFieldColors(
+//                                    focusedIndicatorColor = Color.Transparent,
+//                                    unfocusedIndicatorColor = Color.Transparent,
+//                                    disabledIndicatorColor = Color.Transparent,
+//                                ),
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .height(55.dp)
+//                            )
 //                        }
-                        Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
-                                value = name,
-                                onValueChange = { name = it },
-                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
-                                shape = RoundedCornerShape(7.dp),
-                                placeholder = { Text("Name", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    disabledIndicatorColor = Color.Transparent,
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(55.dp)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
                             TextField(
                                 value = email,
@@ -272,7 +268,7 @@ fun RegisterScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                         Button(
                             onClick = {
-//                        if (register != "Loading...") viewModel.register(name, email, password, confirm_password)
+                        if (register != "Loading...") viewModel.register( email, password, confirm_password)
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF0E7B75),
