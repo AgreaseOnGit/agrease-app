@@ -32,6 +32,8 @@ import com.bangkit.capstone.agreaseapp.ui.component.BottomBar
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.LoginScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.RegisterScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.splash.SplashScreen
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 
@@ -114,17 +116,7 @@ fun AgreaseApp(
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     composable(Screen.Home.route) {
-                        HomeScreen(
-                            redirectToWelcome = { redirectToWelcome("Session is expired") },
-                            redirectToReport = {
-                                navController.navigate(Screen.Reports.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                }
-                            },
-                        )
+                        HomeScreen()
                     }
                     composable(Screen.Welcome.route) {
                         WelcomeScreen(navController = navController, message = message)
@@ -146,6 +138,17 @@ fun AgreaseApp(
                                 }
                             }
                         })
+                    }
+                    composable(Screen.Profile.route) {
+                        ProfileScreen(
+                            redirectToWelcome = { redirectToWelcome("") },
+                            redirectToMyAccount = { navController.navigate(Screen.MyAccount.route) },
+                        )
+                    }
+                    composable(Screen.MyAccount.route) {
+                        MyAccountScreen(
+                            redirectToWelcome = { redirectToWelcome("Session is expired") },
+                        )
                     }
                 }
             }

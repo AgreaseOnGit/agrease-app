@@ -8,6 +8,8 @@ import com.bangkit.capstone.agreaseapp.data.di.Injection
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.AuthViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeViewModel
+import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileViewModel
+import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountViewModel
 
 class ViewModelFactory(
     private val userRepository: UserRepository,
@@ -22,6 +24,8 @@ class ViewModelFactory(
         },
         AuthViewModel::class.java to { AuthViewModel(userRepository) },
         AppViewModel::class.java to { AppViewModel(userRepository) },
+        ProfileViewModel::class.java to { ProfileViewModel(userRepository) },
+        MyAccountViewModel::class.java to { MyAccountViewModel(userRepository) },
     )
 
     @Suppress("UNCHECKED_CAST")
