@@ -207,8 +207,8 @@ fun ProfileScreen(
                                             .background(Color.White)
                                             .padding(20.dp)
                                             .clickable {
-//                                                viewModel.logout()
-//                                                redirectToWelcome("")
+                                                viewModel.logout()
+                                                redirectToWelcome("")
                                             },
                                     ){
                                         Icon(

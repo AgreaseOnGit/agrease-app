@@ -7,8 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
@@ -16,10 +15,15 @@ class AuthViewModel (
     private val userRepository: UserRepository
 ): ViewModel() {
     private val _user: MutableState<UiState<UserModel>> = mutableStateOf(UiState.Unauthorized)
+    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
     val user: MutableState<UiState<UserModel>>
         get() = _user
 
     fun login(email: String, password: String) {
+        if(email.isEmpty() || password.isEmpty()){
+            _user.value = UiState.Error("Email or password can't be empty")
+            return
+        }
         _user.value = UiState.Loading
         viewModelScope.launch {
             userRepository.login(email = email, password = password)
@@ -44,10 +48,18 @@ class AuthViewModel (
         }
     }
 
-    fun register(name: String, email: String, password: String, confirm_password: String) {
+    fun register(email: String, password: String, confirm_password: String) {
+        if ( email.isEmpty() || password.isEmpty() || confirm_password.isEmpty()) {
+            _user.value = UiState.Error("All fields must be filled")
+            return
+        }
+        if (password != confirm_password) {
+            _user.value = UiState.Error("Password and Confirm Password must be the same")
+            return
+        }
         _user.value = UiState.Loading
         viewModelScope.launch {
-            userRepository.register(name = name, email = email, password = password, confirm_password = confirm_password)
+            userRepository.register(email = email, password = password)
                 .catch {
                     _user.value = UiState.Error(it.message.toString())
                 }

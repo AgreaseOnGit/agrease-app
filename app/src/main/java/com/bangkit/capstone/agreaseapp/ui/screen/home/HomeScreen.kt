@@ -27,6 +27,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -70,6 +71,15 @@ fun HomeScreen(
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
+    TopAppBar(
+        title = {
+            Text(text = "Home Screen")
+        },
+        actions = {
+
+        }
+    )
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -83,16 +93,20 @@ fun HomeScreen(
             )
             .verticalScroll(rememberScrollState())
     ) {
-        Text(text = "Home Screen", textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(vertical = 50.dp))
+        Text(text = "Home Screen", textAlign = TextAlign.Center, modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 50.dp))
         Column(
             modifier = modifier
                 .clip(
                     MaterialTheme.shapes.large.copy(
-                        bottomEnd = CornerSize(0.dp),
-                        bottomStart = CornerSize(0.dp)
+                        topStart = CornerSize(0.dp),
+                        topEnd = CornerSize(0.dp),
+                        bottomStart = CornerSize(0.dp),
+                        bottomEnd = CornerSize(0.dp)
                     )
                 )
-                .background(Color.White)
+                .background(Color.Gray)
                 .padding(start = 20.dp, top = 50.dp, end = 20.dp)
         ) {
             Row(
@@ -101,7 +115,31 @@ fun HomeScreen(
                     .fillMaxWidth()
             ) {
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(500.dp))
+        }
+        Text(text = "Home Screen", textAlign = TextAlign.Center, modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 50.dp))
+        Column(
+            modifier = modifier
+                .clip(
+                    MaterialTheme.shapes.large.copy(
+                        topStart = CornerSize(0.dp),
+                        topEnd = CornerSize(0.dp),
+                        bottomStart = CornerSize(0.dp),
+                        bottomEnd = CornerSize(0.dp)
+                    )
+                )
+                .background(Color.Gray)
+                .padding(start = 20.dp, top = 50.dp, end = 20.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+            }
+            Spacer(modifier = Modifier.height(500.dp))
         }
     }
 }

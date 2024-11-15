@@ -59,7 +59,7 @@ fun AgreaseApp(
         }
     }
 
-//    val context = LocalContext.current
+    val context = LocalContext.current
 
     val checkToken by viewModel.isHaveToken
 
