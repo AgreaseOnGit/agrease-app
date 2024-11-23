@@ -14,9 +14,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class HomeViewModel(
-//    private val articleRepository: ArticleRepository,
     private val userRepository: UserRepository,
-//    private val reportRepository: ReportRepository
 ): ViewModel() {
     private val _products: MutableStateFlow<UiState<List<ProductModel>>> = MutableStateFlow(UiState.Loading)
     val products: StateFlow<UiState<List<ProductModel>>>
@@ -25,10 +23,6 @@ class HomeViewModel(
     private val _user: MutableStateFlow<UiState<UserModel>> = MutableStateFlow(UiState.Loading)
     val user: StateFlow<UiState<UserModel>>
         get() = _user
-
-//    private val _isAnalisysDone: MutableStateFlow<UiState<Int>> = MutableStateFlow(UiState.Loading)
-//    val isAnalisysDone: StateFlow<UiState<Int>>
-//        get() = _isAnalisysDone
 
     fun getProducts(page: Int) {
         _products.value = UiState.Success(DummyDataSource.dummyProducts)
@@ -77,25 +71,4 @@ class HomeViewModel(
                 }
         }
     }
-
-//    fun doAnalysis(image: File) {
-//        _isAnalisysDone.value = UiState.Loading
-//        viewModelScope.launch {
-//            reportRepository.doAnalysis(image = image)
-//                .catch {
-//                    _isAnalisysDone.value = UiState.Error(it.message.toString())
-//                }
-//                .collect { data ->
-//                    try {
-//                        if (!data.success) {
-//                            _isAnalisysDone.value = UiState.Error(data.message)
-//                            return@collect
-//                        }
-//                        _isAnalisysDone.value = UiState.Success(200)
-//                    } catch (e: Exception) {
-//                        _isAnalisysDone.value = UiState.Error(e.message.toString())
-//                    }
-//                }
-//        }
-//    }
 }
