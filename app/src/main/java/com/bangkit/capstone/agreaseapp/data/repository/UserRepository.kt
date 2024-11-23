@@ -31,14 +31,14 @@ class UserRepository(
                     id = currentUser.uid,
                     email = currentUser.email ?: "",
                     name = currentUser.displayName ?: "User",
-                    profile = currentUser.photoUrl.toString(),
+                    profile = "",
                     token = "mytoken"
                 )
                 emit(
                     TemplateResponse(
                         success = true,
                         message = "Login successful",
-                        data = UserModel(currentUser.uid, currentUser.email ?: "", currentUser.displayName ?: "User", currentUser.photoUrl.toString(), "mytoken")
+                        data = UserModel(currentUser.uid, currentUser.email ?: "", currentUser.displayName ?: "User", "", "mytoken")
                     )
                 )
             } else {
@@ -83,14 +83,14 @@ class UserRepository(
                     id = currentUser.uid,
                     email = currentUser.email ?: "",
                     name = currentUser.displayName ?: "User",
-                    profile = currentUser.photoUrl.toString(),
+                    profile = "",
                     token = "mytoken"
                 )
                 emit(
                     TemplateResponse(
                         success = true,
                         message = "Registration successful",
-                        data = UserModel(currentUser.uid, currentUser.email ?: "", currentUser.displayName ?: "User", currentUser.photoUrl.toString(), "mytoken")
+                        data = UserModel(currentUser.uid, currentUser.email ?: "", currentUser.displayName ?: "User", "", "mytoken")
                     )
                 )
             } else {
