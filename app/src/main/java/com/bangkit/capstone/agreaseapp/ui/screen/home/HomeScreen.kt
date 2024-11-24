@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -39,6 +41,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -62,6 +65,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val orientation = LocalConfiguration.current.orientation
     val gridColumns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
 
@@ -119,12 +123,15 @@ fun HomeScreen(
                             )
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.padding(8.dp)
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .widthIn(max = screenWidth - 200.dp)
                             ) {
                                 Text(
                                     text = "Hi, ${user.data.name}",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
                                 )
                                 Text(
                                     text = "Welcome to Agrease App!",
@@ -138,6 +145,7 @@ fun HomeScreen(
                                 modifier = modifier
                                     .padding(4.dp)
                                     .size(45.dp)
+                                    .width(45.dp)
                                     .clip(CircleShape)
                             )
                         }
@@ -152,40 +160,47 @@ fun HomeScreen(
         Column(
             modifier = modifier
                 .background(Color.White)
-                .padding( top = 15.dp, bottom = 20.dp)
+                .padding( top = 10.dp, bottom = 20.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 15.dp, end = 15.dp)
-            ) {
-                Text(
-                    text = "Categories",
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "See All",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 10.dp, end = 10.dp)
-            ) {
-                items(10) { index ->
-                    ButtonActionMenu(
-                        text = "Cat ${index + 1}",
-                        icon = R.drawable.baseline_web,
-                        onClick = {},
-                    )
+            Text(
+                text = "Categories",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+            )
+            Spacer(modifier = Modifier.height(7.dp))
+            viewModel.categories.collectAsState(initial = UiState.Loading).value.let { categories ->
+                when (categories) {
+                    is UiState.Loading -> {
+                        LoadingIndicator()
+                        viewModel.getcategories()
+                    }
+                    is UiState.Success -> {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(14.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, end = 10.dp)
+                        ) {
+                            items(categories.data.size) { category ->
+                                ButtonActionMenu(
+                                    text = categories.data[category].name,
+                                    onClick = {},
+                                )
+                            }
+                        }
+                    }
+                    is UiState.Error -> {
+                        ErrorMessage(message = categories.errorMessage)
+                    }
+                    is UiState.Unauthorized -> {
+                        DisposableEffect(key1 = categories ){
+                            redirectToWelcome()
+                            onDispose { }
+                        }
+                    }
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             viewModel.products.collectAsState(initial = UiState.Loading).value.let { products ->
                 when (products) {
                     is UiState.Loading -> {
@@ -206,7 +221,7 @@ fun HomeScreen(
                                 style = MaterialTheme.typography.titleMedium,
                             )
                         }
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(7.dp))
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(gridColumns),
                             horizontalArrangement = Arrangement.spacedBy(14.dp),

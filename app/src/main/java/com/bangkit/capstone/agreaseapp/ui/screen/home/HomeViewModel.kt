@@ -2,6 +2,7 @@ package com.bangkit.capstone.agreaseapp.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bangkit.capstone.agreaseapp.data.model.CategoryModel
 import com.bangkit.capstone.agreaseapp.data.model.ProductModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.data.model.dummy.DummyDataSource
@@ -16,6 +17,10 @@ import java.io.File
 class HomeViewModel(
     private val userRepository: UserRepository,
 ): ViewModel() {
+    private val _categories: MutableStateFlow<UiState<List<CategoryModel>>> = MutableStateFlow(UiState.Loading)
+    val categories: StateFlow<UiState<List<CategoryModel>>>
+        get() = _categories
+
     private val _products: MutableStateFlow<UiState<List<ProductModel>>> = MutableStateFlow(UiState.Loading)
     val products: StateFlow<UiState<List<ProductModel>>>
         get() = _products
@@ -23,6 +28,10 @@ class HomeViewModel(
     private val _user: MutableStateFlow<UiState<UserModel>> = MutableStateFlow(UiState.Loading)
     val user: StateFlow<UiState<UserModel>>
         get() = _user
+
+    fun getcategories() {
+        _categories.value = UiState.Success(DummyDataSource.dummyCatgories)
+    }
 
     fun getProducts(page: Int) {
         _products.value = UiState.Success(DummyDataSource.dummyProducts)

@@ -1,5 +1,6 @@
 package com.bangkit.capstone.agreaseapp.data.model.dummy
 
+import com.bangkit.capstone.agreaseapp.data.model.CategoryModel
 import com.bangkit.capstone.agreaseapp.data.model.ProductModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 
@@ -83,5 +84,48 @@ object DummyDataSource {
         "Risky@mail.com",
         "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
         "sdawflkjslkdfjsda",
+    )
+
+    val dummyCatgories = listOf(
+        CategoryModel(
+            1,
+            "Obat Tanaman",
+        ),
+        CategoryModel(
+            2,
+            "Produk Segar",
+        ),
+        CategoryModel(
+            3,
+            "Peralatan Pertanian",
+        ),
+        CategoryModel(
+            4,
+            "Logistik Pertanian",
+        ),
+        CategoryModel(
+            5,
+            "Teknologi Pertanian",
+        ),
+        CategoryModel(
+            6,
+            "Produk Olahan",
+        ),
+        CategoryModel(
+            7,
+            "Perlengkapan Pembibitan",
+        ),
+        CategoryModel(
+            8,
+            "Bibit Tanaman"
+        ),
+        CategoryModel(
+            9,
+            "Pupuk Tanaman",
+        ),
+        CategoryModel(
+            10,
+            "Mesin Pertanian",
+        ),
     )
 }

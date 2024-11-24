@@ -30,7 +30,7 @@ class UserRepository(
                 saveUser(
                     id = currentUser.uid,
                     email = currentUser.email ?: "",
-                    name = currentUser.displayName ?: "User",
+                    name = currentUser.uid ?: "User",
                     profile = "",
                     token = "mytoken"
                 )
@@ -38,7 +38,7 @@ class UserRepository(
                     TemplateResponse(
                         success = true,
                         message = "Login successful",
-                        data = UserModel(currentUser.uid, currentUser.email ?: "", currentUser.displayName ?: "User", "", "mytoken")
+                        data = UserModel(currentUser.uid, currentUser.uid ?: "", currentUser.email ?: "User", "", "mytoken")
                     )
                 )
             } else {
@@ -82,7 +82,7 @@ class UserRepository(
                 saveUser(
                     id = currentUser.uid,
                     email = currentUser.email ?: "",
-                    name = currentUser.displayName ?: "User",
+                    name = currentUser.uid ?: "User",
                     profile = "",
                     token = "mytoken"
                 )
@@ -90,7 +90,7 @@ class UserRepository(
                     TemplateResponse(
                         success = true,
                         message = "Registration successful",
-                        data = UserModel(currentUser.uid, currentUser.email ?: "", currentUser.displayName ?: "User", "", "mytoken")
+                        data = UserModel(currentUser.uid, currentUser.uid ?: "", currentUser.email ?: "User", "", "mytoken")
                     )
                 )
             } else {
@@ -127,41 +127,98 @@ class UserRepository(
     }
 
     fun getUser(): Flow<TemplateResponse<UserModel>> {
-        val userPreference = runBlocking {
-            userPreference.getUser().first()
-        }
+//        val userPreference = runBlocking {
+//            userPreference.getUser().first()
+//        }
 
         return flow {
-            val user = apiService.getUser(token = userPreference.token)
-            if (!user.isSuccessful) {
-                val message = user.processError()
-                if (message == "Unauthorized") {
-                    logOut()
+            try {
+                val currentUser = Firebase.auth.currentUser
+                Log.d("UserRepository", "getUser: ${currentUser?.uid}")
+                if (currentUser != null) {
+                    saveUser(
+                        id = currentUser.uid,
+                        email = currentUser.email ?: "",
+                        name = currentUser.uid ?: "User",
+                        profile = "",
+                        token = "mytoken"
+                    )
+                    emit(
+                        TemplateResponse(
+                            success = true,
+                            message = "Login successful",
+                            data = UserModel(currentUser.uid, currentUser.uid ?: "", currentUser.email ?: "User", "", "mytoken")
+                        )
+                    )
+                } else {
+                    emit(
+                        TemplateResponse(
+                            success = false,
+                            message = "User not found",
+                            data = UserModel("", "", "", "", "")
+                        )
+                    )
                 }
-
+            } catch (e: Exception) {
+                val errorMessage = when (e) {
+                    is FirebaseAuthException -> {
+                        when (e.errorCode) {
+                            "ERROR_INVALID_CREDENTIAL" -> "The email or password is incorrect. Please try again."
+                            "ERROR_USER_NOT_FOUND" -> "There is no user corresponding to this email."
+                            "ERROR_INVALID_EMAIL" -> "The email address is not valid."
+                            "ERROR_USER_DISABLED" -> "The user account has been disabled by an administrator."
+                            "ERROR_TOO_MANY_REQUESTS" -> "Too many login attempts. Please try again later."
+                            else -> "Authentication failed. Please try again."
+                        }
+                    }
+                    else -> "An unexpected error occurred. Please try again."
+                }
                 emit(
                     TemplateResponse(
                         success = false,
-                        message = message,
+                        message = errorMessage,
                         data = UserModel("", "", "", "", "")
                     )
                 )
-                return@flow
             }
-
-            user.body()?.apply {
-                emit(this)
-            }
-        }.catch { e ->
-            emit(
-                TemplateResponse(
-                    success = false,
-                    message = e.message.toString(),
-                    data = UserModel("", "", "", "", "")
-                )
-            )
         }
     }
+//    fun getUser(): Flow<TemplateResponse<UserModel>> {
+//        val userPreference = runBlocking {
+//            userPreference.getUser().first()
+//        }
+//
+//        return flow {
+//            val user = apiService.getUser(token = userPreference.token)
+//            if (!user.isSuccessful) {
+//                val message = user.processError()
+//                if (message == "Unauthorized") {
+//                    logOut()
+//                }
+//
+//                emit(
+//                    TemplateResponse(
+//                        success = false,
+//                        message = message,
+//                        data = UserModel("", "", "", "", "")
+//                    )
+//                )
+//                return@flow
+//            }
+//
+//            user.body()?.apply {
+//                emit(this)
+//            }
+//        }.catch { e ->
+//            emit(
+//                TemplateResponse(
+//                    success = false,
+//                    message = e.message.toString(),
+//                    data = UserModel("", "", "", "", "")
+//                )
+//            )
+//        }
+//    }
 
     fun getUserPreference(): Flow<UserModel> = userPreference.getUser()
 
