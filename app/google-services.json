@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "779891065970",
-    "project_id": "fir-ml-dicoding-5b9f7",
-    "storage_bucket": "fir-ml-dicoding-5b9f7.firebasestorage.app"
+    "project_number": "936799801699",
+    "project_id": "agrease-labs",
+    "storage_bucket": "agrease-labs.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:779891065970:android:cc0e9b8f2893ed7ec3eeeb",
+        "mobilesdk_app_id": "1:936799801699:android:5d7bc3592a56cac5484356",
         "android_client_info": {
-          "package_name": "com.dicoding.latihantensorflowliteprediction"
+          "package_name": "com.bangkit.capstone.agreaseapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCKJdAYk5Glg3IeJsL-FsMHjcjXZup7E9A"
+          "current_key": "AIzaSyDcI9RgRNI9BhkomjRJTyalKiViAoUBuXY"
         }
       ],
       "services": {

@@ -59,7 +59,7 @@ fun AgreaseApp(
         }
     }
 
-//    val context = LocalContext.current
+    val context = LocalContext.current
 
     val checkToken by viewModel.isHaveToken
 
@@ -126,7 +126,9 @@ fun AgreaseApp(
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     composable(Screen.Home.route) {
-                        HomeScreen()
+                        HomeScreen(
+                            redirectToWelcome = { redirectToWelcome("Session is expired") },
+                        )
                     }
                     composable(Screen.Welcome.route) {
                         WelcomeScreen(navController = navController, message = message)

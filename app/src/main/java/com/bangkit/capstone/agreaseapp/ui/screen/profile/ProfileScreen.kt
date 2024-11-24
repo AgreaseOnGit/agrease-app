@@ -156,10 +156,10 @@ fun ProfileScreen(
                                                 text = "My Account",
                                                 style = MaterialTheme.typography.titleMedium,
                                             )
-//                                            Text(
-//                                                text = "Make change to your acccount",
-//                                                style = MaterialTheme.typography.bodySmall,
-//                                            )
+                                            Text(
+                                                text = "Make change to your acccount",
+                                                style = MaterialTheme.typography.bodySmall,
+                                            )
                                         }
                                         Spacer(modifier = modifier.weight(1f))
                                         Icon(
@@ -179,19 +179,19 @@ fun ProfileScreen(
                                             }
                                     ){
                                         Icon(
-                                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_settings_24),
-                                            contentDescription = "Settings",
+                                            imageVector = Icons.Default.Lock,
+                                            contentDescription = "Change Password",
                                         )
                                         Spacer(modifier = modifier.width(20.dp))
                                         Column {
                                             Text(
-                                                text = "Settings",
+                                                text = "Change Password",
                                                 style = MaterialTheme.typography.titleMedium,
                                             )
-//                                            Text(
-//                                                text = "Setting Mode",
-//                                                style = MaterialTheme.typography.bodySmall,
-//                                            )
+                                            Text(
+                                                text = "Further secure your account for safety",
+                                                style = MaterialTheme.typography.bodySmall,
+                                            )
                                         }
                                         Spacer(modifier = modifier.weight(1f))
                                         Icon(
@@ -207,8 +207,8 @@ fun ProfileScreen(
                                             .background(Color.White)
                                             .padding(20.dp)
                                             .clickable {
-                                                viewModel.logout() // memanggil fungsi logout ke viewmodel
-                                                redirectToWelcome("") // Navigasi ke layar welcome
+                                                viewModel.logout()
+                                                redirectToWelcome("")
                                             },
                                     ){
                                         Icon(
@@ -221,99 +221,99 @@ fun ProfileScreen(
                                                 text = "Log Out",
                                                 style = MaterialTheme.typography.titleMedium,
                                             )
-//                                            Text(
-//                                                text = "Further secure your account for safety",
-//                                                style = MaterialTheme.typography.bodySmall,
-//                                            )
+                                            Text(
+                                                text = "Further secure your account for safety",
+                                                style = MaterialTheme.typography.bodySmall,
+                                            )
                                         }
-//                                        Spacer(modifier = modifier.weight(1f))
-//                                        Icon(
-//                                            imageVector = Icons.Default.KeyboardArrowRight,
-//                                            contentDescription = "",
-//                                            modifier = modifier.clickable { },
-//                                        )
+                                        Spacer(modifier = modifier.weight(1f))
+                                        Icon(
+                                            imageVector = Icons.Default.KeyboardArrowRight,
+                                            contentDescription = "",
+                                            modifier = modifier.clickable { },
+                                        )
                                     }
                                 }
                             }
                         }
                     }
 
-//                    item {
-//                        Spacer(modifier = modifier.height(40.dp))
-//                        Text(
-//                            text = "More",
-//                            style = MaterialTheme.typography.titleMedium,
-//                        )
-//                        Spacer(modifier = modifier.height(20.dp))
-//                        ElevatedCard(
-//                            elevation = CardDefaults.cardElevation(
-//                                defaultElevation = 6.dp
-//                            ),
-//
-//                            modifier = modifier
-//                                .fillMaxWidth()
-//                        ) {
-//                            Column {
-//                                Row (
-//                                    verticalAlignment = Alignment.CenterVertically,
-//                                    modifier = modifier
-//                                        .fillMaxWidth()
-//                                        .background(Color.White)
-//                                        .padding(20.dp)
-//                                ){
-//                                    Icon(
-//                                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_web),
-//                                        contentDescription = "Website",
-//                                    )
-//                                    Spacer(modifier = modifier.width(20.dp))
-//                                    Column {
-//                                        Text(
-//                                            text = "Website",
-//                                            style = MaterialTheme.typography.titleMedium,
-//                                        )
-//                                        Text(
-//                                            text = "Our website for more information",
-//                                            style = MaterialTheme.typography.bodySmall,
-//                                        )
-//                                    }
-//                                    Spacer(modifier = modifier.weight(1f))
-//                                    Icon(
-//                                        imageVector = Icons.Default.KeyboardArrowRight,
-//                                        contentDescription = "",
-//                                    )
-//                                }
-//
-//                                Row (
-//                                    verticalAlignment = Alignment.CenterVertically,
-//                                    modifier = modifier
-//                                        .fillMaxWidth()
-//                                        .background(Color.White)
-//                                        .padding(20.dp)
-//                                ){
-//                                    Icon(
-//                                        imageVector = Icons.Default.Call,
-//                                        contentDescription = "Help & Support",
-//                                    )
-//                                    Spacer(modifier = modifier.width(20.dp))
-//                                    Column {
-//                                        Text(
-//                                            text = "Help & Supportte",
-//                                            style = MaterialTheme.typography.titleMedium,
-//                                        )
-//                                        Text(
-//                                            text = "We are ready to help",
-//                                            style = MaterialTheme.typography.bodySmall,
-//                                        )
-//                                    }
-//                                    Spacer(modifier = modifier.weight(1f))
-//                                    Icon(
-//                                        imageVector = Icons.Default.KeyboardArrowRight,
-//                                        contentDescription = "",
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
+                    item {
+                        Spacer(modifier = modifier.height(40.dp))
+                        Text(
+                            text = "More",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Spacer(modifier = modifier.height(20.dp))
+                        ElevatedCard(
+                            elevation = CardDefaults.cardElevation(
+                                defaultElevation = 6.dp
+                            ),
+
+                            modifier = modifier
+                                .fillMaxWidth()
+                        ) {
+                            Column {
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .background(Color.White)
+                                        .padding(20.dp)
+                                ){
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_web),
+                                        contentDescription = "Website",
+                                    )
+                                    Spacer(modifier = modifier.width(20.dp))
+                                    Column {
+                                        Text(
+                                            text = "Website",
+                                            style = MaterialTheme.typography.titleMedium,
+                                        )
+                                        Text(
+                                            text = "Our website for more information",
+                                            style = MaterialTheme.typography.bodySmall,
+                                        )
+                                    }
+                                    Spacer(modifier = modifier.weight(1f))
+                                    Icon(
+                                        imageVector = Icons.Default.KeyboardArrowRight,
+                                        contentDescription = "",
+                                    )
+                                }
+
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .background(Color.White)
+                                        .padding(20.dp)
+                                ){
+                                    Icon(
+                                        imageVector = Icons.Default.Call,
+                                        contentDescription = "Help & Support",
+                                    )
+                                    Spacer(modifier = modifier.width(20.dp))
+                                    Column {
+                                        Text(
+                                            text = "Help & Supportte",
+                                            style = MaterialTheme.typography.titleMedium,
+                                        )
+                                        Text(
+                                            text = "We are ready to help",
+                                            style = MaterialTheme.typography.bodySmall,
+                                        )
+                                    }
+                                    Spacer(modifier = modifier.weight(1f))
+                                    Icon(
+                                        imageVector = Icons.Default.KeyboardArrowRight,
+                                        contentDescription = "",
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

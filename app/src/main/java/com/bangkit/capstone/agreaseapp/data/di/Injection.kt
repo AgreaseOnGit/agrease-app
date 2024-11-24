@@ -5,6 +5,7 @@ import com.bangkit.capstone.agreaseapp.data.local.preference.UserPreference
 import com.bangkit.capstone.agreaseapp.data.local.preference.dataStore
 import com.bangkit.capstone.agreaseapp.data.remote.retrofit.ApiConfig
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
+import com.google.firebase.auth.FirebaseAuth
 
 object Injection {
 //    fun provideArticleRepository(context: Context): ArticleRepository {
@@ -16,7 +17,8 @@ object Injection {
     fun provideUserRepository(context: Context): UserRepository {
         val apiService = ApiConfig.getApiService()
         val userPreference = UserPreference.getInstance(context.dataStore)
-        return UserRepository.getInstance(userPreference = userPreference, apiService = apiService)
+        val auth = FirebaseAuth.getInstance()
+        return UserRepository.getInstance(userPreference = userPreference, apiService = apiService, auth = auth)
     }
 
 //    fun provideScheduleRepository(context: Context): ScheduleRepository {

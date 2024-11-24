@@ -76,7 +76,7 @@ fun MyAccountScreen(
     var error by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var user by remember { mutableStateOf(UserModel(0, "", "", "", "", "")) }
+    var user by remember { mutableStateOf(UserModel("", "", "", "", "")) }
     var message by remember { mutableStateOf("") }
 
     val context = LocalContext.current
