@@ -69,7 +69,17 @@ fun AgreaseApp(
 
     when (checkToken) {
         is UiState.Loading -> {
-            SplashScreen()
+            SplashScreen(
+                onTimeout = {
+                    navController.navigate(if ((checkToken as UiState.Success<Boolean>).data) {
+                        Screen.Home.route
+                    } else {
+                        Screen.Welcome.route
+                    }) {
+                        popUpTo(navController.graph.id) { inclusive = true }
+                    }
+                }
+            )
         }
 
         is UiState.Success -> {
