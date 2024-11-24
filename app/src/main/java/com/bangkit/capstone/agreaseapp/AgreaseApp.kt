@@ -35,6 +35,7 @@ import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.splash.SplashScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.transaction.TransactionScreen
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 
 
@@ -150,6 +151,11 @@ fun AgreaseApp(
                                 }
                             }
                         })
+                    }
+                    composable(Screen.Transaction.route) {
+                        TransactionScreen(
+                            redirectToWelcome = { redirectToWelcome("Session is expired") }
+                        )
                     }
                     composable(Screen.Profile.route) {
                         ProfileScreen(
