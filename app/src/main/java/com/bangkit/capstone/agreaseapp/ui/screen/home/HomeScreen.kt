@@ -235,13 +235,8 @@ fun HomeScreen(
 
                     is UiState.Unauthorized -> {
                         DisposableEffect(key1 = products ){
-                            when (products) {
-                                is UiState.Unauthorized -> {
-                                    redirectToWelcome()
-                                }
-                                else -> {}
-                            }
-                            onDispose {  }
+                            redirectToWelcome()
+                            onDispose { }
                         }
                     }
                 }
