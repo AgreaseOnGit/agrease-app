@@ -37,11 +37,11 @@ fun BottomBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 icon = Icons.Default.Home,
                 screen = Screen.Home
             ),
-//            NavigationItem(
-//                title = stringResource(R.string.reports_nav),
-//                icon = ImageVector.vectorResource(id = R.drawable.baseline_list),
-//                screen = Screen.Reports
-//            ),
+            NavigationItem(
+                title = stringResource(R.string.transaction_nav),
+                icon = ImageVector.vectorResource(id = R.drawable.baseline_list),
+                screen = Screen.Transaction
+            ),
 //            NavigationItem(
 //                title = stringResource(R.string.consult_nav),
 //                icon = ImageVector.vectorResource(id = R.drawable.comments_regular),

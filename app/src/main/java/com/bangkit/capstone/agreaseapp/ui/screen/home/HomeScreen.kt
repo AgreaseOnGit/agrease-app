@@ -82,7 +82,7 @@ fun HomeScreen(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = MaterialTheme.colorScheme.background,
+                color = Color.White
             )
             .verticalScroll(rememberScrollState())
     ) {
@@ -159,7 +159,6 @@ fun HomeScreen(
         }
         Column(
             modifier = modifier
-                .background(Color.White)
                 .padding( top = 10.dp, bottom = 20.dp)
         ) {
             Text(

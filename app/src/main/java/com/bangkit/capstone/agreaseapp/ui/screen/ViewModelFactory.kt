@@ -10,6 +10,7 @@ import com.bangkit.capstone.agreaseapp.ui.screen.auth.AuthViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountViewModel
+import com.bangkit.capstone.agreaseapp.ui.screen.transaction.TransactionViewModel
 
 class ViewModelFactory(
     private val userRepository: UserRepository,
@@ -26,6 +27,7 @@ class ViewModelFactory(
         AppViewModel::class.java to { AppViewModel(userRepository) },
         ProfileViewModel::class.java to { ProfileViewModel(userRepository) },
         MyAccountViewModel::class.java to { MyAccountViewModel(userRepository) },
+        TransactionViewModel::class.java to { TransactionViewModel(userRepository) },
     )
 
     @Suppress("UNCHECKED_CAST")
