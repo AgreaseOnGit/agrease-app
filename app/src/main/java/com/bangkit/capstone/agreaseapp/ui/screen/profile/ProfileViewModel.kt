@@ -19,24 +19,6 @@ class ProfileViewModel (
 
     fun getUser() {
 
-       // _user.value = UiState.Success(UserModel(1, "Username", "Buyer","test@example.com", "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg", ""))
-//        viewModelScope.launch {
-//            if (_user.value is UiState.Success) {
-//                return@launch
-//            }
-//            userRepository.getUserPreference()
-//                .catch {
-//                    _user.value = UiState.Error(it.message.toString())
-//                }
-//                .collect { user ->
-//                    try {
-//                        _user.value = UiState.Success(user)
-//                    } catch (e: Exception) {
-//                        _user.value = UiState.Error(e.message.toString())
-//                    }
-//                }
-//        }
-
       _user.value = UiState.Success(UserModel("1", "Sample User","test@example.com", "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg", ""))
         viewModelScope.launch {
             if (_user.value is UiState.Success) {
