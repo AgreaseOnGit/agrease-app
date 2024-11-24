@@ -136,13 +136,7 @@ fun MyAccountScreen(
 
             is UiState.Unauthorized -> {
                 DisposableEffect(key1 = respond) {
-                    when (respond) {
-                        is UiState.Unauthorized -> {
-                            redirectToWelcome()
-                        }
-
-                        else -> {}
-                    }
+                    redirectToWelcome()
                     onDispose { }
                 }
             }
