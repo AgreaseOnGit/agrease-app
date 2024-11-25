@@ -1,6 +1,7 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.home
 
 import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.bangkit.capstone.agreaseapp.CategoryActivity
 import com.bangkit.capstone.agreaseapp.R
 import com.bangkit.capstone.agreaseapp.ui.component.ButtonActionMenu
 import com.bangkit.capstone.agreaseapp.ui.component.product.ProductItem
@@ -117,7 +119,7 @@ fun HomeScreen(
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.agrease_rev),
-                                contentDescription = null,
+                                contentDescription = "Agrease Logo",
                                 modifier = Modifier
                                     .size(60.dp)
                             )
@@ -183,7 +185,14 @@ fun HomeScreen(
                             items(categories.data.size) { category ->
                                 ButtonActionMenu(
                                     text = categories.data[category].name,
-                                    onClick = {},
+                                    onClick = {
+                                        activity.startActivity(
+                                            Intent(context, CategoryActivity::class.java).putExtra(
+                                                "category",
+                                                categories.data[category].name
+                                            )
+                                        )
+                                    },
                                 )
                             }
                         }
