@@ -41,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -143,47 +144,49 @@ fun MyAccountScreen(
         }
     }
 
-    Box(
-        modifier = modifier
+    Column(
+        modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-        ) {
-            Text(
-                text =  message,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.Green
-            )
-            Text(
-                text = error,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.Red
-            )
+        Text(
+            text =  message,
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.Green
+        )
+        Text(
+            text = error,
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.Red
+        )
 
-            imageUri?.let {
-                if (Build.VERSION.SDK_INT < 28) {
-                    bitMap.value = MediaStore.Images.Media.getBitmap(
-                        context.contentResolver,
-                        imageUri
-                    )
-                } else {
-                    val source =
-                        ImageDecoder.createSource(context.contentResolver, imageUri!!)
-                    bitMap.value = ImageDecoder.decodeBitmap(source)
-                }
+        imageUri?.let {
+            if (Build.VERSION.SDK_INT < 28) {
+                bitMap.value = MediaStore.Images.Media.getBitmap(
+                    context.contentResolver,
+                    imageUri
+                )
+            } else {
+                val source =
+                    ImageDecoder.createSource(context.contentResolver, imageUri!!)
+                bitMap.value = ImageDecoder.decodeBitmap(source)
+            }
 
-                bitMap.value?.let {
+            bitMap.value?.let {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                ) {
                     Image(
                         bitmap = it.asImageBitmap(),
                         contentDescription = "Profile Image",
                         contentScale = ContentScale.Crop,
                         modifier = modifier
                             .padding(4.dp)
-                            .size(60.dp)
+                            .size(150.dp)
                             .clip(CircleShape)
                             .clickable {
                                 launcher.launch("image/*")
@@ -191,76 +194,84 @@ fun MyAccountScreen(
                     )
                 }
             }
+        }
 
-            if (imageUri == null) {
+        if (imageUri == null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+            ) {
                 AsyncImage(
                     model = if(user.profile.isNotEmpty()) user.profile else "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg",
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = modifier
                         .padding(4.dp)
-                        .size(60.dp)
+                        .size(150.dp)
                         .clip(CircleShape)
                         .clickable {
                             launcher.launch("image/*")
                         }
                 )
             }
-            Text("Name")
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                label = {  },
-                leadingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            )
+        }
+        Text("Name")
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            label = {  },
+            leadingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Email")
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                label = {  },
-                enabled = false,
-                leadingIcon = { Icon(Icons.Filled.MailOutline, contentDescription = null) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Email")
+        TextField(
+            value = email,
+            onValueChange = { email = it },
+            label = {  },
+            enabled = false,
+            leadingIcon = { Icon(Icons.Filled.MailOutline, contentDescription = null) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-//                    if (submit != "Loading..." ) {
-//                        submit = "Loading..."
-//                        message = ""
-//                        error = ""
-//                        if (imageUri == null){
-//                            viewModel.updateUser(
-//                                name = name,
-//                                profile = null,
-//                                email = email,
-//                            )
-//                        } else {
-//                            viewModel.updateUser(
-//                                name,
-//                                uriToFile(imageUri!!),
-//                                email,
-//                            )
-//                        }
+        Button(
+            onClick = {
+//                if (submit != "Loading..." ) {
+//                    submit = "Loading..."
+//                    message = ""
+//                    error = ""
+//                    if (imageUri == null){
+//                        viewModel.updateUser(
+//                            name = name,
+//                            profile = null,
+//                            email = email,
+//                        )
+//                    } else {
+//                        viewModel.updateUser(
+//                            name,
+//                            uriToFile(imageUri!!),
+//                            email,
+//                        )
 //                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text(submit)
-            }
+//                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+        ) {
+            Text(submit)
         }
     }
 }

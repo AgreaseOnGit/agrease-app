@@ -9,6 +9,7 @@ import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.AuthViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.category.CategoryViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeViewModel
+import com.bangkit.capstone.agreaseapp.ui.screen.product.ProductViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.transaction.TransactionViewModel
@@ -30,6 +31,7 @@ class ViewModelFactory(
         MyAccountViewModel::class.java to { MyAccountViewModel(userRepository) },
         TransactionViewModel::class.java to { TransactionViewModel(userRepository) },
         CategoryViewModel::class.java to { CategoryViewModel(userRepository) },
+        ProductViewModel::class.java to { ProductViewModel(userRepository) },
     )
 
     @Suppress("UNCHECKED_CAST")

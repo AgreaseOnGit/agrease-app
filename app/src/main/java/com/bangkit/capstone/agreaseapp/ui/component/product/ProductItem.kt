@@ -111,7 +111,7 @@ fun ProductItem(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.rating),
-                        contentDescription = null,
+                        contentDescription = "rating",
                         modifier = Modifier
                             .size(13.dp)
                     )
