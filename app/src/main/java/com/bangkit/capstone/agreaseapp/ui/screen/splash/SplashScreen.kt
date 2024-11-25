@@ -33,7 +33,6 @@ fun SplashScreen (onTimeout: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .background(custom_green)
-//            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -43,13 +42,11 @@ fun SplashScreen (onTimeout: () -> Unit) {
                 .padding(16.dp),
         ) {
             Image(
-                painter = painterResource(R.drawable.logo), // Replace with your app logo
+                painter = painterResource(R.drawable.logo_no_bg), // Replace with your app logo
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-//                    .size(300.dp)
                     .align(Alignment.CenterHorizontally)
-//                    .clip(CircleShape)
             )
         }
     }

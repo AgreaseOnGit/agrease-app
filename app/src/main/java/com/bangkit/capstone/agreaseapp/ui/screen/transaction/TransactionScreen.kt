@@ -83,9 +83,10 @@ fun TransactionScreen(
 
             is UiState.Success -> {
                 LazyColumn (
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 20.dp),
                     modifier = modifier
                         .fillMaxSize()
+                        .heightIn(max =(100.dp * transactions.data.size) + (10.dp * (transactions.data.size - 1)))
                 ) {
                     if (transactions.data.isEmpty()) {
                         item {
@@ -101,10 +102,10 @@ fun TransactionScreen(
                                 modifier = modifier
                                     .fillMaxWidth()
                                     .padding(
-                                        top = 10.dp,
-                                        bottom = 8.dp,
-                                        start = 10.dp,
-                                        end = 10.dp,
+                                        top = 5.dp,
+                                        bottom = 5.dp,
+                                        start = 5.dp,
+                                        end = 5.dp,
                                     )
                                     .clickable { }
                             ) {
@@ -155,29 +156,6 @@ fun TransactionScreen(
                                 }
                             }
                         }
-//                        item {
-//                            val rowCount = (transactions.data.size + gridColumns - 1) / gridColumns
-//                            val gridHeight = (300.dp * rowCount) + (10.dp * (rowCount - 1))
-//                            LazyVerticalGrid(
-//                                columns = GridCells.Fixed(gridColumns),
-//                                horizontalArrangement = Arrangement.spacedBy(14.dp),
-//                                verticalArrangement = Arrangement.spacedBy(10.dp),
-//                                modifier = Modifier
-//                                    .padding(horizontal = 10.dp)
-//                                    .heightIn(max = gridHeight)
-//                            ) {
-//                                items(transactions.data) { transaction ->
-//                                    ProductItem(
-//                                        name = transaction.name,
-//                                        price = transaction.price,
-//                                        image = transaction.image,
-//                                        rating = transaction.rating,
-//                                        onNavigateToDetailScreen = {},
-//                                        id = transaction.id,
-//                                    )
-//                                }
-//                            }
-//                        }
                     }
                 }
             }
