@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -54,6 +55,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -81,6 +83,8 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var logIn by remember { mutableStateOf("LogIn") }
     var error by remember { mutableStateOf("") }
+
+    var isPasswordVisible by remember { mutableStateOf(false) }
 
 
     DisposableEffect(key1 = user ){
@@ -147,7 +151,8 @@ fun LoginScreen(
                     text = error,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Red,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
                 )
                 ElevatedCard (
                     elevation = CardDefaults.cardElevation(
@@ -186,6 +191,10 @@ fun LoginScreen(
                             TextField(
                                 value = email,
                                 onValueChange = { email = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Email,
+                                    imeAction = ImeAction.Next
+                                ),
                                 trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Email", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -205,8 +214,15 @@ fun LoginScreen(
                             TextField(
                                 value = password,
                                 onValueChange = { password = it },
-                                trailingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
-                                visualTransformation = PasswordVisualTransformation(),
+                                trailingIcon = {
+                                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                                        Icon(
+                                            imageVector = if (isPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
+                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                                        )
+                                    }
+                                },
+                                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Password", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(

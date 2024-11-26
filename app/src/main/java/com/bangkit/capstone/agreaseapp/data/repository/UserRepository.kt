@@ -27,6 +27,7 @@ class UserRepository(
         val login = apiService.login(email, password)
         if (!login.isSuccessful) {
             val message = login.processError()
+            Log.d("UserRepository", "login: $message")
 
             emit(
                 TemplateResponse(

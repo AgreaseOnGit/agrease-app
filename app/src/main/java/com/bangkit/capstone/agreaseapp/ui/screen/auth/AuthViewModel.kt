@@ -1,5 +1,6 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.auth
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlin.reflect.typeOf
 
 class AuthViewModel (
     private val userRepository: UserRepository
@@ -40,8 +42,8 @@ class AuthViewModel (
                 .collect { data ->
                     try {
                         if (!data.success) {
-                            if (data.message == "Unauthorized") {
-                                _user.value = UiState.Error("Email or Password is incorrect. Please try again.")
+                            if (data.message == "Not found") {
+                                _user.value = UiState.Error("Email or Password is incorrect.\nPlease try again.")
                                 return@collect
                             }
                             _user.value = UiState.Error(data.message)
@@ -61,7 +63,7 @@ class AuthViewModel (
             return
         }
         if (password != confirm_password) {
-            _auth.value = UiState.Error("Password and Confirm Password must be the same")
+            _auth.value = UiState.Error("Password and Confirm Password\nmust be the same")
             return
         }
         _auth.value = UiState.Loading
@@ -86,7 +88,7 @@ class AuthViewModel (
 
 
     fun verify( codeOTP: Int) {
-        if (codeOTP.toString().isEmpty()) {
+        if (codeOTP == 0) {
             _auth.value = UiState.Error("Code OTP can't be empty")
             return
         }

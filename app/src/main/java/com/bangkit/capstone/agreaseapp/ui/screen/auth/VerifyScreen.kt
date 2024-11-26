@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -45,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -67,7 +69,7 @@ fun VerifyScreen(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
 ) {
-    var codeOTP by remember { mutableStateOf(0) }
+    var codeOTP by remember { mutableStateOf("") }
 
     val auth: UiState<RegisterResponse> by viewModel.auth
     var verify by remember { mutableStateOf("Verify") }
@@ -168,8 +170,11 @@ fun VerifyScreen(
                         Spacer(modifier = Modifier.height(30.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
                             TextField(
-                                value = codeOTP.toString(),
-                                onValueChange = { codeOTP = it.toInt() },
+                                value = codeOTP,
+                                onValueChange = { codeOTP = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Number
+                                ),
                                 trailingIcon = { Icon(Icons.Filled.MailOutline, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Your Code OTP", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -187,7 +192,7 @@ fun VerifyScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                         Button(
                             onClick = {
-                                if (verify != "Loading...") viewModel.verify( codeOTP = codeOTP)
+                                if (verify != "Loading...") viewModel.verify( codeOTP = if (codeOTP.isNotEmpty()) codeOTP.toInt() else 0)
 
                             },
                             colors = ButtonDefaults.buttonColors(

@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
@@ -56,6 +57,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,6 +89,9 @@ fun BuyerRegisterScreen(
     var phone by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
 
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isConfirmPasswordVisible by remember { mutableStateOf(false) }
+
     val checkRegistered by viewModel.isRegistered
     val auth: UiState<RegisterResponse> by viewModel.auth
     var register by remember { mutableStateOf("Buyer Register") }
@@ -94,15 +99,17 @@ fun BuyerRegisterScreen(
 
     LaunchedEffect(key1 = checkRegistered) {
         viewModel.checkRegistered()
+    }
+
+    DisposableEffect(key1 = auth, key2 = checkRegistered){
         when (checkRegistered) {
             is UiState.Success -> {
-                redirectToVerify()
+                if ((checkRegistered as UiState.Success<Boolean>).data) {
+                    redirectToVerify()
+                }
             }
             else -> {}
         }
-    }
-
-    DisposableEffect(key1 = auth ){
         when (auth) {
             is UiState.Loading -> {
                 register = "Loading..."
@@ -168,7 +175,8 @@ fun BuyerRegisterScreen(
                     text = error,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Red,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
                 )
                 ElevatedCard (
                     elevation = CardDefaults.cardElevation(
@@ -193,6 +201,10 @@ fun BuyerRegisterScreen(
                             TextField(
                                 value = displayName,
                                 onValueChange = { displayName = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Next
+                                ),
                                 trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Name", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -212,6 +224,10 @@ fun BuyerRegisterScreen(
                             TextField(
                                 value = email,
                                 onValueChange = { email = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Email,
+                                    imeAction = ImeAction.Next
+                                ),
                                 trailingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Email", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -231,7 +247,14 @@ fun BuyerRegisterScreen(
                             TextField(
                                 value = password,
                                 onValueChange = { password = it },
-                                trailingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                                trailingIcon = {
+                                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                                        Icon(
+                                            imageVector = if (isPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
+                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                                        )
+                                    }
+                                },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Password", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -239,10 +262,10 @@ fun BuyerRegisterScreen(
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
-                                visualTransformation = PasswordVisualTransformation(),
+                                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 keyboardOptions = KeyboardOptions.Default.copy(
                                     keyboardType = KeyboardType.Password,
-                                    imeAction = ImeAction.Done
+                                    imeAction = ImeAction.Next
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -256,17 +279,24 @@ fun BuyerRegisterScreen(
                             TextField(
                                 value = confirm_password,
                                 onValueChange = { confirm_password = it },
-                                trailingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                                trailingIcon = {
+                                    IconButton(onClick = { isConfirmPasswordVisible = !isConfirmPasswordVisible }) {
+                                        Icon(
+                                            imageVector = if (isConfirmPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
+                                            contentDescription = if (isConfirmPasswordVisible) "Hide password" else "Show password"
+                                        )
+                                    }
+                                },
                                 shape = RoundedCornerShape(7.dp),placeholder = { Text("Confirm Password", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
-                                visualTransformation = PasswordVisualTransformation(),
+                                visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 keyboardOptions = KeyboardOptions.Default.copy(
                                     keyboardType = KeyboardType.Password,
-                                    imeAction = ImeAction.Done
+                                    imeAction = ImeAction.Next
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -279,6 +309,10 @@ fun BuyerRegisterScreen(
                             TextField(
                                 value = phone,
                                 onValueChange = { phone = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Phone,
+                                    imeAction = ImeAction.Next
+                                ),
                                 trailingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Phone Number", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -298,6 +332,10 @@ fun BuyerRegisterScreen(
                             TextField(
                                 value = address,
                                 onValueChange = { address = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Done
+                                ),
                                 trailingIcon = { Icon(Icons.Filled.LocationOn, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Address", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },

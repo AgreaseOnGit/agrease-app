@@ -30,7 +30,8 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("verify/{userid}")
-    @Headers("Accept: application/json")
+//    @Headers("Accept: application/json")
+    @Headers("Content-Type: application/json")
     suspend fun verify(
         @Path("userid") userid: String,
         @Field("codeOTP") codeOTP: Int

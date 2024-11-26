@@ -110,7 +110,7 @@ fun AgreaseApp(
                 },
                 bottomBar =
                 {
-                    if (currentRoute != Screen.Login.route && currentRoute != Screen.Welcome.route && currentRoute != Screen.BuyerRegister.route && currentRoute != Screen.SellerRegister.route && currentRoute != null) {
+                    if (currentRoute != Screen.Login.route && currentRoute != Screen.Welcome.route && currentRoute != Screen.BuyerRegister.route && currentRoute != Screen.SellerRegister.route && currentRoute!= Screen.Verify.route && currentRoute != null) {
                         BottomBar(navController)
                     }
                 },
