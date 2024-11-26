@@ -1,5 +1,7 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.category
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.bangkit.capstone.agreaseapp.R
+import com.bangkit.capstone.agreaseapp.activity.DetailProductActivity
 import com.bangkit.capstone.agreaseapp.ui.component.product.ProductItem
 import com.bangkit.capstone.agreaseapp.ui.component.respond.ErrorMessage
 import com.bangkit.capstone.agreaseapp.ui.component.respond.LoadingIndicator
@@ -48,6 +51,9 @@ fun CategoryScreen(
     ),
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val activity = LocalContext.current as Activity
+    
     val orientation = LocalConfiguration.current.orientation
     val gridColumns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
 
@@ -91,7 +97,14 @@ fun CategoryScreen(
                                 price = product.price,
                                 image = product.image,
                                 rating = product.rating,
-                                onNavigateToDetailScreen = {},
+                                onNavigateToDetailScreen = {
+                                    activity.startActivity(
+                                        Intent(context, DetailProductActivity::class.java).putExtra(
+                                            "id",
+                                            product.id
+                                        )
+                                    )
+                                },
                                 id = product.id,
                             )
                         }

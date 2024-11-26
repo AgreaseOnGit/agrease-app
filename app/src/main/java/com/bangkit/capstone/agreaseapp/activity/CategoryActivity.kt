@@ -1,4 +1,4 @@
-package com.bangkit.capstone.agreaseapp
+package com.bangkit.capstone.agreaseapp.activity
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity

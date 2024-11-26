@@ -46,8 +46,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.bangkit.capstone.agreaseapp.CategoryActivity
+import com.bangkit.capstone.agreaseapp.activity.CategoryActivity
 import com.bangkit.capstone.agreaseapp.R
+import com.bangkit.capstone.agreaseapp.activity.DetailProductActivity
 import com.bangkit.capstone.agreaseapp.ui.component.ButtonActionMenu
 import com.bangkit.capstone.agreaseapp.ui.component.product.ProductItem
 import com.bangkit.capstone.agreaseapp.ui.component.respond.ErrorMessage
@@ -244,7 +245,14 @@ fun HomeScreen(
                                     price = product.price,
                                     image = product.image,
                                     rating = product.rating,
-                                    onNavigateToDetailScreen = {},
+                                    onNavigateToDetailScreen = {
+                                        activity.startActivity(
+                                            Intent(context, DetailProductActivity::class.java).putExtra(
+                                                "id",
+                                                product.id
+                                            )
+                                        )
+                                    },
                                     id = product.id,
                                 )
                             }
