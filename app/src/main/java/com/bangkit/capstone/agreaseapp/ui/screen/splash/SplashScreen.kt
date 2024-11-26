@@ -17,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bangkit.capstone.agreaseapp.R
-import com.bangkit.capstone.agreaseapp.ui.screen.auth.RegisterScreen
 import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 import com.bangkit.capstone.agreaseapp.ui.theme.custom_green
 import kotlinx.coroutines.delay

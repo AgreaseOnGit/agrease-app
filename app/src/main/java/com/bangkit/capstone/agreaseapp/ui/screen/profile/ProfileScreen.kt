@@ -94,7 +94,7 @@ fun ProfileScreen(
                                         .padding(20.dp)
                                 ){
                                     AsyncImage(
-                                        model = profile,
+                                        model = "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg",
                                         contentDescription = "Profile Image",
                                         contentScale = ContentScale.Crop,
                                         modifier = modifier
@@ -105,7 +105,7 @@ fun ProfileScreen(
                                     Spacer(modifier = modifier.width(20.dp))
                                     Column {
                                         Text(
-                                            text = name,
+                                            text = nama,
                                             style = MaterialTheme.typography.titleMedium,
                                         )
                                         Text(

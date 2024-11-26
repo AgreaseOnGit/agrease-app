@@ -60,7 +60,7 @@ fun BottomBar(navController: NavHostController, modifier: Modifier = Modifier) {
         )
         navigationItems.map { item ->
             var isSelected: Boolean = currentRoute == item.screen.route
-            if (item.screen.route == Screen.Profile.route && (currentRoute == Screen.ChangePassword.route || currentRoute == Screen.MyAccount.route)) isSelected = true
+            if (item.screen.route == Screen.Profile.route && currentRoute == Screen.MyAccount.route) isSelected = true
 
             NavigationBarItem(
                 icon = {

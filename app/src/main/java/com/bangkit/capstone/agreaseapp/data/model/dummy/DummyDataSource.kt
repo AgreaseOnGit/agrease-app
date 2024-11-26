@@ -78,14 +78,6 @@ object DummyDataSource {
         ),
     )
 
-    val dummyUser = UserModel(
-        "1",
-        "Risky",
-        "Risky@mail.com",
-        "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
-        "sdawflkjslkdfjsda",
-    )
-
     val dummyCatgories = listOf(
         CategoryModel(
             1,

@@ -17,8 +17,7 @@ object Injection {
     fun provideUserRepository(context: Context): UserRepository {
         val apiService = ApiConfig.getApiService()
         val userPreference = UserPreference.getInstance(context.dataStore)
-        val auth = FirebaseAuth.getInstance()
-        return UserRepository.getInstance(userPreference = userPreference, apiService = apiService, auth = auth)
+        return UserRepository.getInstance(userPreference = userPreference, apiService = apiService)
     }
 
 //    fun provideScheduleRepository(context: Context): ScheduleRepository {

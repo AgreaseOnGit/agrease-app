@@ -77,7 +77,7 @@ fun MyAccountScreen(
     var error by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var user by remember { mutableStateOf(UserModel("", "", "", "", "")) }
+    var user by remember { mutableStateOf(UserModel("", "", "", "", "", "", false)) }
     var message by remember { mutableStateOf("") }
 
     val context = LocalContext.current
@@ -123,7 +123,7 @@ fun MyAccountScreen(
                 submit = "Submit"
 
                 DisposableEffect(key1 = user){
-                    if (name == "") name = user.name
+                    if (name == "") name = user.nama
                     if (email == "") email = user.email
 
                     onDispose { }
@@ -205,7 +205,7 @@ fun MyAccountScreen(
                     .padding(4.dp),
             ) {
                 AsyncImage(
-                    model = if(user.profile.isNotEmpty()) user.profile else "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg",
+                    model = "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg",
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = modifier
