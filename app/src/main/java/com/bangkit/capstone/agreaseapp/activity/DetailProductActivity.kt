@@ -1,7 +1,6 @@
 package com.bangkit.capstone.agreaseapp.activity
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,8 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.bangkit.capstone.agreaseapp.R
-import com.bangkit.capstone.agreaseapp.ui.screen.category.CategoryScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.product.ProductScreen
 import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
@@ -29,7 +26,7 @@ class DetailProductActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val idProduct = intent.getIntExtra("id", 0)
+        val idProduct = intent.getStringExtra("id") ?: ""
 
         setContent {
             AgreaseTheme {
