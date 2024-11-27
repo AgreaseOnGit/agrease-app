@@ -1,6 +1,5 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.auth
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -11,7 +10,6 @@ import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import kotlin.reflect.typeOf
 
 class AuthViewModel (
     private val userRepository: UserRepository

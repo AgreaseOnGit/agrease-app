@@ -2,7 +2,6 @@ package com.bangkit.capstone.agreaseapp.data.model.dummy
 
 import com.bangkit.capstone.agreaseapp.data.model.CategoryModel
 import com.bangkit.capstone.agreaseapp.data.model.ProductModel
-import com.bangkit.capstone.agreaseapp.data.model.UserModel
 
 object DummyDataSource {
     val dummyProducts = listOf(

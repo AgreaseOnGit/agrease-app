@@ -46,8 +46,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.bangkit.capstone.agreaseapp.activity.CategoryActivity
 import com.bangkit.capstone.agreaseapp.R
+import com.bangkit.capstone.agreaseapp.activity.CategoryActivity
 import com.bangkit.capstone.agreaseapp.activity.DetailProductActivity
 import com.bangkit.capstone.agreaseapp.ui.component.ButtonActionMenu
 import com.bangkit.capstone.agreaseapp.ui.component.product.ProductItem
@@ -208,7 +208,6 @@ fun HomeScreen(
                         }
                     }
 
-                    else -> {}
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
@@ -273,7 +272,6 @@ fun HomeScreen(
                         }
                     }
 
-                    else -> { }
                 }
             }
         }

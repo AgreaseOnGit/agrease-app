@@ -1,10 +1,8 @@
 package com.bangkit.capstone.agreaseapp.data.remote.retrofit
 
-import com.bangkit.capstone.agreaseapp.data.model.RegisterModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.data.remote.response.RegisterResponse
 import com.bangkit.capstone.agreaseapp.data.remote.response.TemplateResponse
-
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

@@ -5,7 +5,6 @@ import com.bangkit.capstone.agreaseapp.data.local.preference.UserPreference
 import com.bangkit.capstone.agreaseapp.data.local.preference.dataStore
 import com.bangkit.capstone.agreaseapp.data.remote.retrofit.ApiConfig
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
-import com.google.firebase.auth.FirebaseAuth
 
 object Injection {
 //    fun provideArticleRepository(context: Context): ArticleRepository {
