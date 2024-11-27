@@ -13,6 +13,8 @@ sealed class Screen(val route: String) {
 
     // Auth
     data object Login : Screen("login")
-    data object Register : Screen("register")
+    data object BuyerRegister : Screen("buyer_register")
+    data object SellerRegister : Screen("seller_register")
+    data object Verify : Screen("verify")
     data object Welcome : Screen("welcome")
 }

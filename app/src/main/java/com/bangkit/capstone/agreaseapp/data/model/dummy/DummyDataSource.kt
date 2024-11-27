@@ -2,7 +2,6 @@ package com.bangkit.capstone.agreaseapp.data.model.dummy
 
 import com.bangkit.capstone.agreaseapp.data.model.CategoryModel
 import com.bangkit.capstone.agreaseapp.data.model.ProductModel
-import com.bangkit.capstone.agreaseapp.data.model.UserModel
 
 object DummyDataSource {
     val dummyProducts = listOf(
@@ -76,14 +75,6 @@ object DummyDataSource {
             "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
             "4.9",
         ),
-    )
-
-    val dummyUser = UserModel(
-        "1",
-        "Risky",
-        "Risky@mail.com",
-        "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg",
-        "sdawflkjslkdfjsda",
     )
 
     val dummyCatgories = listOf(

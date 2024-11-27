@@ -2,27 +2,22 @@ package com.bangkit.capstone.agreaseapp.ui.screen.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -50,62 +45,58 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bangkit.capstone.agreaseapp.R
-import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.remote.response.RegisterResponse
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
+import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
-    navController: NavHostController,
-    redirectToHome: () -> Unit = {},
+fun VerifyScreen(
+    navController: NavHostController = rememberNavController(),
+    redirectToLogin: () -> Unit = {},
     viewModel: AuthViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
 ) {
-    val user: UiState<UserModel> by viewModel.user
+    var codeOTP by remember { mutableStateOf("") }
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var logIn by remember { mutableStateOf("LogIn") }
+    val auth: UiState<RegisterResponse> by viewModel.auth
+    var verify by remember { mutableStateOf("Verify") }
     var error by remember { mutableStateOf("") }
 
-    var isPasswordVisible by remember { mutableStateOf(false) }
-
-
-    DisposableEffect(key1 = user ){
-        when (user) {
+    DisposableEffect(key1 = auth ){
+        when (auth) {
             is UiState.Loading -> {
-                logIn = "Loading..."
+                verify = "Loading..."
             }
             is UiState.Error -> {
-                logIn = "LogIn"
-                error = (user as UiState.Error).errorMessage
+                verify = "Verify"
+                error = (auth as UiState.Error).errorMessage
             }
             is UiState.Success -> {
-                redirectToHome()
+                redirectToLogin()
             }
             else -> {}
         }
         onDispose {  }
     }
 
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "LogIn",
+                        text = "Verify User",
                         style = MaterialTheme.typography.titleMedium,
                     )
                 },
@@ -118,7 +109,8 @@ fun LoginScreen(
                             contentDescription = "Back"
                         )
                     }
-                },
+                }
+
             )
         },
     ) { paddingValue ->
@@ -147,8 +139,7 @@ fun LoginScreen(
                     text = error,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                    textAlign = TextAlign.Center
                 )
                 ElevatedCard (
                     elevation = CardDefaults.cardElevation(
@@ -158,15 +149,10 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(shape = CardDefaults.shape)
-                        .shadow(
-                            elevation = 0.dp,
-                            spotColor = Color.Transparent,
-                            shape = CardDefaults.shape
-                        )
-                        .padding(bottom = 46.dp, top = 16.dp, start = 16.dp, end = 16.dp)
-                )
-                {
-                    Column (
+                        .shadow(elevation = 0.dp, spotColor = Color.Transparent, shape = CardDefaults.shape)
+                        .padding(bottom = 16.dp, top = 16.dp, start = 16.dp, end = 16.dp)
+                ) {
+                    Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
@@ -174,61 +160,26 @@ fun LoginScreen(
                             .padding(20.dp),
                     )
                     {
-                        Spacer(modifier = Modifier.height(5.dp))
                         Text(
-                            text = "LogIn",
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            text = "Check the email you registered to get the OTP code.",
+                            style = MaterialTheme.typography.titleMedium,
+                            textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(30.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
                             TextField(
-                                value = email,
-                                onValueChange = { email = it },
+                                value = codeOTP,
+                                onValueChange = { codeOTP = it },
                                 keyboardOptions = KeyboardOptions.Default.copy(
-                                    keyboardType = KeyboardType.Email,
-                                    imeAction = ImeAction.Next
+                                    keyboardType = KeyboardType.Number
                                 ),
-                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                                trailingIcon = { Icon(Icons.Filled.MailOutline, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
-                                placeholder = { Text("Email", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                                placeholder = { Text("Your Code OTP", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(55.dp)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(15.dp))
-                        Box (modifier = Modifier.fillMaxWidth()) {
-                            TextField(
-                                value = password,
-                                onValueChange = { password = it },
-                                trailingIcon = {
-                                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-                                        Icon(
-                                            imageVector = if (isPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
-                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
-                                        )
-                                    }
-                                },
-                                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                shape = RoundedCornerShape(7.dp),
-                                placeholder = { Text("Password", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    disabledIndicatorColor = Color.Transparent,
-                                ),
-                                keyboardOptions = KeyboardOptions.Default.copy(
-                                    keyboardType = KeyboardType.Password,
-                                    imeAction = ImeAction.Done
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -237,10 +188,10 @@ fun LoginScreen(
                         }
 
                         Spacer(modifier = Modifier.height(20.dp))
-
                         Button(
                             onClick = {
-                                if (logIn != "Loading...") viewModel.login(email, password)
+                                if (verify != "Loading...") viewModel.verify( codeOTP = if (codeOTP.isNotEmpty()) codeOTP.toInt() else 0)
+
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF0E7B75),
@@ -250,35 +201,25 @@ fun LoginScreen(
                                 .height(45.dp)
                         ) {
                             Text(
-                                text = logIn,
+                                verify,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                )
+                            )
                         }
-                        Spacer(modifier = Modifier.height(30.dp))
 
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "Don’t have an account?",
-                                style = MaterialTheme.typography.titleMedium,
-                            )
-                            Spacer(modifier = Modifier.width(5.dp))
-                            Text(
-                                text = "Register",
-                                style = MaterialTheme
-                                    .typography.titleMedium
-                                    .copy(textDecoration = TextDecoration.Underline),
-                                modifier = Modifier.clickable {
-                                    navController.popBackStack()
-                                }
-                            )
-                        }
+
                     }
                 }
+
             }
         }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun VerifyScreenPreview() {
+    AgreaseTheme {
+        VerifyScreen()
     }
 }

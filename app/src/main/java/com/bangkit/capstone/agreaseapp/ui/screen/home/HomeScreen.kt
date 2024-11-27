@@ -46,8 +46,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.bangkit.capstone.agreaseapp.activity.CategoryActivity
 import com.bangkit.capstone.agreaseapp.R
+import com.bangkit.capstone.agreaseapp.activity.CategoryActivity
 import com.bangkit.capstone.agreaseapp.activity.DetailProductActivity
 import com.bangkit.capstone.agreaseapp.ui.component.ButtonActionMenu
 import com.bangkit.capstone.agreaseapp.ui.component.product.ProductItem
@@ -131,7 +131,7 @@ fun HomeScreen(
                                     .widthIn(max = screenWidth - 200.dp)
                             ) {
                                 Text(
-                                    text = "Hi, ${user.data.name}",
+                                    text = "Hi, ${user.data.nama}",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center
@@ -142,7 +142,7 @@ fun HomeScreen(
                                 )
                             }
                             AsyncImage(
-                                model = user.data.profile,
+                                model = "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg",
                                 contentDescription = "Profile Image",
                                 contentScale = ContentScale.Crop,
                                 modifier = modifier
@@ -207,6 +207,7 @@ fun HomeScreen(
                             onDispose { }
                         }
                     }
+
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
@@ -270,6 +271,7 @@ fun HomeScreen(
                             onDispose { }
                         }
                     }
+
                 }
             }
         }

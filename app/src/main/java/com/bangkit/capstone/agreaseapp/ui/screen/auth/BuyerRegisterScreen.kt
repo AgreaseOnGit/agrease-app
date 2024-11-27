@@ -20,8 +20,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -37,6 +41,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +57,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,7 +67,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bangkit.capstone.agreaseapp.R
-import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.remote.response.RegisterResponse
 import com.bangkit.capstone.agreaseapp.ui.navigation.Screen
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
@@ -69,33 +75,51 @@ import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(
+fun BuyerRegisterScreen(
     navController: NavHostController = rememberNavController(),
-    redirectToHome: () -> Unit = {},
+    redirectToVerify: () -> Unit = {},
     viewModel: AuthViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
 ) {
-//    var name by remember { mutableStateOf("") }
+    var displayName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirm_password by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
 
-    val user: UiState<UserModel> by viewModel.user
-    var register by remember { mutableStateOf("Register") }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isConfirmPasswordVisible by remember { mutableStateOf(false) }
+
+    val checkRegistered by viewModel.isRegistered
+    val auth: UiState<RegisterResponse> by viewModel.auth
+    var register by remember { mutableStateOf("Buyer Register") }
     var error by remember { mutableStateOf("") }
 
-    DisposableEffect(key1 = user ){
-        when (user) {
+    LaunchedEffect(key1 = checkRegistered) {
+        viewModel.checkRegistered()
+    }
+
+    DisposableEffect(key1 = auth, key2 = checkRegistered){
+        when (checkRegistered) {
+            is UiState.Success -> {
+                if ((checkRegistered as UiState.Success<Boolean>).data) {
+                    redirectToVerify()
+                }
+            }
+            else -> {}
+        }
+        when (auth) {
             is UiState.Loading -> {
                 register = "Loading..."
             }
             is UiState.Error -> {
-                register = "Register"
-                error = (user as UiState.Error).errorMessage
+                register = "Buyer Register"
+                error = (auth as UiState.Error).errorMessage
             }
             is UiState.Success -> {
-                redirectToHome()
+                redirectToVerify()
             }
             else -> {}
         }
@@ -108,7 +132,7 @@ fun RegisterScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Register",
+                        text = "Buyer Register",
                         style = MaterialTheme.typography.titleMedium,
                     )
                 },
@@ -136,14 +160,14 @@ fun RegisterScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
                     .verticalScroll(state = rememberScrollState())
             ) {
+                Spacer(modifier = Modifier.height(5.dp))
                 Image(
                     painter = painterResource(id = R.drawable.logo_no_bg),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(150.dp)
+                        .size(120.dp)
                         .align(Alignment.CenterHorizontally)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -151,7 +175,8 @@ fun RegisterScreen(
                     text = error,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Red,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
                 )
                 ElevatedCard (
                     elevation = CardDefaults.cardElevation(
@@ -162,47 +187,48 @@ fun RegisterScreen(
                         .fillMaxWidth()
                         .clip(shape = CardDefaults.shape)
                         .shadow(elevation = 0.dp, spotColor = Color.Transparent, shape = CardDefaults.shape)
-                        .padding(bottom = 46.dp, top = 16.dp, start = 16.dp, end = 16.dp)
+                        .padding(bottom = 45.dp, top = 5.dp, start = 15.dp, end = 15.dp)
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(20.dp),
+                            .padding(15.dp),
                     )
                     {
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(
-                            text = "Register",
-                            style = MaterialTheme.typography.titleLarge,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                        )
-                        Spacer(modifier = Modifier.height(10.dp))
-//                        Box(modifier = Modifier.fillMaxWidth()) {
-//                            TextField(
-//                                value = name,
-//                                onValueChange = { name = it },
-//                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
-//                                shape = RoundedCornerShape(7.dp),
-//                                placeholder = { Text("Name", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
-//                                colors = TextFieldDefaults.textFieldColors(
-//                                    focusedIndicatorColor = Color.Transparent,
-//                                    unfocusedIndicatorColor = Color.Transparent,
-//                                    disabledIndicatorColor = Color.Transparent,
-//                                ),
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .height(55.dp)
-//                            )
-//                        }
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            TextField(
+                                value = displayName,
+                                onValueChange = { displayName = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Next
+                                ),
+                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                                shape = RoundedCornerShape(7.dp),
+                                placeholder = { Text("Name", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(55.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
                             TextField(
                                 value = email,
                                 onValueChange = { email = it },
-                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Email,
+                                    imeAction = ImeAction.Next
+                                ),
+                                trailingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Email", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -216,13 +242,19 @@ fun RegisterScreen(
                             )
                         }
 
-
                         Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
                             TextField(
                                 value = password,
                                 onValueChange = { password = it },
-                                trailingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                                trailingIcon = {
+                                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                                        Icon(
+                                            imageVector = if (isPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
+                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                                        )
+                                    }
+                                },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Password", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -230,10 +262,10 @@ fun RegisterScreen(
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
-                                visualTransformation = PasswordVisualTransformation(),
+                                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 keyboardOptions = KeyboardOptions.Default.copy(
                                     keyboardType = KeyboardType.Password,
-                                    imeAction = ImeAction.Done
+                                    imeAction = ImeAction.Next
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -247,17 +279,70 @@ fun RegisterScreen(
                             TextField(
                                 value = confirm_password,
                                 onValueChange = { confirm_password = it },
-                                trailingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
+                                trailingIcon = {
+                                    IconButton(onClick = { isConfirmPasswordVisible = !isConfirmPasswordVisible }) {
+                                        Icon(
+                                            imageVector = if (isConfirmPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
+                                            contentDescription = if (isConfirmPasswordVisible) "Hide password" else "Show password"
+                                        )
+                                    }
+                                },
                                 shape = RoundedCornerShape(7.dp),placeholder = { Text("Confirm Password", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
-                                visualTransformation = PasswordVisualTransformation(),
+                                visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 keyboardOptions = KeyboardOptions.Default.copy(
                                     keyboardType = KeyboardType.Password,
+                                    imeAction = ImeAction.Next
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(55.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            TextField(
+                                value = phone,
+                                onValueChange = { phone = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Phone,
+                                    imeAction = ImeAction.Next
+                                ),
+                                trailingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
+                                shape = RoundedCornerShape(7.dp),
+                                placeholder = { Text("Phone Number", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(55.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            TextField(
+                                value = address,
+                                onValueChange = { address = it },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Text,
                                     imeAction = ImeAction.Done
+                                ),
+                                trailingIcon = { Icon(Icons.Filled.LocationOn, contentDescription = null) },
+                                shape = RoundedCornerShape(7.dp),
+                                placeholder = { Text("Address", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -268,7 +353,8 @@ fun RegisterScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                         Button(
                             onClick = {
-                        if (register != "Loading...") viewModel.register( email, password, confirm_password)
+                                if (register != "Loading...") viewModel.register( email, password, confirm_password, displayName, phone, address, "buyer")
+
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF0E7B75),
@@ -281,7 +367,7 @@ fun RegisterScreen(
                                 register,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                )
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
@@ -321,8 +407,8 @@ fun RegisterScreen(
 
 @Composable
 @Preview(showBackground = true)
-fun RegisterScreenPreview() {
+fun BuyerRegisterScreenPreview() {
     AgreaseTheme {
-        RegisterScreen()
+        BuyerRegisterScreen()
     }
 }
