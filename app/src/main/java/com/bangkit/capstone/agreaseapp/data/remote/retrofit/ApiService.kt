@@ -1,5 +1,6 @@
 package com.bangkit.capstone.agreaseapp.data.remote.retrofit
 
+import com.bangkit.capstone.agreaseapp.data.model.ProductModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.data.remote.response.RegisterResponse
 import com.bangkit.capstone.agreaseapp.data.remote.response.TemplateResponse
@@ -49,18 +50,17 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): Response<TemplateResponse<UserModel>>
 
-//    @GET("articles")
-//    @Headers("Accept: application/json")
-//    suspend fun getArticles(
-//        @Query("page") page: Int,
-//    ): Response<TemplateResponse<List<ArticleModel>>>
-//
-//    @GET("articles/{id}")
-//    @Headers("Accept: application/json")
-//    suspend fun getArticleById(
-//        @Path("id") id: Int
-//    ): Response<TemplateResponse<ArticleModel>>
-//
+    @GET("product")
+    @Headers("Accept: application/json")
+    suspend fun getProducts(
+    ): Response<TemplateResponse<List<ProductModel>>>
+
+    @GET("product/{id}")
+    @Headers("Accept: application/json")
+    suspend fun getProductById(
+        @Path("id") id: String
+    ): Response<TemplateResponse<ProductModel>>
+
 //    @Multipart
 //    @POST("predict")
 //    @Headers("Accept: application/json")

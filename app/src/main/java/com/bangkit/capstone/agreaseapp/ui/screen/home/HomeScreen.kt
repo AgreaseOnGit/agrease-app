@@ -215,7 +215,7 @@ fun HomeScreen(
                 when (products) {
                     is UiState.Loading -> {
                         LoadingIndicator()
-                        viewModel.getProducts(1)
+                        viewModel.getProducts()
                     }
 
                     is UiState.Success -> {
@@ -242,9 +242,9 @@ fun HomeScreen(
                         ) {
                             items(products.data) { product ->
                                 ProductItem(
-                                    name = product.name,
+                                    name = "Product Id ${product.id}",
                                     price = product.price,
-                                    image = product.image,
+                                    image = "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
                                     rating = product.rating,
                                     onNavigateToDetailScreen = {
                                         activity.startActivity(

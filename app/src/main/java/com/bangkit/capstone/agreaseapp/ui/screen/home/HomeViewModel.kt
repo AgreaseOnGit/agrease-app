@@ -6,16 +6,17 @@ import com.bangkit.capstone.agreaseapp.data.model.CategoryModel
 import com.bangkit.capstone.agreaseapp.data.model.ProductModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.data.model.dummy.DummyDataSource
+import com.bangkit.capstone.agreaseapp.data.repository.ProductRepository
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import java.io.File
 
 class HomeViewModel(
     private val userRepository: UserRepository,
+    private val productRepository: ProductRepository
 ): ViewModel() {
     private val _categories: MutableStateFlow<UiState<List<CategoryModel>>> = MutableStateFlow(UiState.Loading)
     val categories: StateFlow<UiState<List<CategoryModel>>>
@@ -33,33 +34,28 @@ class HomeViewModel(
         _categories.value = UiState.Success(DummyDataSource.dummyCatgories)
     }
 
-    fun getProducts(page: Int) {
-        _products.value = UiState.Success(DummyDataSource.dummyProducts)
-
-//        viewModelScope.launch {
-//            if (_products.value is UiState.Success) {
-//                return@launch
-//            }
-//            articleRepository.getArticles(page = page)
-//                .catch {
-//                    _products.value = UiState.Error(it.message.toString())
-//                }
-//                .collect { articles ->
-//                    try {
-//                        if (!articles.success) {
-//                            if (articles.message == "Unauthorized") {
-//                                _products.value = UiState.Unauthorized
-//                                return@collect
-//                            }
-//                            _products.value = UiState.Error(articles.message)
-//                            return@collect
-//                        }
-//                        _products.value = UiState.Success(articles.data.take(3))
-//                    } catch (e: Exception) {
-//                        _products.value = UiState.Error(e.message.toString())
-//                    }
-//                }
-//        }
+    fun getProducts() {
+        _products.value = UiState.Loading
+        viewModelScope.launch {
+            if (_products.value is UiState.Success) {
+                return@launch
+            }
+            productRepository.getProducts()
+                .catch {
+                    _products.value = UiState.Error(it.message.toString())
+                }
+                .collect { products ->
+                    try {
+                        if (!products.success) {
+                            _products.value = UiState.Error(products.message)
+                            return@collect
+                        }
+                        _products.value = UiState.Success(products.data)
+                    } catch (e: Exception) {
+                        _products.value = UiState.Error(e.message.toString())
+                    }
+                }
+        }
     }
 
     fun getUser() {

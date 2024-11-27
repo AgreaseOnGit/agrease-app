@@ -10,15 +10,7 @@ data class ProductModel(
     @field:PrimaryKey
     @field:ColumnInfo(name = "id")
     @field:SerializedName("id")
-    val id: Int,
-
-    @field:ColumnInfo(name = "name")
-    @field:SerializedName("name")
-    val name: String,
-
-    @field:ColumnInfo(name = "price")
-    @field:SerializedName("price")
-    val price: String,
+    val id: String,
 
     @field:ColumnInfo(name = "image")
     @field:SerializedName("image")
@@ -27,4 +19,16 @@ data class ProductModel(
     @field:ColumnInfo(name = "rating")
     @field:SerializedName("rating")
     val rating: String,
+
+    @field:ColumnInfo(name = "stock")
+    @field:SerializedName("stock")
+    val stock: String,
+
+    @field:ColumnInfo(name = "category")
+    @field:SerializedName("category")
+    val category: String,
+
+    @field:ColumnInfo(name = "price")
+    @field:SerializedName("price")
+    val price: String,
 )

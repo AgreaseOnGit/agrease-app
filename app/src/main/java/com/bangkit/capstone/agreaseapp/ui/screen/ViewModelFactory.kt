@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bangkit.capstone.agreaseapp.AppViewModel
 import com.bangkit.capstone.agreaseapp.data.di.Injection
+import com.bangkit.capstone.agreaseapp.data.repository.ProductRepository
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.AuthViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.category.CategoryViewModel
@@ -16,6 +17,7 @@ import com.bangkit.capstone.agreaseapp.ui.screen.transaction.TransactionViewMode
 
 class ViewModelFactory(
     private val userRepository: UserRepository,
+    private val productRepository: ProductRepository
 ) :
     ViewModelProvider.NewInstanceFactory() {
 
@@ -23,15 +25,16 @@ class ViewModelFactory(
         HomeViewModel::class.java to {
             HomeViewModel(
                 userRepository,
+                productRepository
             )
         },
         AuthViewModel::class.java to { AuthViewModel(userRepository) },
         AppViewModel::class.java to { AppViewModel(userRepository) },
         ProfileViewModel::class.java to { ProfileViewModel(userRepository) },
         MyAccountViewModel::class.java to { MyAccountViewModel(userRepository) },
-        TransactionViewModel::class.java to { TransactionViewModel(userRepository) },
-        CategoryViewModel::class.java to { CategoryViewModel(userRepository) },
-        ProductViewModel::class.java to { ProductViewModel(userRepository) },
+        TransactionViewModel::class.java to { TransactionViewModel(productRepository) },
+        CategoryViewModel::class.java to { CategoryViewModel(productRepository) },
+        ProductViewModel::class.java to { ProductViewModel(productRepository) },
     )
 
     @Suppress("UNCHECKED_CAST")
@@ -49,6 +52,7 @@ class ViewModelFactory(
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: ViewModelFactory(
                     Injection.provideUserRepository(context),
+                    Injection.provideProductRepository(context)
                 )
             }.also { INSTANCE = it }
     }

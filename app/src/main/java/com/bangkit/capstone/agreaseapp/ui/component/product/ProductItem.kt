@@ -16,11 +16,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,21 +27,19 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.bangkit.capstone.agreaseapp.R
-import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
 @Composable
 fun ProductItem(
-    id: Int,
+    id: String,
     name: String,
     image: String,
     price: String,
     rating: String,
-    onNavigateToDetailScreen: (Int) -> Unit,
+    onNavigateToDetailScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
@@ -62,7 +58,7 @@ fun ProductItem(
                 end = 5.dp,
             )
             .clickable {
-//                onNavigateToDetailScreen(id)
+                onNavigateToDetailScreen(id)
             }
     ) {
         Column(
@@ -70,9 +66,6 @@ fun ProductItem(
                 .width((screenWidth / 2) - 20.dp)
                 .height(275.dp)
                 .background(Color.White)
-                .clickable {
-                    onNavigateToDetailScreen(id)
-                }
         ) {
             AsyncImage(
                 model = image,
@@ -124,20 +117,5 @@ fun ProductItem(
                 }
             }
         }
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun ProductItemPreview() {
-    AgreaseTheme {
-        ProductItem(
-            id = 1,
-            name = "Product Name",
-            image = "https://www.thesaurus.com/e/wp-content/uploads/2021/11/20211104_articles_1000x700.png",
-            price = "Rp 250.000,00",
-            rating = "4.9",
-            onNavigateToDetailScreen = {},
-        )
     }
 }
