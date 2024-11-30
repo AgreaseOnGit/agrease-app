@@ -3,6 +3,7 @@ package com.bangkit.capstone.agreaseapp.ui.screen.category
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,12 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -50,6 +54,10 @@ fun CategoryScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(
+                color = Color.White
+            )
+            .verticalScroll(rememberScrollState())
     ) {
         viewModel.products.collectAsState(initial = UiState.Loading).value.let { products ->
             when (products) {
@@ -68,7 +76,7 @@ fun CategoryScreen(
                             .padding(start = 20.dp, end = 20.dp)
                     ) {
                         Text(
-                            text = "$category : ${products.data.size} products",
+                            text = "Hasil : ${products.data.size} products",
                             style = MaterialTheme.typography.bodyLarge,
                         )
                     }

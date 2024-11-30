@@ -20,9 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -132,7 +129,6 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
                     .verticalScroll(state = rememberScrollState())
             ) {
                 Image(
@@ -191,7 +187,7 @@ fun LoginScreen(
                                     keyboardType = KeyboardType.Email,
                                     imeAction = ImeAction.Next
                                 ),
-                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                                trailingIcon = { Icon(painterResource(id = R.drawable.baseline_person_24), contentDescription = "Email") },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Email", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -213,8 +209,8 @@ fun LoginScreen(
                                 trailingIcon = {
                                     IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                                         Icon(
-                                            imageVector = if (isPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
-                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                                            painter = painterResource(id = if (isPasswordVisible) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_24),
+                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password",
                                         )
                                     }
                                 },

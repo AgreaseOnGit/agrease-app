@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.model.VerifyModel
 import com.bangkit.capstone.agreaseapp.data.remote.response.RegisterResponse
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,10 @@ class AuthViewModel (
     val isRegistered: MutableState<UiState<Boolean>>
         get() = _isRegistered
 
+    private val _verifyData: MutableStateFlow<UiState<VerifyModel>> = MutableStateFlow(UiState.Loading)
+    val verifyData: StateFlow<UiState<VerifyModel>>
+        get() = _verifyData
+
     fun login(email: String, password: String) {
         if(email.isEmpty() || password.isEmpty()){
             _user.value = UiState.Error("Email or password can't be empty")
@@ -40,7 +47,7 @@ class AuthViewModel (
                 .collect { data ->
                     try {
                         if (!data.success) {
-                            if (data.message == "Not found") {
+                            if (data.message == "Not found" || data.message == "Bad request") {
                                 _user.value = UiState.Error("Email or Password is incorrect.\nPlease try again.")
                                 return@collect
                             }
@@ -103,6 +110,7 @@ class AuthViewModel (
                             return@collect
                         }
                         _auth.value = UiState.Success(data)
+                        userRepository.destroyVerifyUID()
                     } catch (e: Exception) {
                         _auth.value = UiState.Error(e.message.toString())
                     }
@@ -111,8 +119,22 @@ class AuthViewModel (
     }
 
     fun checkRegistered() {
+        _verifyData.value = UiState.Loading
         viewModelScope.launch {
-            _isRegistered.value = UiState.Success(userRepository.getRegisteredUID().isNotEmpty())
+            val data = userRepository.getVerifyUID()
+            if (data.authUID.isNotEmpty()) {
+                _isRegistered.value = UiState.Success(true)
+                _verifyData.value = UiState.Success(data)
+            } else {
+                _isRegistered.value = UiState.Success(false)
+                _verifyData.value = UiState.Success(data)
+            }
+        }
+    }
+
+    fun destroyVerifyUID() {
+        viewModelScope.launch {
+            userRepository.destroyVerifyUID()
         }
     }
 
