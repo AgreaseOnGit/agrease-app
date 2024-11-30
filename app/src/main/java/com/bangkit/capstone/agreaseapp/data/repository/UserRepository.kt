@@ -1,9 +1,8 @@
 package com.bangkit.capstone.agreaseapp.data.repository
 
-import android.util.Log
 import com.bangkit.capstone.agreaseapp.data.local.preference.UserPreference
-import com.bangkit.capstone.agreaseapp.data.model.RegisterModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.model.VerifyModel
 import com.bangkit.capstone.agreaseapp.data.remote.response.RegisterResponse
 import com.bangkit.capstone.agreaseapp.data.remote.response.TemplateResponse
 import com.bangkit.capstone.agreaseapp.data.remote.retrofit.ApiService
@@ -21,7 +20,6 @@ class UserRepository(
         val login = apiService.login(email, password)
         if (!login.isSuccessful) {
             val message = login.processError()
-            Log.d("UserRepository", "login: $message")
 
             emit(
                 TemplateResponse(
@@ -63,7 +61,7 @@ class UserRepository(
         }
 
         register.body()?.apply {
-            saveUID(uid)
+            saveVerifyUID(email, this.uid)
             emit(this)
         }
     }.catch { e ->
@@ -77,7 +75,7 @@ class UserRepository(
     }
 
     fun verify( codeOTP: Int) = flow {
-        val userid = userPreference.getUID().first()
+        val userid = userPreference.getVerify().first()
         val register = apiService.verify( userid.authUID, codeOTP)
         if (!register.isSuccessful) {
             val message = register.processError()
@@ -146,21 +144,25 @@ class UserRepository(
 
     suspend fun getVerified(): Boolean = userPreference.getUser().first().isVerified
 
-    suspend fun getRegisteredUID(): String = userPreference.getUID().first().authUID
+    suspend fun getVerifyUID(): VerifyModel = userPreference.getVerify().first()
 
     suspend fun saveUser(uid: String, email: String, nama: String, phone: String, address: String, role: String, isVerified: Boolean) {
         val user = UserModel(uid, email, nama, phone, address, role, isVerified)
         userPreference.saveUser(user)
     }
 
-    suspend fun saveUID(authUID: String) {
-        val auth = RegisterModel(authUID)
-        userPreference.saveUID(auth)
+    suspend fun saveVerifyUID(authEmail: String, authUID: String) {
+        val auth = VerifyModel(authEmail, authUID)
+        userPreference.saveVerify(auth)
     }
 
     suspend fun logOut(): Boolean {
         userPreference.destroyUser()
+        return true
+    }
 
+    suspend fun destroyVerifyUID(): Boolean {
+        userPreference.destroyVerify()
         return true
     }
 

@@ -1,7 +1,6 @@
 package com.bangkit.capstone.agreaseapp.activity
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -40,7 +39,7 @@ class CategoryActivity : ComponentActivity() {
                     Scaffold(
                         topBar = {
                             TopAppBar(
-                                title = { Text(text = "Product Category") },
+                                title = { Text(text = "$category") },
                                 navigationIcon = {
                                     IconButton(onClick = { activity?.finish() }) {
                                         Icon(

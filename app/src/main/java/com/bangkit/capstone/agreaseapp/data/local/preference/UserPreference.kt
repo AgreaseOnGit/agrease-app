@@ -7,13 +7,14 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.bangkit.capstone.agreaseapp.data.model.RegisterModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.model.VerifyModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user")
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
+    private val authEmail = stringPreferencesKey("authEmail")
     private val authUID = stringPreferencesKey("authUID")
 
     private val uid = stringPreferencesKey("uid")
@@ -36,9 +37,10 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun saveUID(auth: RegisterModel) {
+    suspend fun saveVerify(auth: VerifyModel) {
         dataStore.edit {
             it[authUID] = auth.authUID
+            it[authEmail] = auth.authEmail
         }
     }
 
@@ -54,13 +56,19 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         )
     }
 
-    fun getUID(): Flow<RegisterModel> = dataStore.data.map {
-        RegisterModel(
-            it[authUID] ?: "",
+    fun getVerify(): Flow<VerifyModel> = dataStore.data.map {
+        VerifyModel(
+            it[authEmail] ?: "",
+            it[authUID] ?: ""
         )
     }
 
     suspend fun destroyUser() = dataStore.edit { it.clear() }
+
+    suspend fun destroyVerify() = dataStore.edit {
+        it[authEmail] = ""
+        it[authUID] = ""
+    }
 
     companion object {
         @Volatile

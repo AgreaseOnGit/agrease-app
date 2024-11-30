@@ -36,9 +36,7 @@ class ProductRepository(
             val articlesFromApi = apiService.getProductById(id = id)
             if (!articlesFromApi.isSuccessful) {
                 val message = articlesFromApi.processError()
-                if (message == "Unauthorized") {
-                    userPreference.destroyUser()
-                }
+
                 emit(TemplateResponse(success = false, message = message, data = ProductModel("", "", "", "", "", "")))
                 return@flow
             }

@@ -15,7 +15,7 @@ import com.bangkit.capstone.agreaseapp.ui.component.DetailBottomBar
 import com.bangkit.capstone.agreaseapp.ui.screen.product.ProductScreen
 import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
-class DetailProductActivity : ComponentActivity() {
+class CheckoutActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

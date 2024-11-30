@@ -20,12 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -99,9 +93,6 @@ fun SellerRegisterScreen(
 
     LaunchedEffect(key1 = checkRegistered) {
         viewModel.checkRegistered()
-    }
-
-    DisposableEffect(key1 = auth, key2 = checkRegistered) {
         when (checkRegistered) {
             is UiState.Success -> {
                 if ((checkRegistered as UiState.Success<Boolean>).data) {
@@ -110,6 +101,9 @@ fun SellerRegisterScreen(
             }
             else -> {}
         }
+    }
+
+    DisposableEffect(key1 = auth) {
         when (auth) {
             is UiState.Loading -> {
                 register = "Loading..."
@@ -205,7 +199,7 @@ fun SellerRegisterScreen(
                                     keyboardType = KeyboardType.Text,
                                     imeAction = ImeAction.Next
                                 ),
-                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                                trailingIcon = { Icon(painterResource(id = R.drawable.baseline_person_24), contentDescription = "Name") },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Name", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -228,7 +222,7 @@ fun SellerRegisterScreen(
                                     keyboardType = KeyboardType.Email,
                                     imeAction = ImeAction.Next
                                 ),
-                                trailingIcon = { Icon(Icons.Filled.Email, contentDescription = null) },
+                                trailingIcon = { Icon(painterResource(id = R.drawable.baseline_email_24), contentDescription = "Email") },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Email", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -250,8 +244,8 @@ fun SellerRegisterScreen(
                                 trailingIcon = {
                                     IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                                         Icon(
-                                            imageVector = if (isPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
-                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                                            painter = painterResource(id = if (isPasswordVisible) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_24),
+                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password",
                                         )
                                     }
                                 },
@@ -282,8 +276,8 @@ fun SellerRegisterScreen(
                                 trailingIcon = {
                                     IconButton(onClick = { isConfirmPasswordVisible = !isConfirmPasswordVisible }) {
                                         Icon(
-                                            imageVector = if (isConfirmPasswordVisible) Icons.Default.Close else Icons.Default.Lock,
-                                            contentDescription = if (isConfirmPasswordVisible) "Hide password" else "Show password"
+                                            painter = painterResource(id = if (isConfirmPasswordVisible) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_24),
+                                            contentDescription = if (isConfirmPasswordVisible) "Hide password" else "Show password",
                                         )
                                     }
                                 },
@@ -313,7 +307,7 @@ fun SellerRegisterScreen(
                                     keyboardType = KeyboardType.Phone,
                                     imeAction = ImeAction.Next
                                 ),
-                                trailingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
+                                trailingIcon = { Icon(painterResource(id = R.drawable.baseline_phone_24), contentDescription = "Phone Number") },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Phone Number", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -336,7 +330,7 @@ fun SellerRegisterScreen(
                                     keyboardType = KeyboardType.Text,
                                     imeAction = ImeAction.Done
                                 ),
-                                trailingIcon = { Icon(Icons.Filled.LocationOn, contentDescription = null) },
+                                trailingIcon = { Icon(painterResource(id = R.drawable.baseline_location_pin_24), contentDescription = "Address") },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Address", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(

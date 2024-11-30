@@ -2,15 +2,18 @@ package com.bangkit.capstone.agreaseapp.ui.screen.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -33,6 +36,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,8 +49,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,7 +74,6 @@ fun VerifyScreen(
     ),
 ) {
     var codeOTP by remember { mutableStateOf("") }
-
     val auth: UiState<RegisterResponse> by viewModel.auth
     var verify by remember { mutableStateOf("Verify") }
     var error by remember { mutableStateOf("") }
@@ -160,18 +165,35 @@ fun VerifyScreen(
                             .padding(20.dp),
                     )
                     {
-                        Text(
-                            text = "Check the email you registered to get the OTP code.",
-                            style = MaterialTheme.typography.titleMedium,
-                            textAlign = TextAlign.Center
-                        )
+                        viewModel.verifyData.collectAsState(initial = UiState.Loading).value.let { user ->
+                            when (user) {
+                                is UiState.Loading -> {
+                                    Text(
+                                        text = "Loading...",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    viewModel.checkRegistered()
+                                }
+                                is UiState.Success -> {
+                                    Text(
+                                        text = "We have sent a code to your email\n${user.data.authEmail}.\nPlease enter the code to verify your account.",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                                else -> {}
+                            }
+                        }
                         Spacer(modifier = Modifier.height(30.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
                             TextField(
                                 value = codeOTP,
                                 onValueChange = { codeOTP = it },
                                 keyboardOptions = KeyboardOptions.Default.copy(
-                                    keyboardType = KeyboardType.Number
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done
                                 ),
                                 trailingIcon = { Icon(Icons.Filled.MailOutline, contentDescription = null) },
                                 shape = RoundedCornerShape(7.dp),
@@ -191,7 +213,6 @@ fun VerifyScreen(
                         Button(
                             onClick = {
                                 if (verify != "Loading...") viewModel.verify( codeOTP = if (codeOTP.isNotEmpty()) codeOTP.toInt() else 0)
-
                             },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFF0E7B75),
@@ -206,8 +227,30 @@ fun VerifyScreen(
                                 fontWeight = FontWeight.Bold,
                             )
                         }
+                        Spacer(modifier = Modifier.height(30.dp))
 
-
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "Your email in Incorrect?",
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(
+                                text = "Register",
+                                style = MaterialTheme
+                                    .typography.titleMedium
+                                    .copy(textDecoration = TextDecoration.Underline),
+                                modifier = Modifier
+                                    .clickable {
+                                        viewModel.destroyVerifyUID()
+                                        navController.popBackStack()
+                                    }
+                            )
+                        }
                     }
                 }
 
