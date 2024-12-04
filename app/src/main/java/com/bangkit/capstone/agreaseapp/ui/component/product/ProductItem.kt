@@ -19,6 +19,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -31,18 +32,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.bangkit.capstone.agreaseapp.R
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun ProductItem(
-    id: String,
+    id: Int,
     name: String,
     image: String,
-    price: String,
-    rating: String,
-    onNavigateToDetailScreen: (String) -> Unit,
+    price: Int,
+    rating: Double,
+    seller: String,
+    onNavigateToDetailScreen: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
+    fun formattedPrice(price: Int): String {
+        return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)
+    }
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
@@ -81,10 +89,10 @@ fun ProductItem(
                 verticalArrangement = Arrangement.Center,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(top = 5.dp, start = 10.dp, bottom = 10.dp, end = 10.dp)
             ) {
                 Text(
-                    text = name,
+                    text = name.toUpperCase(Locale.getDefault()),
                     maxLines = 3,
                     lineHeight = 20.sp,
                     fontSize = 15.sp,
@@ -92,28 +100,44 @@ fun ProductItem(
                 )
                 Spacer(modifier = Modifier.height(3.dp))
                 Text(
-                    text = price,
+                    text = "Rp ${formattedPrice(price)}",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Light,
                     fontStyle = FontStyle.Italic,
                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Row(
-                    modifier = modifier.padding(top = 5.dp)
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = modifier
+                        .fillMaxWidth()
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.rating),
-                        contentDescription = "rating",
-                        modifier = Modifier
-                            .size(13.dp)
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = rating,
-                        fontSize = 13.sp,
+                        text = seller.toUpperCase(Locale.getDefault()),
+                        maxLines = 1,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Light,
+                        style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        modifier = modifier.widthIn(max = screenWidth/4)
                     )
+                    Row(
+                        modifier = modifier.padding(top = 5.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.rating),
+                            contentDescription = "rating",
+                            modifier = Modifier
+                                .size(13.dp)
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = rating.toString(),
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        )
+                    }
                 }
             }
         }

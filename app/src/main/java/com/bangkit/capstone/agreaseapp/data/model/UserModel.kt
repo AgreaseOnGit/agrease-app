@@ -15,6 +15,8 @@ data class UserModel(
     val address: String,
     @field:SerializedName("role")
     val role: String,
+    @field:SerializedName("photo")
+    val photo: String,
     @field:SerializedName("isVerified")
     val isVerified: Boolean,
 )

@@ -1,6 +1,7 @@
 package com.bangkit.capstone.agreaseapp.activity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,7 +20,7 @@ class DetailProductActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val idProduct = intent.getStringExtra("id") ?: ""
+        val idProduct = intent.getIntExtra("id", 0)
 
         setContent {
             AgreaseTheme {
@@ -34,12 +35,12 @@ class DetailProductActivity : ComponentActivity() {
                         bottomBar = {
                             DetailBottomBar(
                                 onBuyClicked = {
-//                                    activity.startActivity(
-//                                        Intent(context, CheckoutActivity::class.java).putExtra(
-//                                            "id",
-//                                            idProduct
-//                                        )
-//                                    )
+                                    activity.startActivity(
+                                        Intent(context, CheckoutActivity::class.java).putExtra(
+                                            "id",
+                                            idProduct
+                                        )
+                                    )
                                 },
                                 onSaveClicked = {}
                             )

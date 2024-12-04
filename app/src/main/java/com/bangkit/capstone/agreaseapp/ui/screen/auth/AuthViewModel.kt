@@ -34,32 +34,54 @@ class AuthViewModel (
         get() = _verifyData
 
     fun login(email: String, password: String) {
-        if(email.isEmpty() || password.isEmpty()){
-            _user.value = UiState.Error("Email or password can't be empty")
-            return
-        }
         _user.value = UiState.Loading
         viewModelScope.launch {
-            userRepository.login(email = email, password = password)
+            userRepository.saveDummyUserLogin()
                 .catch {
                     _user.value = UiState.Error(it.message.toString())
                 }
                 .collect { data ->
                     try {
-                        if (!data.success) {
-                            if (data.message == "Not found" || data.message == "Bad request") {
-                                _user.value = UiState.Error("Email or Password is incorrect.\nPlease try again.")
-                                return@collect
-                            }
-                            _user.value = UiState.Error(data.message)
-                            return@collect
-                        }
-                        _user.value = UiState.Success(data.data)
+//                        if (!data.success) {
+//                            if (data.message == "Not found" || data.message == "Bad request") {
+//                                _user.value = UiState.Error("Email or Password is incorrect.\nPlease try again.")
+//                                return@collect
+//                            }
+//                            _user.value = UiState.Error(data.message)
+//                            return@collect
+//                        }
+                        _user.value = UiState.Success(data)
                     } catch (e: Exception) {
                         _user.value = UiState.Error(e.message.toString())
                     }
                 }
         }
+//        if(email.isEmpty() || password.isEmpty()){
+//            _user.value = UiState.Error("Email or password can't be empty")
+//            return
+//        }
+//        _user.value = UiState.Loading
+//        viewModelScope.launch {
+//            userRepository.login(email = email, password = password)
+//                .catch {
+//                    _user.value = UiState.Error(it.message.toString())
+//                }
+//                .collect { data ->
+//                    try {
+//                        if (!data.success) {
+//                            if (data.message == "Not found" || data.message == "Bad request") {
+//                                _user.value = UiState.Error("Email or Password is incorrect.\nPlease try again.")
+//                                return@collect
+//                            }
+//                            _user.value = UiState.Error(data.message)
+//                            return@collect
+//                        }
+//                        _user.value = UiState.Success(data.data)
+//                    } catch (e: Exception) {
+//                        _user.value = UiState.Error(e.message.toString())
+//                    }
+//                }
+//        }
     }
 
     fun register( email: String, password: String, confirm_password: String, displayName: String, phone: String, address: String, role: String) {

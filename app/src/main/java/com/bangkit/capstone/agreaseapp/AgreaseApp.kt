@@ -25,17 +25,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.bangkit.capstone.agreaseapp.ui.component.BottomBar
 import com.bangkit.capstone.agreaseapp.ui.navigation.Screen
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
-import com.bangkit.capstone.agreaseapp.ui.screen.auth.WelcomeScreen
-import com.bangkit.capstone.agreaseapp.ui.component.BottomBar
-import com.bangkit.capstone.agreaseapp.ui.screen.auth.LoginScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.BuyerRegisterScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.auth.LoginScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.SellerRegisterScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.VerifyScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.auth.WelcomeScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.search.SearchScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.splash.SplashScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.transaction.TransactionScreen
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
@@ -175,6 +176,11 @@ fun AgreaseApp(
                                 launchSingleTop = true
                             }
                         })
+                    }
+                    composable(Screen.Search.route) {
+                        SearchScreen(
+                            redirectToWelcome = { redirectToWelcome("Session is expired") }
+                        )
                     }
                     composable(Screen.Transaction.route) {
                         TransactionScreen(

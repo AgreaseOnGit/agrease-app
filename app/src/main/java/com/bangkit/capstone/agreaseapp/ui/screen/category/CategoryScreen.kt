@@ -91,19 +91,20 @@ fun CategoryScreen(
                     ) {
                         items(products.data) { product ->
                             ProductItem(
-                                name = "Product Id ${product.id}",
+                                name = product.productName,
                                 price = product.price,
-                                image = "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                                image = product.image,
                                 rating = product.rating,
+                                seller = product.sellerId,
                                 onNavigateToDetailScreen = {
                                     activity.startActivity(
                                         Intent(context, DetailProductActivity::class.java).putExtra(
                                             "id",
-                                            product.id
+                                            products.data.indexOf(product)
                                         )
                                     )
                                 },
-                                id = product.id,
+                                id = products.data.indexOf(product),
                             )
                         }
                     }

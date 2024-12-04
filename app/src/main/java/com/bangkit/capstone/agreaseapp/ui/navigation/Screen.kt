@@ -4,12 +4,11 @@ sealed class Screen(val route: String) {
     data object Home : Screen("home")
 
     data object Transaction : Screen("transaction")
-
+    data object Search : Screen("search")
 
     // Account
     data object Profile : Screen("profile")
     data object MyAccount : Screen("myaccount")
-    data object ChangePassword : Screen("changepassword")
 
     // Auth
     data object Login : Screen("login")

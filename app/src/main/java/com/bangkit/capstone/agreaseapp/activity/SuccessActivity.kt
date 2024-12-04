@@ -12,15 +12,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.bangkit.capstone.agreaseapp.ui.component.CheckoutBottomBar
-import com.bangkit.capstone.agreaseapp.ui.screen.checkout.CheckoutScreen
+import com.bangkit.capstone.agreaseapp.ui.component.SuccessBottomBar
+import com.bangkit.capstone.agreaseapp.ui.screen.checkout.SuccessScreen
 import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
-class CheckoutActivity : ComponentActivity() {
+class SuccessActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val idProduct = intent.getIntExtra("id", 0)
 
         setContent {
             AgreaseTheme {
@@ -29,23 +27,21 @@ class CheckoutActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val activity = (LocalContext.current as Activity)
-                    val context = LocalContext.current
 
                     Scaffold(
                         bottomBar = {
-                            CheckoutBottomBar(
-                                onPayClick = {
-                                    activity.startActivity(
-                                        Intent(context, SuccessActivity::class.java)
-                                    )
+                            SuccessBottomBar(
+                                onClick = {
+                                    val intent = Intent(activity, MainActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    startActivity(intent)
+                                    activity.finish()
                                 },
                             )
                         }
                     )
                     { innerPadding ->
-                        CheckoutScreen(id = idProduct, modifier = Modifier.padding(innerPadding), redirectToWelcome = {
-                            activity.finish()
-                        })
+                        SuccessScreen( modifier = Modifier.padding(innerPadding))
                     }
                 }
             }
