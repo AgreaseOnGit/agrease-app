@@ -25,14 +25,14 @@ class UserRepository(
                 TemplateResponse(
                     success = false,
                     message = message,
-                    data = UserModel("", "", "", "", "", "", false)
+                    data = UserModel("", "", "", "", "", "", "", false)
                 )
             )
             return@flow
         }
 
         login.body()?.let {
-            saveUser(it.data.uid, it.data.email, it.data.nama, it.data.phone, it.data.address, it.data.role, it.data.isVerified)
+            saveUser(it.data.uid, it.data.email, it.data.nama, it.data.phone, it.data.address, it.data.role, it.data.photo, it.data.isVerified)
             emit(it)
         }
     }.catch { e ->
@@ -40,7 +40,7 @@ class UserRepository(
             TemplateResponse(
                 success = false,
                 message = e.message.toString(),
-                data = UserModel("", "", "", "", "", "", false)
+                data = UserModel("", "", "", "", "", "", "", false)
             )
         )
     }
@@ -140,15 +140,22 @@ class UserRepository(
 //        }
 //    }
 
-    fun getUserPreference(): Flow<UserModel> = userPreference.getUser()
+    fun getUserPreference(): Flow<UserModel> {
+        return userPreference.getUser()
+    }
 
     suspend fun getVerified(): Boolean = userPreference.getUser().first().isVerified
 
     suspend fun getVerifyUID(): VerifyModel = userPreference.getVerify().first()
 
-    suspend fun saveUser(uid: String, email: String, nama: String, phone: String, address: String, role: String, isVerified: Boolean) {
-        val user = UserModel(uid, email, nama, phone, address, role, isVerified)
+    suspend fun saveUser(uid: String, email: String, nama: String, phone: String, address: String, role: String, photo: String, isVerified: Boolean) {
+        val user = UserModel(uid, email, nama, phone, address, role, photo, isVerified)
         userPreference.saveUser(user)
+    }
+    fun saveDummyUserLogin()= flow {
+        val user = UserModel("user01", "user01@gmail.com", "Mr. Vincent", "081234567890", "Jl. Merdeka No 7, Semarang, Jawa Tengah", "buyer", "https://static.wikia.nocookie.net/character-stats-and-profiles/images/7/71/Pak_Vincent.png/revision/latest?cb=20241115022726", true)
+        saveUser(user.uid, user.email, user.nama, user.phone, user.address, user.role, user.photo, user.isVerified)
+        emit(user)
     }
 
     suspend fun saveVerifyUID(authEmail: String, authUID: String) {

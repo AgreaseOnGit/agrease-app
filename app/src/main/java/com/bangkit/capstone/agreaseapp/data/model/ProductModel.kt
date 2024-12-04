@@ -12,23 +12,35 @@ data class ProductModel(
     @field:SerializedName("id")
     val id: String,
 
+    @field:ColumnInfo(name = "productName")
+    @field:SerializedName("productName")
+    val productName: String,
+
+    @field:ColumnInfo(name = "productDescription")
+    @field:SerializedName("productDescription")
+    val productDescription: String,
+
+    @field:ColumnInfo(name = "rating")
+    @field:SerializedName("rating")
+    val rating: Double,
+
+    @field:ColumnInfo(name = "sellerId")
+    @field:SerializedName("sellerId")
+    val sellerId: String,
+
+    @field:ColumnInfo(name = "price")
+    @field:SerializedName("price")
+    val price: Int,
+
+    @field:ColumnInfo(name = "stock")
+    @field:SerializedName("stock")
+    val stock: Int,
+
     @field:ColumnInfo(name = "image")
     @field:SerializedName("image")
     val image: String,
 
-    @field:ColumnInfo(name = "rating")
-    @field:SerializedName("rating")
-    val rating: String,
-
-    @field:ColumnInfo(name = "stock")
-    @field:SerializedName("stock")
-    val stock: String,
-
     @field:ColumnInfo(name = "category")
     @field:SerializedName("category")
     val category: String,
-
-    @field:ColumnInfo(name = "price")
-    @field:SerializedName("price")
-    val price: String,
 )

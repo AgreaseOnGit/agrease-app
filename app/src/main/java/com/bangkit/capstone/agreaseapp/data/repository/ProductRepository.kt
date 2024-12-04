@@ -37,7 +37,7 @@ class ProductRepository(
             if (!articlesFromApi.isSuccessful) {
                 val message = articlesFromApi.processError()
 
-                emit(TemplateResponse(success = false, message = message, data = ProductModel("", "", "", "", "", "")))
+                emit(TemplateResponse(success = false, message = message, data = ProductModel("", "", "", 0.0, "", 0, 0,"", "")))
                 return@flow
             }
 
@@ -45,7 +45,7 @@ class ProductRepository(
                 emit(this)
             }
         }.catch { e ->
-            emit(TemplateResponse(success = false, message = e.message.toString(), data = ProductModel("", "", "", "", "", "")))
+            emit(TemplateResponse(success = false, message = e.message.toString(), data = ProductModel("", "", "", 0.0, "", 0, 0,"", "")))
         }
 
     companion object {

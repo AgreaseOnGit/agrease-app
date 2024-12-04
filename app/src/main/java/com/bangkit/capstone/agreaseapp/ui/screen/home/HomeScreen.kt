@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,10 +24,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -44,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.bangkit.capstone.agreaseapp.R
@@ -56,7 +54,6 @@ import com.bangkit.capstone.agreaseapp.ui.component.respond.LoadingIndicator
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     redirectToWelcome: () -> Unit,
@@ -68,18 +65,8 @@ fun HomeScreen(
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val orientation = LocalConfiguration.current.orientation
     val gridColumns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
-
-    TopAppBar(
-        title = {
-            Text(text = "Home Screen")
-        },
-        actions = {
-
-        }
-    )
 
     Column(
         modifier = modifier
@@ -128,7 +115,7 @@ fun HomeScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .widthIn(max = screenWidth - 200.dp)
+                                    .weight(1f)
                             ) {
                                 Text(
                                     text = "Hi, ${user.data.nama}",
@@ -142,7 +129,7 @@ fun HomeScreen(
                                 )
                             }
                             AsyncImage(
-                                model = "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg",
+                                model = user.data.photo,
                                 contentDescription = "Profile Image",
                                 contentScale = ContentScale.Crop,
                                 modifier = modifier
@@ -166,6 +153,7 @@ fun HomeScreen(
         ) {
             Text(
                 text = "Categories",
+                fontSize = 18.sp,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(start = 15.dp, end = 15.dp)
             )
@@ -228,6 +216,7 @@ fun HomeScreen(
                         ) {
                             Text(
                                 text = "Recomendation Products",
+                                fontSize = 18.sp,
                                 style = MaterialTheme.typography.titleMedium,
                             )
                         }
@@ -242,19 +231,20 @@ fun HomeScreen(
                         ) {
                             items(products.data) { product ->
                                 ProductItem(
-                                    name = "Product Id ${product.id}",
+                                    name = product.productName,
                                     price = product.price,
-                                    image = "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                                    image = product.image,
                                     rating = product.rating,
+                                    seller = product.sellerId,
                                     onNavigateToDetailScreen = {
                                         activity.startActivity(
                                             Intent(context, DetailProductActivity::class.java).putExtra(
                                                 "id",
-                                                product.id
+                                                products.data.indexOf(product)
                                             )
                                         )
                                     },
-                                    id = product.id,
+                                    id = products.data.indexOf(product),
                                 )
                             }
                         }
