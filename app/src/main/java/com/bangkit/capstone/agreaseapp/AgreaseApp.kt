@@ -31,6 +31,7 @@ import com.bangkit.capstone.agreaseapp.ui.screen.auth.WelcomeScreen
 import com.bangkit.capstone.agreaseapp.ui.component.BottomBar
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.LoginScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.RegisterScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.chat.ChatScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountScreen
@@ -157,8 +158,12 @@ fun AgreaseApp(
                             redirectToWelcome = { redirectToWelcome("Session is expired") }
                         )
                     }
+                    composable(Screen.Chat.route) {
+                        ChatScreen()
+                    }
                     composable(Screen.Profile.route) {
                         ProfileScreen(
+                            navController = navController,
                             redirectToWelcome = { redirectToWelcome("") },
                             redirectToMyAccount = { navController.navigate(Screen.MyAccount.route) },
                         )

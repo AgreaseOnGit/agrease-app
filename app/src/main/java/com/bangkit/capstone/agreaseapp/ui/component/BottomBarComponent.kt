@@ -43,9 +43,9 @@ fun BottomBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 screen = Screen.Transaction
             ),
 //            NavigationItem(
-//                title = stringResource(R.string.consult_nav),
-//                icon = ImageVector.vectorResource(id = R.drawable.comments_regular),
-//                screen = Screen.Consult
+//                title = stringResource(R.string.chat_nav),
+//                icon = ImageVector.vectorResource(id = R.drawable.baseline_chat_24),
+//                screen = Screen.Chat
 //            ),
 //            NavigationItem(
 //                title = stringResource(R.string.schedule_nav),

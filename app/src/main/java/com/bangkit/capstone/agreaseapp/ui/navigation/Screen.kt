@@ -5,6 +5,8 @@ sealed class Screen(val route: String) {
 
     data object Transaction : Screen("transaction")
 
+    // chatBot
+    data object Chat : Screen("chat")
 
     // Account
     data object Profile : Screen("profile")
