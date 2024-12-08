@@ -4,6 +4,10 @@ sealed class Screen(val route: String) {
     data object Home : Screen("home")
 
     data object Transaction : Screen("transaction")
+
+    // chatBot
+    data object Chat : Screen("chat")
+    
     data object Search : Screen("search")
 
     // Account

@@ -4,5 +4,6 @@
     <string name="home_nav">Home</string>
     <string name="profile_nav">Profile</string>
     <string name="transaction_nav">Transaction</string>
+    <string name="chat_nav">Chat</string>
     <string name="search_nav">Search</string>
 </resources>
