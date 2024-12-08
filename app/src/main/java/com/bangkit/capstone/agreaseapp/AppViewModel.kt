@@ -11,14 +11,13 @@ import kotlinx.coroutines.launch
 class AppViewModel (
     private val userRepository: UserRepository
 ): ViewModel() {
-    private val _isHaveToken: MutableState<UiState<Boolean>> = mutableStateOf(UiState.Loading)
-    val isHaveToken: MutableState<UiState<Boolean>>
-        get() = _isHaveToken
+    private val _isVerified: MutableState<UiState<Boolean>> = mutableStateOf(UiState.Loading)
+    val isVerified: MutableState<UiState<Boolean>>
+        get() = _isVerified
 
-    fun checkToken() {
+    fun checkVerified() {
         viewModelScope.launch {
-            _isHaveToken.value = UiState.Success(userRepository.getToken().isNotEmpty())
-//            _isHaveToken.value = UiState.Success(true)
+            _isVerified.value = UiState.Success(userRepository.getVerified())
         }
     }
 }

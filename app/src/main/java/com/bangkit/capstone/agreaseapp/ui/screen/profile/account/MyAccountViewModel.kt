@@ -1,7 +1,5 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.profile.account
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
@@ -11,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import java.io.File
 
 class MyAccountViewModel (
     private val userRepository: UserRepository
@@ -23,26 +20,42 @@ class MyAccountViewModel (
     fun getUser() {
         _user.value = UiState.Loading
         viewModelScope.launch {
-            userRepository.getUser()
+            if (_user.value is UiState.Success) {
+                return@launch
+            }
+            userRepository.getUserPreference()
                 .catch {
                     _user.value = UiState.Error(it.message.toString())
                 }
-                .collect { data ->
+                .collect { user ->
                     try {
-                        if (!data.success) {
-                            if (data.message == "Unauthorized") {
-                                _user.value = UiState.Unauthorized
-                                return@collect
-                            }
-                            _user.value = UiState.Error(data.message)
-                            return@collect
-                        }
-                        _user.value = UiState.Success(data.data)
+                        _user.value = UiState.Success(user)
                     } catch (e: Exception) {
                         _user.value = UiState.Error(e.message.toString())
                     }
                 }
         }
+//        viewModelScope.launch {
+//            userRepository.getUser()
+//                .catch {
+//                    _user.value = UiState.Error(it.message.toString())
+//                }
+//                .collect { data ->
+//                    try {
+//                        if (!data.success) {
+//                            if (data.message == "Unauthorized") {
+//                                _user.value = UiState.Unauthorized
+//                                return@collect
+//                            }
+//                            _user.value = UiState.Error(data.message)
+//                            return@collect
+//                        }
+//                        _user.value = UiState.Success(data.data)
+//                    } catch (e: Exception) {
+//                        _user.value = UiState.Error(e.message.toString())
+//                    }
+//                }
+//        }
     }
 
 //    fun updateUser(name: String, profile: File?, email: String) {

@@ -2,7 +2,6 @@ package com.bangkit.capstone.agreaseapp.ui.screen.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,14 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -54,15 +50,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.bangkit.capstone.agreaseapp.R
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
-import com.bangkit.capstone.agreaseapp.ui.navigation.Screen
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 
@@ -81,6 +76,8 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var logIn by remember { mutableStateOf("LogIn") }
     var error by remember { mutableStateOf("") }
+
+    var isPasswordVisible by remember { mutableStateOf(false) }
 
 
     DisposableEffect(key1 = user ){
@@ -132,7 +129,6 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
                     .verticalScroll(state = rememberScrollState())
             ) {
                 Image(
@@ -147,7 +143,8 @@ fun LoginScreen(
                     text = error,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.Red,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
                 )
                 ElevatedCard (
                     elevation = CardDefaults.cardElevation(
@@ -186,7 +183,11 @@ fun LoginScreen(
                             TextField(
                                 value = email,
                                 onValueChange = { email = it },
-                                trailingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    keyboardType = KeyboardType.Email,
+                                    imeAction = ImeAction.Next
+                                ),
+                                trailingIcon = { Icon(painterResource(id = R.drawable.baseline_person_24), contentDescription = "Email") },
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Email", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -205,8 +206,15 @@ fun LoginScreen(
                             TextField(
                                 value = password,
                                 onValueChange = { password = it },
-                                trailingIcon = { Icon(Icons.Filled.Lock, contentDescription = null) },
-                                visualTransformation = PasswordVisualTransformation(),
+                                trailingIcon = {
+                                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                                        Icon(
+                                            painter = painterResource(id = if (isPasswordVisible) R.drawable.baseline_visibility_off_24 else R.drawable.baseline_visibility_24),
+                                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password",
+                                        )
+                                    }
+                                },
+                                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                                 shape = RoundedCornerShape(7.dp),
                                 placeholder = { Text("Password", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                                 colors = TextFieldDefaults.textFieldColors(
@@ -260,11 +268,7 @@ fun LoginScreen(
                                     .typography.titleMedium
                                     .copy(textDecoration = TextDecoration.Underline),
                                 modifier = Modifier.clickable {
-                                    navController.navigate(Screen.Register.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                    }
+                                    navController.popBackStack()
                                 }
                             )
                         }

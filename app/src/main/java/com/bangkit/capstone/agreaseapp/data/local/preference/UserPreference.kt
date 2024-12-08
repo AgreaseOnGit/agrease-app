@@ -3,43 +3,75 @@ package com.bangkit.capstone.agreaseapp.data.local.preference
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.model.VerifyModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user")
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
-    private val id = stringPreferencesKey("id")
-    private val name = stringPreferencesKey("name")
-    private val token = stringPreferencesKey("token")
+    private val authEmail = stringPreferencesKey("authEmail")
+    private val authUID = stringPreferencesKey("authUID")
+
+    private val uid = stringPreferencesKey("uid")
     private val email = stringPreferencesKey("email")
-    private val profile = stringPreferencesKey("profile")
+    private val nama = stringPreferencesKey("nama")
+    private val phone = stringPreferencesKey("phone")
+    private val address = stringPreferencesKey("address")
+    private val role = stringPreferencesKey("role")
+    private val photo = stringPreferencesKey("photo")
+    private val isVerified = booleanPreferencesKey("isVerified")
 
     suspend fun saveUser(user: UserModel) {
         dataStore.edit {
-            it[id] = user.id
-            it[name] = user.name
+            it[uid] = user.uid
             it[email] = user.email
-            it[profile] = if (user.profile.isNullOrBlank()) "https://www.its.ac.id/international/wp-content/uploads/sites/66/2020/02/blank-profile-picture-973460_1280-1.jpg" else user.profile
-            it[token] = if (user.token.contains("Bearer")) user.token else "Bearer ${user.token}"
+            it[nama] = user.nama
+            it[phone] = user.phone
+            it[address] = user.address
+            it[role] = user.role
+            it[photo] = user.photo
+            it[isVerified] = user.isVerified
+        }
+    }
+
+    suspend fun saveVerify(auth: VerifyModel) {
+        dataStore.edit {
+            it[authUID] = auth.authUID
+            it[authEmail] = auth.authEmail
         }
     }
 
     fun getUser(): Flow<UserModel> = dataStore.data.map {
         UserModel(
-            it[id] ?: "",
-            it[name] ?: "",
+            it[uid] ?: "",
             it[email] ?: "",
-            it[profile] ?: "",
-            it[token] ?: "",
+            it[nama] ?: "",
+            it[phone] ?: "",
+            it[address] ?: "",
+            it[role] ?: "",
+            it[photo] ?: "",
+            it[isVerified] ?: false
+        )
+    }
+
+    fun getVerify(): Flow<VerifyModel> = dataStore.data.map {
+        VerifyModel(
+            it[authEmail] ?: "",
+            it[authUID] ?: ""
         )
     }
 
     suspend fun destroyUser() = dataStore.edit { it.clear() }
+
+    suspend fun destroyVerify() = dataStore.edit {
+        it[authEmail] = ""
+        it[authUID] = ""
+    }
 
     companion object {
         @Volatile

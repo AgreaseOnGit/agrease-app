@@ -7,14 +7,17 @@ sealed class Screen(val route: String) {
 
     // chatBot
     data object Chat : Screen("chat")
+    
+    data object Search : Screen("search")
 
     // Account
     data object Profile : Screen("profile")
     data object MyAccount : Screen("myaccount")
-    data object ChangePassword : Screen("changepassword")
 
     // Auth
     data object Login : Screen("login")
-    data object Register : Screen("register")
+    data object BuyerRegister : Screen("buyer_register")
+    data object SellerRegister : Screen("seller_register")
+    data object Verify : Screen("verify")
     data object Welcome : Screen("welcome")
 }

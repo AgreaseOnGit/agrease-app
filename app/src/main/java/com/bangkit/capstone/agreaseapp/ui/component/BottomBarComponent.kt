@@ -38,20 +38,15 @@ fun BottomBar(navController: NavHostController, modifier: Modifier = Modifier) {
                 screen = Screen.Home
             ),
             NavigationItem(
+                title = stringResource(R.string.search_nav),
+                icon = ImageVector.vectorResource(id = R.drawable.round_search_24),
+                screen = Screen.Search
+            ),
+            NavigationItem(
                 title = stringResource(R.string.transaction_nav),
                 icon = ImageVector.vectorResource(id = R.drawable.baseline_list),
                 screen = Screen.Transaction
             ),
-//            NavigationItem(
-//                title = stringResource(R.string.chat_nav),
-//                icon = ImageVector.vectorResource(id = R.drawable.baseline_chat_24),
-//                screen = Screen.Chat
-//            ),
-//            NavigationItem(
-//                title = stringResource(R.string.schedule_nav),
-//                icon = ImageVector.vectorResource(id = R.drawable.baseline_access_time),
-//                screen = Screen.Schedule
-//            ),
             NavigationItem(
                 title = stringResource(R.string.profile_nav),
                 icon = Icons.Default.AccountCircle,
@@ -60,7 +55,7 @@ fun BottomBar(navController: NavHostController, modifier: Modifier = Modifier) {
         )
         navigationItems.map { item ->
             var isSelected: Boolean = currentRoute == item.screen.route
-            if (item.screen.route == Screen.Profile.route && (currentRoute == Screen.ChangePassword.route || currentRoute == Screen.MyAccount.route)) isSelected = true
+            if (item.screen.route == Screen.Profile.route && currentRoute == Screen.MyAccount.route) isSelected = true
 
             NavigationBarItem(
                 icon = {

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,10 +24,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -44,10 +41,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.bangkit.capstone.agreaseapp.CategoryActivity
 import com.bangkit.capstone.agreaseapp.R
+import com.bangkit.capstone.agreaseapp.activity.CategoryActivity
+import com.bangkit.capstone.agreaseapp.activity.DetailProductActivity
 import com.bangkit.capstone.agreaseapp.ui.component.ButtonActionMenu
 import com.bangkit.capstone.agreaseapp.ui.component.product.ProductItem
 import com.bangkit.capstone.agreaseapp.ui.component.respond.ErrorMessage
@@ -55,7 +54,6 @@ import com.bangkit.capstone.agreaseapp.ui.component.respond.LoadingIndicator
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     redirectToWelcome: () -> Unit,
@@ -67,18 +65,8 @@ fun HomeScreen(
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val orientation = LocalConfiguration.current.orientation
     val gridColumns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
-
-    TopAppBar(
-        title = {
-            Text(text = "Home Screen")
-        },
-        actions = {
-
-        }
-    )
 
     Column(
         modifier = modifier
@@ -127,10 +115,10 @@ fun HomeScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
                                     .padding(8.dp)
-                                    .widthIn(max = screenWidth - 200.dp)
+                                    .weight(1f)
                             ) {
                                 Text(
-                                    text = "Hi, ${user.data.name}",
+                                    text = "Hi, ${user.data.nama}",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center
@@ -141,7 +129,7 @@ fun HomeScreen(
                                 )
                             }
                             AsyncImage(
-                                model = user.data.profile,
+                                model = user.data.photo,
                                 contentDescription = "Profile Image",
                                 contentScale = ContentScale.Crop,
                                 modifier = modifier
@@ -165,6 +153,7 @@ fun HomeScreen(
         ) {
             Text(
                 text = "Categories",
+                fontSize = 18.sp,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(start = 15.dp, end = 15.dp)
             )
@@ -206,6 +195,7 @@ fun HomeScreen(
                             onDispose { }
                         }
                     }
+
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
@@ -213,7 +203,7 @@ fun HomeScreen(
                 when (products) {
                     is UiState.Loading -> {
                         LoadingIndicator()
-                        viewModel.getProducts(1)
+                        viewModel.getProducts()
                     }
 
                     is UiState.Success -> {
@@ -226,6 +216,7 @@ fun HomeScreen(
                         ) {
                             Text(
                                 text = "Recomendation Products",
+                                fontSize = 18.sp,
                                 style = MaterialTheme.typography.titleMedium,
                             )
                         }
@@ -240,12 +231,20 @@ fun HomeScreen(
                         ) {
                             items(products.data) { product ->
                                 ProductItem(
-                                    name = product.name,
+                                    name = product.productName,
                                     price = product.price,
                                     image = product.image,
                                     rating = product.rating,
-                                    onNavigateToDetailScreen = {},
-                                    id = product.id,
+                                    seller = product.sellerId,
+                                    onNavigateToDetailScreen = {
+                                        activity.startActivity(
+                                            Intent(context, DetailProductActivity::class.java).putExtra(
+                                                "id",
+                                                products.data.indexOf(product)
+                                            )
+                                        )
+                                    },
+                                    id = products.data.indexOf(product),
                                 )
                             }
                         }
@@ -262,6 +261,7 @@ fun HomeScreen(
                             onDispose { }
                         }
                     }
+
                 }
             }
         }

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -61,7 +62,7 @@ fun WelcomeScreen(
             Text(
                 text = "Let’s get started!",
                 style = MaterialTheme.typography.titleLarge,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF00BF63),
                 modifier = modifier
@@ -100,7 +101,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(15.dp))
             Button(
                 onClick = {
-                    navController.navigate(Screen.Register.route) {
+                    navController.navigate(Screen.BuyerRegister.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
@@ -117,11 +118,37 @@ fun WelcomeScreen(
                     .height(45.dp)
             ) {
                 Text(
-                    "Register",
+                    "Buyer Register",
                     color = Color(0xFF00BF63),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     )
+            }
+            Spacer(modifier = Modifier.height(15.dp))
+            Button(
+                onClick = {
+                    navController.navigate(Screen.SellerRegister.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        restoreState = true
+                        launchSingleTop = true
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White
+                ),
+                border = BorderStroke(1.dp, Color(0xFF00BF63)),
+                modifier = Modifier
+                    .width(250.dp)
+                    .height(45.dp)
+            ) {
+                Text(
+                    "Seller Register",
+                    color = Color(0xFF00BF63),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
     }

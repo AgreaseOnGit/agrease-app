@@ -15,7 +15,16 @@
         android:theme="@style/Theme.AgreaseApp"
         tools:targetApi="31">
         <activity
-            android:name=".CategoryActivity"
+            android:name=".activity.SuccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DetailProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CategoryActivity"
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"

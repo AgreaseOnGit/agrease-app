@@ -3,7 +3,6 @@ package com.bangkit.capstone.agreaseapp.ui.screen.profile
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,24 +14,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -97,7 +89,7 @@ fun ProfileScreen(
                                         .padding(20.dp)
                                 ){
                                     AsyncImage(
-                                        model = profile,
+                                        model = photo,
                                         contentDescription = "Profile Image",
                                         contentScale = ContentScale.Crop,
                                         modifier = modifier
@@ -108,7 +100,7 @@ fun ProfileScreen(
                                     Spacer(modifier = modifier.width(20.dp))
                                     Column {
                                         Text(
-                                            text = name,
+                                            text = nama,
                                             style = MaterialTheme.typography.titleMedium,
                                         )
                                         Text(
@@ -154,55 +146,102 @@ fun ProfileScreen(
                                             contentDescription = "My Account",
                                         )
                                         Spacer(modifier = modifier.width(20.dp))
-                                        Column {
-                                            Text(
-                                                text = "My Account",
-                                                style = MaterialTheme.typography.titleMedium,
-                                            )
-//                                            Text(
-//                                                text = "Make change to your acccount",
-//                                                style = MaterialTheme.typography.bodySmall,
-//                                            )
-                                        }
+                                        Text(
+                                            text = "My Account",
+                                            style = MaterialTheme.typography.titleMedium,
+                                        )
                                         Spacer(modifier = modifier.weight(1f))
                                         Icon(
                                             imageVector = Icons.Default.KeyboardArrowRight,
                                             contentDescription = "",
                                         )
                                     }
-
+                                    Divider(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(Color.White)
+                                            .padding( horizontal = 15.dp),
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                        thickness = 1.dp
+                                    )
                                     Row (
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = modifier
                                             .fillMaxWidth()
                                             .background(Color.White)
                                             .padding(20.dp)
-                                            .clickable {
-//                                                redirectToChangePassword()
-                                            }
+                                            .clickable { }
+                                    ){
+                                        Icon(
+                                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_chat_24),
+                                            contentDescription = "Chatbot",
+                                        )
+                                        Spacer(modifier = modifier.width(20.dp))
+                                        Text(
+                                            text = "Chatbot",
+                                            style = MaterialTheme.typography.titleMedium,
+                                        )
+                                    }
+                                    Divider(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(Color.White)
+                                            .padding( horizontal = 15.dp),
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                        thickness = 1.dp
+                                    )
+                                    Row (
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = modifier
+                                            .fillMaxWidth()
+                                            .background(Color.White)
+                                            .padding(20.dp)
+                                            .clickable { }
+                                    ){
+                                        Icon(
+                                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_room_preferences_24),
+                                            contentDescription = "Preference",
+                                        )
+                                        Spacer(modifier = modifier.width(20.dp))
+                                        Text(
+                                            text = "User Preference",
+                                            style = MaterialTheme.typography.titleMedium,
+                                        )
+                                    }
+                                    Divider(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(Color.White)
+                                            .padding( horizontal = 15.dp),
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                        thickness = 1.dp
+                                    )
+                                    Row (
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = modifier
+                                            .fillMaxWidth()
+                                            .background(Color.White)
+                                            .padding(20.dp)
+                                            .clickable { }
                                     ){
                                         Icon(
                                             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_settings_24),
                                             contentDescription = "Settings",
                                         )
                                         Spacer(modifier = modifier.width(20.dp))
-                                        Column {
-                                            Text(
-                                                text = "Settings",
-                                                style = MaterialTheme.typography.titleMedium,
-                                            )
-//                                            Text(
-//                                                text = "Further secure your account for safety",
-//                                                style = MaterialTheme.typography.bodySmall,
-//                                            )
-                                        }
-//                                        Spacer(modifier = modifier.weight(1f))
-//                                        Icon(
-//                                            imageVector = Icons.Default.KeyboardArrowRight,
-//                                            contentDescription = "",
-//                                        )
+                                        Text(
+                                            text = "Settings",
+                                            style = MaterialTheme.typography.titleMedium,
+                                        )
                                     }
-
+                                    Divider(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(Color.White)
+                                            .padding( horizontal = 15.dp),
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                        thickness = 1.dp
+                                    )
                                     Row (
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = modifier
@@ -257,104 +296,15 @@ fun ProfileScreen(
                                             contentDescription = "Log Out",
                                         )
                                         Spacer(modifier = modifier.width(20.dp))
-                                        Column {
-                                            Text(
-                                                text = "Log Out",
-                                                style = MaterialTheme.typography.titleMedium,
-                                            )
-//                                            Text(
-//                                                text = "Further secure your account for safety",
-//                                                style = MaterialTheme.typography.bodySmall,
-//                                            )
-                                        }
-//                                        Spacer(modifier = modifier.weight(1f))
-//                                        Icon(
-//                                            imageVector = Icons.Default.KeyboardArrowRight,
-//                                            contentDescription = "",
-//                                            modifier = modifier.clickable { },
-//                                        )
+                                        Text(
+                                            text = "Log Out",
+                                            style = MaterialTheme.typography.titleMedium,
+                                        )
                                     }
                                 }
                             }
                         }
                     }
-
-//                    item {
-//                        Spacer(modifier = modifier.height(40.dp))
-//                        Text(
-//                            text = "More",
-//                            style = MaterialTheme.typography.titleMedium,
-//                        )
-//                        Spacer(modifier = modifier.height(20.dp))
-//                        ElevatedCard(
-//                            elevation = CardDefaults.cardElevation(
-//                                defaultElevation = 6.dp
-//                            ),
-//
-//                            modifier = modifier
-//                                .fillMaxWidth()
-//                        ) {
-//                            Column {
-//                                Row (
-//                                    verticalAlignment = Alignment.CenterVertically,
-//                                    modifier = modifier
-//                                        .fillMaxWidth()
-//                                        .background(Color.White)
-//                                        .padding(20.dp)
-//                                ){
-//                                    Icon(
-//                                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_web),
-//                                        contentDescription = "Website",
-//                                    )
-//                                    Spacer(modifier = modifier.width(20.dp))
-//                                    Column {
-//                                        Text(
-//                                            text = "Website",
-//                                            style = MaterialTheme.typography.titleMedium,
-//                                        )
-//                                        Text(
-//                                            text = "Our website for more information",
-//                                            style = MaterialTheme.typography.bodySmall,
-//                                        )
-//                                    }
-//                                    Spacer(modifier = modifier.weight(1f))
-//                                    Icon(
-//                                        imageVector = Icons.Default.KeyboardArrowRight,
-//                                        contentDescription = "",
-//                                    )
-//                                }
-//
-//                                Row (
-//                                    verticalAlignment = Alignment.CenterVertically,
-//                                    modifier = modifier
-//                                        .fillMaxWidth()
-//                                        .background(Color.White)
-//                                        .padding(20.dp)
-//                                ){
-//                                    Icon(
-//                                        imageVector = Icons.Default.Call,
-//                                        contentDescription = "Help & Support",
-//                                    )
-//                                    Spacer(modifier = modifier.width(20.dp))
-//                                    Column {
-//                                        Text(
-//                                            text = "Help & Supportte",
-//                                            style = MaterialTheme.typography.titleMedium,
-//                                        )
-//                                        Text(
-//                                            text = "We are ready to help",
-//                                            style = MaterialTheme.typography.bodySmall,
-//                                        )
-//                                    }
-//                                    Spacer(modifier = modifier.weight(1f))
-//                                    Icon(
-//                                        imageVector = Icons.Default.KeyboardArrowRight,
-//                                        contentDescription = "",
-//                                    )
-//                                }
-//                            }
-//                        }
-//                    }
                 }
             }
 

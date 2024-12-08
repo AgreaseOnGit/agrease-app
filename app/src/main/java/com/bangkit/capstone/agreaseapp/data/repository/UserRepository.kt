@@ -1,188 +1,108 @@
 package com.bangkit.capstone.agreaseapp.data.repository
 
-import android.util.Log
 import com.bangkit.capstone.agreaseapp.data.local.preference.UserPreference
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.model.VerifyModel
+import com.bangkit.capstone.agreaseapp.data.remote.response.RegisterResponse
 import com.bangkit.capstone.agreaseapp.data.remote.response.TemplateResponse
 import com.bangkit.capstone.agreaseapp.data.remote.retrofit.ApiService
 import com.bangkit.capstone.agreaseapp.utils.processError
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 
 class UserRepository(
     private val userPreference: UserPreference,
     private val apiService: ApiService,
-    private val auth : FirebaseAuth
 ) {
     fun login(email: String, password: String) = flow {
-        try {
-            auth.signInWithEmailAndPassword(email, password).await()
-            val currentUser = Firebase.auth.currentUser
-            if (currentUser != null) {
-                saveUser(
-                    id = currentUser.uid,
-                    email = currentUser.email ?: "",
-                    name = currentUser.uid ?: "User",
-                    profile = "",
-                    token = "mytoken"
-                )
-                emit(
-                    TemplateResponse(
-                        success = true,
-                        message = "Login successful",
-                        data = UserModel(currentUser.uid, currentUser.uid ?: "", currentUser.email ?: "User", "", "mytoken")
-                    )
-                )
-            } else {
-                emit(
-                    TemplateResponse(
-                        success = false,
-                        message = "User not found",
-                        data = UserModel("", "", "", "", "")
-                    )
-                )
-            }
-        } catch (e: Exception) {
-            val errorMessage = when (e) {
-                is FirebaseAuthException -> {
-                    when (e.errorCode) {
-                        "ERROR_INVALID_CREDENTIAL" -> "The email or password is incorrect. Please try again."
-                        "ERROR_USER_NOT_FOUND" -> "There is no user corresponding to this email."
-                        "ERROR_INVALID_EMAIL" -> "The email address is not valid."
-                        "ERROR_USER_DISABLED" -> "The user account has been disabled by an administrator."
-                        "ERROR_TOO_MANY_REQUESTS" -> "Too many login attempts. Please try again later."
-                        else -> "Authentication failed. Please try again."
-                    }
-                }
-                else -> "An unexpected error occurred. Please try again."
-            }
+        val login = apiService.login(email, password)
+        if (!login.isSuccessful) {
+            val message = login.processError()
+
             emit(
                 TemplateResponse(
                     success = false,
-                    message = errorMessage,
-                    data = UserModel("", "", "", "", "")
+                    message = message,
+                    data = UserModel("", "", "", "", "", "", "", false)
                 )
             )
+            return@flow
         }
+
+        login.body()?.let {
+            saveUser(it.data.uid, it.data.email, it.data.nama, it.data.phone, it.data.address, it.data.role, it.data.photo, it.data.isVerified)
+            emit(it)
+        }
+    }.catch { e ->
+        emit(
+            TemplateResponse(
+                success = false,
+                message = e.message.toString(),
+                data = UserModel("", "", "", "", "", "", "", false)
+            )
+        )
     }
 
-    fun register(email: String, password: String) = flow {
-        try {
-            auth.createUserWithEmailAndPassword(email, password).await()
-            val currentUser = Firebase.auth.currentUser
-            if (currentUser != null) {
-                saveUser(
-                    id = currentUser.uid,
-                    email = currentUser.email ?: "",
-                    name = currentUser.uid ?: "User",
-                    profile = "",
-                    token = "mytoken"
-                )
-                emit(
-                    TemplateResponse(
-                        success = true,
-                        message = "Registration successful",
-                        data = UserModel(currentUser.uid, currentUser.uid ?: "", currentUser.email ?: "User", "", "mytoken")
-                    )
-                )
-            } else {
-                emit(
-                    TemplateResponse(
-                        success = false,
-                        message = "User not created",
-                        data = UserModel("", "", "", "", "")
-                    )
-                )
-            }
-        } catch (e: Exception) {
-            val errorMessage = when (e) {
-                is FirebaseAuthException -> {
-                    Log.d("UserRepository", "Login: ${e.errorCode}")
-                    when (e.errorCode) {
-                        "ERROR_EMAIL_ALREADY_IN_USE" -> "The email address is already in use by another account."
-                        "ERROR_INVALID_EMAIL" -> "The email address is badly formatted."
-                        "ERROR_WEAK_PASSWORD" -> "The password is too weak. Please choose a stronger password."
-                        "ERROR_OPERATION_NOT_ALLOWED" -> "This operation is not allowed. Please contact support."
-                        else -> "Authentication failed. Please try again."
-                    }
-                }
-                else -> "An unexpected error occurred. Please try again."
-            }
+    fun register( email: String, password: String, displayName: String, phone: String, address: String, role: String) = flow {
+        val register = apiService.register( email, password, displayName, phone, address, role)
+        if (!register.isSuccessful) {
+            val message = register.processError()
+
             emit(
-                TemplateResponse(
+                RegisterResponse(
                     success = false,
-                    message = errorMessage,
-                    data = UserModel("", "", "", "", "")
+                    message = message,
+                    uid = ""
                 )
             )
+            return@flow
         }
+
+        register.body()?.apply {
+            saveVerifyUID(email, this.uid)
+            emit(this)
+        }
+    }.catch { e ->
+        emit(
+            RegisterResponse(
+                success = false,
+                message = e.message.toString(),
+                uid = ""
+            )
+        )
     }
 
-    fun getUser(): Flow<TemplateResponse<UserModel>> {
-//        val userPreference = runBlocking {
-//            userPreference.getUser().first()
-//        }
+    fun verify( codeOTP: Int) = flow {
+        val userid = userPreference.getVerify().first()
+        val register = apiService.verify( userid.authUID, codeOTP)
+        if (!register.isSuccessful) {
+            val message = register.processError()
 
-        return flow {
-            try {
-                val currentUser = Firebase.auth.currentUser
-                Log.d("UserRepository", "getUser: ${currentUser?.uid}")
-                if (currentUser != null) {
-                    saveUser(
-                        id = currentUser.uid,
-                        email = currentUser.email ?: "",
-                        name = currentUser.uid ?: "User",
-                        profile = "",
-                        token = "mytoken"
-                    )
-                    emit(
-                        TemplateResponse(
-                            success = true,
-                            message = "Login successful",
-                            data = UserModel(currentUser.uid, currentUser.uid ?: "", currentUser.email ?: "User", "", "mytoken")
-                        )
-                    )
-                } else {
-                    emit(
-                        TemplateResponse(
-                            success = false,
-                            message = "User not found",
-                            data = UserModel("", "", "", "", "")
-                        )
-                    )
-                }
-            } catch (e: Exception) {
-                val errorMessage = when (e) {
-                    is FirebaseAuthException -> {
-                        when (e.errorCode) {
-                            "ERROR_INVALID_CREDENTIAL" -> "The email or password is incorrect. Please try again."
-                            "ERROR_USER_NOT_FOUND" -> "There is no user corresponding to this email."
-                            "ERROR_INVALID_EMAIL" -> "The email address is not valid."
-                            "ERROR_USER_DISABLED" -> "The user account has been disabled by an administrator."
-                            "ERROR_TOO_MANY_REQUESTS" -> "Too many login attempts. Please try again later."
-                            else -> "Authentication failed. Please try again."
-                        }
-                    }
-                    else -> "An unexpected error occurred. Please try again."
-                }
-                emit(
-                    TemplateResponse(
-                        success = false,
-                        message = errorMessage,
-                        data = UserModel("", "", "", "", "")
-                    )
+            emit(
+                RegisterResponse(
+                    success = false,
+                    message = message,
+                    uid = ""
                 )
-            }
+            )
+            return@flow
         }
+
+        register.body()?.apply {
+            emit(this)
+        }
+    }.catch { e ->
+        emit(
+            RegisterResponse(
+                success = false,
+                message = e.message.toString(),
+                uid = ""
+            )
+        )
     }
+
 //    fun getUser(): Flow<TemplateResponse<UserModel>> {
 //        val userPreference = runBlocking {
 //            userPreference.getUser().first()
@@ -220,18 +140,36 @@ class UserRepository(
 //        }
 //    }
 
-    fun getUserPreference(): Flow<UserModel> = userPreference.getUser()
+    fun getUserPreference(): Flow<UserModel> {
+        return userPreference.getUser()
+    }
 
-    suspend fun getToken(): String = userPreference.getUser().first().token
+    suspend fun getVerified(): Boolean = userPreference.getUser().first().isVerified
 
-    suspend fun saveUser(id: String, email: String, name: String, profile: String, token: String) {
-        val user = UserModel(id, name, email, profile, token)
+    suspend fun getVerifyUID(): VerifyModel = userPreference.getVerify().first()
+
+    suspend fun saveUser(uid: String, email: String, nama: String, phone: String, address: String, role: String, photo: String, isVerified: Boolean) {
+        val user = UserModel(uid, email, nama, phone, address, role, photo, isVerified)
         userPreference.saveUser(user)
+    }
+    fun saveDummyUserLogin()= flow {
+        val user = UserModel("user01", "user01@gmail.com", "Mr. Vincent", "081234567890", "Jl. Merdeka No 7, Semarang, Jawa Tengah", "buyer", "https://static.wikia.nocookie.net/character-stats-and-profiles/images/7/71/Pak_Vincent.png/revision/latest?cb=20241115022726", true)
+        saveUser(user.uid, user.email, user.nama, user.phone, user.address, user.role, user.photo, user.isVerified)
+        emit(user)
+    }
+
+    suspend fun saveVerifyUID(authEmail: String, authUID: String) {
+        val auth = VerifyModel(authEmail, authUID)
+        userPreference.saveVerify(auth)
     }
 
     suspend fun logOut(): Boolean {
         userPreference.destroyUser()
+        return true
+    }
 
+    suspend fun destroyVerifyUID(): Boolean {
+        userPreference.destroyVerify()
         return true
     }
 
@@ -276,39 +214,6 @@ class UserRepository(
 //            )
 //        )
 //    }
-//
-//    fun changePassword(newPassword: String, confirmPassword: String) = flow {
-//        val userPreference = userPreference.getUser().first()
-//        val user = apiService.changePassword(
-//            token = userPreference.token,
-//            password = newPassword,
-//            confirm_password = confirmPassword
-//        )
-//        if (!user.isSuccessful) {
-//            val message = user.processError()
-//
-//            emit(
-//                TemplateResponse(
-//                    success = false,
-//                    message = message,
-//                    data = false
-//                )
-//            )
-//            return@flow
-//        }
-//
-//        user.body()?.apply {
-//            emit(this)
-//        }
-//    }.catch { e ->
-//        emit(
-//            TemplateResponse(
-//                success = false,
-//                message = e.message.toString(),
-//                data = false
-//            )
-//        )
-//    }
 
     companion object {
         @Volatile
@@ -316,10 +221,9 @@ class UserRepository(
         fun getInstance(
             userPreference: UserPreference,
             apiService: ApiService,
-            auth : FirebaseAuth
         ): UserRepository =
             instance ?: synchronized(this) {
-                instance ?: UserRepository(userPreference, apiService, auth)
+                instance ?: UserRepository(userPreference, apiService)
             }.also {
                 instance = it
             }
