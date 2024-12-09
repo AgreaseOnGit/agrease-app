@@ -28,9 +28,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -192,7 +192,7 @@ fun SellerRegisterScreen(
                     )
                     {
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = displayName,
                                 onValueChange = { displayName = it },
                                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -215,7 +215,7 @@ fun SellerRegisterScreen(
 
                         Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = email,
                                 onValueChange = { email = it },
                                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -238,7 +238,7 @@ fun SellerRegisterScreen(
 
                         Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = password,
                                 onValueChange = { password = it },
                                 trailingIcon = {
@@ -270,7 +270,7 @@ fun SellerRegisterScreen(
 
                         Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = confirm_password,
                                 onValueChange = { confirm_password = it },
                                 trailingIcon = {
@@ -300,7 +300,7 @@ fun SellerRegisterScreen(
 
                         Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = phone,
                                 onValueChange = { phone = it },
                                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -323,7 +323,7 @@ fun SellerRegisterScreen(
 
                         Spacer(modifier = Modifier.height(15.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = address,
                                 onValueChange = { address = it },
                                 keyboardOptions = KeyboardOptions.Default.copy(

@@ -9,6 +9,7 @@ import com.bangkit.capstone.agreaseapp.data.repository.ProductRepository
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.AuthViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.category.CategoryViewModel
+import com.bangkit.capstone.agreaseapp.ui.screen.chat.ChatViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.checkout.CheckoutViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.product.ProductViewModel
@@ -16,6 +17,7 @@ import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.search.SearchViewModel
 import com.bangkit.capstone.agreaseapp.ui.screen.transaction.TransactionViewModel
+import com.bangkit.capstone.agreaseapp.ui.screen.transaction.detail.DetailTransactionViewModel
 
 class ViewModelFactory(
     private val userRepository: UserRepository,
@@ -39,6 +41,8 @@ class ViewModelFactory(
         ProductViewModel::class.java to { ProductViewModel(productRepository) },
         CheckoutViewModel::class.java to { CheckoutViewModel(productRepository, userRepository) },
         SearchViewModel::class.java to { SearchViewModel(productRepository) },
+        ChatViewModel::class.java to { ChatViewModel(userRepository) },
+        DetailTransactionViewModel::class.java to { DetailTransactionViewModel(productRepository,userRepository) },
     )
 
     @Suppress("UNCHECKED_CAST")

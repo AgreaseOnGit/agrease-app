@@ -4,32 +4,41 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.sql.Date
 
-@Entity(tableName = "Transaction")
+@Entity(tableName = "transaction")
 data class TransactionModel(
 
-//    @field:PrimaryKey
-//    @field:ColumnInfo(name = "id")
-//    @field:SerializedName("id")
-//    val id: Int,
+    @field:PrimaryKey
+    @field:ColumnInfo(name = "id")
+    @field:SerializedName("id")
+    val id: String,
 
-    @field:ColumnInfo(name = "product_name")
-    @field:SerializedName("product_name")
-    val product_name: String,
+    @field:ColumnInfo(name = "idBuyer")
+    @field:SerializedName("idBuyer")
+    val idBuyer: String,
 
-    @field:ColumnInfo(name = "image")
-    @field:SerializedName("image")
-    val image: String,
+    @field:ColumnInfo(name = "product")
+    @field:SerializedName("product")
+    val product: ProductModel,
 
-    @field:ColumnInfo(name = "total_price")
-    @field:SerializedName("total_price")
-    val total_price: Int,
+    @field:ColumnInfo(name = "method")
+    @field:SerializedName("method")
+    val method: String,
 
-    @field:ColumnInfo(name = "shop_name")
-    @field:SerializedName("shop_name")
-    val shop_name: String,
+    @field:ColumnInfo(name = "quantity")
+    @field:SerializedName("quantity")
+    val quantity: Int,
+
+    @field:ColumnInfo(name = "total")
+    @field:SerializedName("total")
+    val total: Int,
+
+    @field:ColumnInfo(name = "date")
+    @field:SerializedName("date")
+    val date: Date,
 
     @field:ColumnInfo(name = "status")
     @field:SerializedName("status")
-    val status: String
+    val status: String,
 )
