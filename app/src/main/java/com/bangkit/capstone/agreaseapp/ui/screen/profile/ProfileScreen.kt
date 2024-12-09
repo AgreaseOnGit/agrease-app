@@ -36,12 +36,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import coil.compose.AsyncImage
 import com.bangkit.capstone.agreaseapp.R
 import com.bangkit.capstone.agreaseapp.ui.component.respond.ErrorMessage
 import com.bangkit.capstone.agreaseapp.ui.component.respond.LoadingIndicator
-import com.bangkit.capstone.agreaseapp.ui.navigation.Screen
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 
@@ -50,6 +48,7 @@ fun ProfileScreen(
     redirectToWelcome: (String) -> Unit,
     navController: NavController,
     redirectToMyAccount: () -> Unit,
+    redirectToChatbot: () -> Unit,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
@@ -170,7 +169,9 @@ fun ProfileScreen(
                                             .fillMaxWidth()
                                             .background(Color.White)
                                             .padding(20.dp)
-                                            .clickable { }
+                                            .clickable {
+                                                redirectToChatbot()
+                                            }
                                     ){
                                         Icon(
                                             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_chat_24),
@@ -242,43 +243,6 @@ fun ProfileScreen(
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                                         thickness = 1.dp
                                     )
-                                    Row (
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = modifier
-                                            .fillMaxWidth()
-                                            .background(Color.White)
-                                            .padding(20.dp)
-                                            .clickable {
-                                                navController.navigate(Screen.Chat.route) {
-                                                    popUpTo(navController.graph.findStartDestination().id) {
-                                                        saveState = true
-                                                    }
-                                                    restoreState = true
-                                                    launchSingleTop = true
-                                                }
-                                            }
-                                    ){
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_chat_24),
-                                            contentDescription = "ChatBot",
-                                        )
-                                        Spacer(modifier = modifier.width(20.dp))
-                                        Column {
-                                            Text(
-                                                text = "ChatBot",
-                                                style = MaterialTheme.typography.titleMedium,
-                                            )
-//                                            Text(
-//                                                text = "Further secure your account for safety",
-//                                                style = MaterialTheme.typography.bodySmall,
-//                                            )
-                                        }
-//                                        Spacer(modifier = modifier.weight(1f))
-//                                        Icon(
-//                                            imageVector = Icons.Default.KeyboardArrowRight,
-//                                            contentDescription = "",
-//                                        )
-                                    }
 
                                     Row (
                                         verticalAlignment = Alignment.CenterVertically,

@@ -35,47 +35,5 @@ class MyAccountViewModel (
                     }
                 }
         }
-//        viewModelScope.launch {
-//            userRepository.getUser()
-//                .catch {
-//                    _user.value = UiState.Error(it.message.toString())
-//                }
-//                .collect { data ->
-//                    try {
-//                        if (!data.success) {
-//                            if (data.message == "Unauthorized") {
-//                                _user.value = UiState.Unauthorized
-//                                return@collect
-//                            }
-//                            _user.value = UiState.Error(data.message)
-//                            return@collect
-//                        }
-//                        _user.value = UiState.Success(data.data)
-//                    } catch (e: Exception) {
-//                        _user.value = UiState.Error(e.message.toString())
-//                    }
-//                }
-//        }
     }
-
-//    fun updateUser(name: String, profile: File?, email: String) {
-//        _user.value = UiState.Loading
-//        viewModelScope.launch {
-//            userRepository.updateUser(name = name, profile = profile, email = email)
-//                .catch {
-//                    _user.value = UiState.Error(it.message.toString())
-//                }
-//                .collect { data ->
-//                    try {
-//                        if (!data.success) {
-//                            _user.value = UiState.Error(data.message)
-//                            return@collect
-//                        }
-//                        _user.value = UiState.Success(data.data)
-//                    } catch (e: Exception) {
-//                        _user.value = UiState.Error(e.message.toString())
-//                    }
-//                }
-//        }
-//    }
 }

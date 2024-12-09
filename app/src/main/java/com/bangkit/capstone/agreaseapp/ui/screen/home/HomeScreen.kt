@@ -125,6 +125,7 @@ fun HomeScreen(
                                 )
                                 Text(
                                     text = "Welcome to Agrease App!",
+                                    textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
                             }
@@ -166,7 +167,7 @@ fun HomeScreen(
                     }
                     is UiState.Success -> {
                         LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(14.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 10.dp, end = 10.dp)

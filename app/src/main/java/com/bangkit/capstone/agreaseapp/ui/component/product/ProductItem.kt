@@ -47,6 +47,7 @@ fun ProductItem(
     modifier: Modifier = Modifier,
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val orientation = LocalConfiguration.current.orientation
 
     fun formattedPrice(price: Int): String {
         return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)

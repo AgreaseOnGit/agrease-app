@@ -30,11 +30,10 @@ import com.bangkit.capstone.agreaseapp.ui.navigation.Screen
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.BuyerRegisterScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.LoginScreen
-import com.bangkit.capstone.agreaseapp.ui.screen.auth.RegisterScreen
-import com.bangkit.capstone.agreaseapp.ui.screen.chat.ChatScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.SellerRegisterScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.VerifyScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.WelcomeScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.chat.ChatScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.home.HomeScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.ProfileScreen
 import com.bangkit.capstone.agreaseapp.ui.screen.profile.account.MyAccountScreen
@@ -113,7 +112,7 @@ fun AgreaseApp(
                 },
                 bottomBar =
                 {
-                    if (currentRoute != Screen.Login.route && currentRoute != Screen.Welcome.route && currentRoute != Screen.BuyerRegister.route && currentRoute != Screen.SellerRegister.route && currentRoute!= Screen.Verify.route && currentRoute != null) {
+                    if (currentRoute != Screen.Login.route && currentRoute != Screen.Welcome.route && currentRoute != Screen.BuyerRegister.route && currentRoute != Screen.SellerRegister.route  && currentRoute!= Screen.MyAccount.route  && currentRoute!= Screen.Chat.route && currentRoute != null) {
                         BottomBar(navController)
                     }
                 },
@@ -190,13 +189,16 @@ fun AgreaseApp(
                         )
                     }
                     composable(Screen.Chat.route) {
-                        ChatScreen()
+                        ChatScreen(
+                            redirectToWelcome = { redirectToWelcome("") },
+                        )
                     }
                     composable(Screen.Profile.route) {
                         ProfileScreen(
                             navController = navController,
                             redirectToWelcome = { redirectToWelcome("") },
                             redirectToMyAccount = { navController.navigate(Screen.MyAccount.route) },
+                            redirectToChatbot = { navController.navigate(Screen.Chat.route) },
                         )
                     }
                     composable(Screen.MyAccount.route) {

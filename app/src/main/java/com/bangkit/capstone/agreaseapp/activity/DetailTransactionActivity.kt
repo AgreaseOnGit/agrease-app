@@ -1,7 +1,6 @@
 package com.bangkit.capstone.agreaseapp.activity
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,11 +11,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.bangkit.capstone.agreaseapp.ui.component.DetailBottomBar
-import com.bangkit.capstone.agreaseapp.ui.screen.product.ProductScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.transaction.detail.DetailTransactionScreen
 import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
-class DetailProductActivity : ComponentActivity() {
+class DetailTransactionActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,25 +27,11 @@ class DetailProductActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val activity = (LocalContext.current as Activity)
-                    val context = LocalContext.current
 
                     Scaffold(
-                        bottomBar = {
-                            DetailBottomBar(
-                                onBuyClicked = {
-                                    activity.startActivity(
-                                        Intent(context, CheckoutActivity::class.java).putExtra(
-                                            "id",
-                                            idProduct
-                                        )
-                                    )
-                                },
-//                                onSaveClicked = {}
-                            )
-                        }
                     )
                     { innerPadding ->
-                        ProductScreen(id = idProduct, modifier = Modifier.padding(innerPadding), redirectToWelcome = {
+                        DetailTransactionScreen(id = idProduct, modifier = Modifier.padding(innerPadding), redirectToWelcome = {
                             activity.finish()
                         })
                     }

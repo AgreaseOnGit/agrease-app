@@ -28,9 +28,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -180,7 +180,7 @@ fun LoginScreen(
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         Box(modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = email,
                                 onValueChange = { email = it },
                                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -203,7 +203,7 @@ fun LoginScreen(
 
                         Spacer(modifier = Modifier.height(15.dp))
                         Box (modifier = Modifier.fillMaxWidth()) {
-                            TextField(
+                            OutlinedTextField(
                                 value = password,
                                 onValueChange = { password = it },
                                 trailingIcon = {

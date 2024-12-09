@@ -239,26 +239,7 @@ fun MyAccountScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {
-//                if (submit != "Loading..." ) {
-//                    submit = "Loading..."
-//                    message = ""
-//                    error = ""
-//                    if (imageUri == null){
-//                        viewModel.updateUser(
-//                            name = name,
-//                            profile = null,
-//                            email = email,
-//                        )
-//                    } else {
-//                        viewModel.updateUser(
-//                            name,
-//                            uriToFile(imageUri!!),
-//                            email,
-//                        )
-//                    }
-//                }
-            },
+            onClick = { },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
