@@ -43,7 +43,7 @@ fun CategoryScreen(
     viewModel: CategoryViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
@@ -52,7 +52,7 @@ fun CategoryScreen(
     val gridColumns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(
                 color = Color.White

@@ -21,7 +21,9 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,15 +57,31 @@ fun TransactionScreen(
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
+    val role by viewModel.userRole
+
     fun formattedPrice(price: Int): String {
         return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)
     }
+
+    LaunchedEffect(key1 = role) {
+        viewModel.getUserRole()
+    }
+
 
     viewModel.transactions.collectAsState(initial = UiState.Loading).value.let { transactions ->
         when (transactions) {
             is UiState.Loading -> {
                 LoadingIndicator()
-                viewModel.getTransactions()
+                when(role) {
+                    is UiState.Success -> {
+                        if ((role as UiState.Success<String>).data == "seller") {
+                            viewModel.getTransactions("seller")
+                        } else {
+                            viewModel.getTransactions("buyer")
+                        }
+                    }
+                    else -> {}
+                }
             }
 
             is UiState.Success -> {
@@ -84,10 +102,15 @@ fun TransactionScreen(
                                         Intent(
                                             context,
                                             DetailTransactionActivity::class.java
-                                        ).putExtra(
-                                            "id",
-                                            transaction
-                                        )
+                                        ).apply {
+                                            putExtra("id", transaction)
+                                            when(role){
+                                                is UiState.Success -> {
+                                                    putExtra("role", (role as UiState.Success<String>).data)
+                                                }
+                                                else -> {}
+                                            }
+                                        }
                                     )
                                 }
                         ) {
@@ -107,20 +130,53 @@ fun TransactionScreen(
                                             bottom = 5.dp
                                         ),
                                 ) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.baseline_add_business_24),
-                                        colorFilter = ColorFilter.tint(Color(0xFF00BF63)),
-                                        contentDescription = "shop",
-                                        modifier = Modifier
-                                            .size(23.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(5.dp))
-                                    Text(
-                                        text = transactions.data[transaction].product.sellerId.toUpperCase(Locale.getDefault()),
-                                        fontSize = 15.sp,
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = Color(0xFF00BF63),
-                                    )
+                                    when(role) {
+                                        is UiState.Success -> {
+                                            if ((role as UiState.Success<String>).data == "seller") {
+                                                ElevatedCard(
+                                                    elevation = CardDefaults.cardElevation(
+                                                        defaultElevation = 15.dp
+                                                    ),
+                                                    colors = when (transactions.data[transaction].status) {
+                                                        "Done" -> CardDefaults.cardColors(Color(0xFF00BF63))
+                                                        "On Delivery" -> CardDefaults.cardColors(Color(0xFF2C98EE))
+                                                        "Packaging" -> CardDefaults.cardColors(Color(0xFFFF9800))
+                                                        else -> CardDefaults.cardColors(Color(0xFFE91E1E))
+                                                    },
+                                                    modifier = Modifier
+                                                        .clip(shape = CardDefaults.shape)
+                                                        .shadow(
+                                                            elevation = 0.dp,
+                                                            spotColor = Color.Transparent,
+                                                            shape = CardDefaults.shape
+                                                        )
+                                                ){
+                                                    Text(
+                                                        text = transactions.data[transaction].status,
+                                                        fontSize = 12.sp,
+                                                        color = Color.White,
+                                                        modifier = Modifier.padding(vertical = 2.dp, horizontal = 7.dp)
+                                                    )
+                                                }
+                                            } else {
+                                                Image(
+                                                    painter = painterResource(id = R.drawable.baseline_add_business_24),
+                                                    colorFilter = ColorFilter.tint(Color(0xFF00BF63)),
+                                                    contentDescription = "shop",
+                                                    modifier = Modifier
+                                                        .size(20.dp)
+                                                )
+                                                Spacer(modifier = Modifier.width(5.dp))
+                                                Text(
+                                                    text = transactions.data[transaction].product.sellerId.toUpperCase(Locale.getDefault()),
+                                                    fontSize = 15.sp,
+                                                    style = MaterialTheme.typography.titleMedium,
+                                                    color = Color(0xFF00BF63),
+                                                )
+                                            }
+                                        }
+                                        else -> {}
+                                    }
                                     Spacer(modifier = Modifier.weight(1f))
                                     Text(
                                         text = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID")).format(transactions.data[transaction].date),
@@ -158,48 +214,71 @@ fun TransactionScreen(
                                             style = MaterialTheme.typography.titleMedium,
                                             color = MaterialTheme.colorScheme.onTertiaryContainer
                                         )
-                                        Spacer(modifier = Modifier.weight(1f))
-                                        Text(
-                                            text = "Total : Rp ${formattedPrice(transactions.data[transaction].total)}",
-                                            maxLines = 1,
-                                            fontSize = 15.sp,
-                                            color = MaterialTheme.colorScheme.onTertiaryContainer
-                                        )
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            verticalAlignment = Alignment.Bottom,
-                                            horizontalArrangement = Arrangement.SpaceBetween
-                                        ) {
-                                            Text(
-                                                text = "${transactions.data[transaction].quantity} Items",
-                                                fontSize = 15.sp,
-                                                color = MaterialTheme.colorScheme.onTertiaryContainer
-                                            )
-                                            ElevatedCard(
-                                                elevation = CardDefaults.cardElevation(
-                                                    defaultElevation = 15.dp
-                                                ),
-                                                colors = when (transactions.data[transaction].status) {
-                                                    "Done" -> CardDefaults.cardColors(Color(0xFF00BF63))
-                                                    "On Delivery" -> CardDefaults.cardColors(Color(0xFF2C98EE))
-                                                    "Packaging" -> CardDefaults.cardColors(Color(0xFFFF9800))
-                                                    else -> CardDefaults.cardColors(Color(0xFFE91E1E))
-                                                },
-                                                modifier = Modifier
-                                                    .clip(shape = CardDefaults.shape)
-                                                    .shadow(
-                                                        elevation = 0.dp,
-                                                        spotColor = Color.Transparent,
-                                                        shape = CardDefaults.shape
+                                        when(role) {
+                                            is UiState.Success -> {
+                                                if ((role as UiState.Success<String>).data == "seller") {
+                                                    Text(
+                                                        text = "Buyer : ${transactions.data[transaction].idBuyer}",
+                                                        maxLines = 1,
+                                                        fontSize = 15.sp,
+                                                        color = MaterialTheme.colorScheme.onTertiaryContainer
                                                     )
-                                            ){
+                                                } else {
+                                                    Spacer(modifier = Modifier.weight(1f))
+                                                }
                                                 Text(
-                                                    text = transactions.data[transaction].status,
-                                                    fontSize = 12.sp,
-                                                    color = Color.White,
-                                                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 7.dp)
+                                                    text = "Total : Rp ${formattedPrice(transactions.data[transaction].total)}",
+                                                    maxLines = 1,
+                                                    fontSize = 15.sp,
+                                                    color = MaterialTheme.colorScheme.onTertiaryContainer
                                                 )
+                                                if ((role as UiState.Success<String>).data == "buyer") {
+                                                    Row(
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        verticalAlignment = Alignment.Bottom,
+                                                        horizontalArrangement = Arrangement.SpaceBetween
+                                                    ) {
+                                                        Text(
+                                                            text = "${transactions.data[transaction].quantity} Items",
+                                                            fontSize = 15.sp,
+                                                            color = MaterialTheme.colorScheme.onTertiaryContainer
+                                                        )
+                                                        ElevatedCard(
+                                                            elevation = CardDefaults.cardElevation(
+                                                                defaultElevation = 15.dp
+                                                            ),
+                                                            colors = when (transactions.data[transaction].status) {
+                                                                "Done" -> CardDefaults.cardColors(Color(0xFF00BF63))
+                                                                "On Delivery" -> CardDefaults.cardColors(Color(0xFF2C98EE))
+                                                                "Packaging" -> CardDefaults.cardColors(Color(0xFFFF9800))
+                                                                else -> CardDefaults.cardColors(Color(0xFFE91E1E))
+                                                            },
+                                                            modifier = Modifier
+                                                                .clip(shape = CardDefaults.shape)
+                                                                .shadow(
+                                                                    elevation = 0.dp,
+                                                                    spotColor = Color.Transparent,
+                                                                    shape = CardDefaults.shape
+                                                                )
+                                                        ){
+                                                            Text(
+                                                                text = transactions.data[transaction].status,
+                                                                fontSize = 12.sp,
+                                                                color = Color.White,
+                                                                modifier = Modifier.padding(vertical = 2.dp, horizontal = 7.dp)
+                                                            )
+                                                        }
+                                                    }
+                                                } else {
+                                                    Text(
+                                                        text = "${transactions.data[transaction].quantity} Items",
+                                                        fontSize = 15.sp,
+                                                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                                                    )
+                                                }
+
                                             }
+                                            else -> {}
                                         }
                                     }
                                 }

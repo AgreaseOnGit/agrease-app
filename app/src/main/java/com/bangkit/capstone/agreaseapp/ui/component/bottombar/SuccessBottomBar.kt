@@ -1,4 +1,4 @@
-package com.bangkit.capstone.agreaseapp.ui.component
+package com.bangkit.capstone.agreaseapp.ui.component.bottombar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

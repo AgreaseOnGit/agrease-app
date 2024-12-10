@@ -145,6 +145,7 @@ class UserRepository(
     }
 
     suspend fun getVerified(): Boolean = userPreference.getUser().first().isVerified
+    suspend fun getRole(): String = userPreference.getUser().first().role
 
     suspend fun getVerifyUID(): VerifyModel = userPreference.getVerify().first()
 
@@ -152,8 +153,12 @@ class UserRepository(
         val user = UserModel(uid, email, nama, phone, address, role, photo, isVerified)
         userPreference.saveUser(user)
     }
-    fun saveDummyUserLogin()= flow {
-        val user = UserModel("user01", "user01@gmail.com", "Mr. Vincent", "081234567890", "Jl. Merdeka No 7, Semarang, Jawa Tengah", "buyer", "https://static.wikia.nocookie.net/character-stats-and-profiles/images/7/71/Pak_Vincent.png/revision/latest?cb=20241115022726", true)
+    fun saveDummyUserLogin(role: String)= flow {
+        val user = if (role == "user.buyer@gmail.com"){
+            UserModel("user01", "user.buyer@gmail.com", "Mr. Vincent", "081234567890", "Jl. Merdeka No 7, Semarang, Jawa Tengah", "buyer", "https://static.wikia.nocookie.net/character-stats-and-profiles/images/7/71/Pak_Vincent.png/revision/latest?cb=20241115022726", true)
+        } else {
+            UserModel("user02", "user.seller@gmail.com", "Panda Farm", "081234567890", "Jl. Merauke No 9, Kediri, Jawa Timur", "seller", "https://hips.hearstapps.com/hbu.h-cdn.co/assets/16/15/1460404413-1460150763-1460127682-oregon-farm.jpg?crop=0.665xw:1.00xh;0.0442xw,0&resize=980:*", true)
+        }
         saveUser(user.uid, user.email, user.nama, user.phone, user.address, user.role, user.photo, user.isVerified)
         emit(user)
     }

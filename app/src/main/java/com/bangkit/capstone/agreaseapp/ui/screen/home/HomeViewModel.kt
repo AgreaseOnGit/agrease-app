@@ -1,11 +1,14 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.home
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.capstone.agreaseapp.data.model.CategoryModel
 import com.bangkit.capstone.agreaseapp.data.model.ProductModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.data.model.dummy.DummyDataSource
+import com.bangkit.capstone.agreaseapp.data.model.dummy.SellerDummyDataSource
 import com.bangkit.capstone.agreaseapp.data.repository.ProductRepository
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
@@ -30,12 +33,26 @@ class HomeViewModel(
     val user: StateFlow<UiState<UserModel>>
         get() = _user
 
-    fun getcategories() {
+    private val _userRole: MutableState<UiState<String>> = mutableStateOf(UiState.Loading)
+    val userRole: MutableState<UiState<String>>
+        get() = _userRole
+
+    fun getUserRole() {
+        viewModelScope.launch {
+            _userRole.value = UiState.Success(userRepository.getRole())
+        }
+    }
+
+    fun getCategories() {
         _categories.value = UiState.Success(DummyDataSource.dummyCatgories)
     }
 
-    fun getProducts() {
-        _products.value = UiState.Success(DummyDataSource.dummyProducts)
+    fun getProducts(role: String) {
+        if (role == "buyer") {
+            _products.value = UiState.Success(DummyDataSource.dummyProducts)
+        } else {
+            _products.value = UiState.Success(SellerDummyDataSource.dummyProducts)
+        }
 //        _products.value = UiState.Loading
 //        viewModelScope.launch {
 //            if (_products.value is UiState.Success) {

@@ -1,11 +1,14 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.transaction.detail
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.capstone.agreaseapp.data.model.ProductModel
 import com.bangkit.capstone.agreaseapp.data.model.TransactionModel
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.data.model.dummy.DummyDataSource
+import com.bangkit.capstone.agreaseapp.data.model.dummy.SellerDummyDataSource
 import com.bangkit.capstone.agreaseapp.data.repository.ProductRepository
 import com.bangkit.capstone.agreaseapp.data.repository.UserRepository
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
@@ -32,8 +35,22 @@ class DetailTransactionViewModel(
     val products: StateFlow<UiState<List<ProductModel>>>
         get() = _products
 
-    fun getDetailTransactions(id: Int) {
-        _transaction.value = UiState.Success(DummyDataSource.dummyTransaction[id])
+    private val _userRole: MutableState<UiState<String>> = mutableStateOf(UiState.Loading)
+    val userRole: MutableState<UiState<String>>
+        get() = _userRole
+
+    fun getUserRole() {
+        viewModelScope.launch {
+            _userRole.value = UiState.Success(userRepository.getRole())
+        }
+    }
+
+    fun getDetailTransactions(role: String, id: Int) {
+        if (role == "buyer"){
+            _transaction.value = UiState.Success(DummyDataSource.dummyTransaction[id])
+        } else {
+            _transaction.value = UiState.Success(SellerDummyDataSource.dummyTransaction[id])
+        }
     }
 
     fun getUser() {

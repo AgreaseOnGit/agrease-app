@@ -55,11 +55,10 @@ import java.util.Locale
 @Composable
 fun CheckoutScreen(
     id: Int,
-    redirectToWelcome: () -> Unit,
     viewModel: CheckoutViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     val (selectedPaymentMethod, setSelectedPaymentMethod) = remember { mutableStateOf("Cash On Delivery (COD)") }
     val (quantity, setQuantity) = remember { mutableIntStateOf(1) }
