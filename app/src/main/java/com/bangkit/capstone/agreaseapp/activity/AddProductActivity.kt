@@ -18,15 +18,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.bangkit.capstone.agreaseapp.ui.screen.category.CategoryScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.product.add.AddProductScreen
+import com.bangkit.capstone.agreaseapp.ui.screen.product.update.UpdateProductScreen
 import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
-class CategoryActivity : ComponentActivity() {
+class AddProductActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val category = intent.getStringExtra("category" )
+        val from = intent.getStringExtra("from")
+        val idProduct = if (from == "update") intent.getIntExtra("id", 0) else null
 
         setContent {
             AgreaseTheme {
@@ -34,14 +36,20 @@ class CategoryActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val activity = (LocalContext.current as? Activity)
+                    val activity = (LocalContext.current as Activity)
+                    val context = LocalContext.current
 
                     Scaffold(
                         topBar = {
                             TopAppBar(
-                                title = { Text(text = "$category", style = MaterialTheme.typography.titleMedium) },
+                                title = {
+                                    Text(
+                                        text = if (from == "update") "Update Product" else "Sell New Product",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                },
                                 navigationIcon = {
-                                    IconButton(onClick = { activity?.finish() }) {
+                                    IconButton(onClick = { activity.finish() }) {
                                         Icon(
                                             imageVector = Icons.Filled.ArrowBack,
                                             contentDescription = "Back"
@@ -53,9 +61,15 @@ class CategoryActivity : ComponentActivity() {
                         },
                     )
                     { innerPadding ->
-                        CategoryScreen(category = category!!, modifier = Modifier.padding(innerPadding), redirectToWelcome = {
-                            activity?.finish()
-                        })
+                        if (idProduct != null) {
+                            UpdateProductScreen( id = idProduct, modifier = Modifier.padding(innerPadding), redirectToWelcome = {
+                                activity.finish()
+                            })
+                        } else {
+                            AddProductScreen( modifier = Modifier.padding(innerPadding), redirectToWelcome = {
+                                activity.finish()
+                            })
+                        }
                     }
                 }
             }

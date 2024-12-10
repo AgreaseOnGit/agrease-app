@@ -161,17 +161,19 @@ fun BuyerRegisterScreen(
                     painter = painterResource(id = R.drawable.logo_no_bg),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(120.dp)
+                        .size(100.dp)
                         .align(Alignment.CenterHorizontally)
                 )
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = error,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
-                )
+                if (error.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = error,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                    )
+                }
                 ElevatedCard (
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 7.dp
@@ -207,9 +209,9 @@ fun BuyerRegisterScreen(
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
+                                maxLines = 2,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 
@@ -230,9 +232,9 @@ fun BuyerRegisterScreen(
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
+                                maxLines = 2,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 
@@ -263,7 +265,6 @@ fun BuyerRegisterScreen(
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 
@@ -294,7 +295,6 @@ fun BuyerRegisterScreen(
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 
@@ -317,7 +317,6 @@ fun BuyerRegisterScreen(
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 
@@ -338,16 +337,16 @@ fun BuyerRegisterScreen(
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
+                                maxLines = 5,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 
                         Spacer(modifier = Modifier.height(20.dp))
                         Button(
                             onClick = {
-                                if (register != "Loading...") viewModel.register( email, password, confirm_password, displayName, phone, address, "buyer")
+//                                if (register != "Loading...") viewModel.register( email, password, confirm_password, displayName, phone, address, "buyer")
 
                             },
                             colors = ButtonDefaults.buttonColors(

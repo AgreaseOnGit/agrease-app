@@ -138,14 +138,16 @@ fun LoginScreen(
                         .size(150.dp)
                         .align(Alignment.CenterHorizontally)
                 )
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = error,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Red,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(start = 15.dp, end = 15.dp)
-                )
+                if (error.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = error,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+                    )
+                }
                 ElevatedCard (
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = 7.dp
@@ -195,9 +197,9 @@ fun LoginScreen(
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
                                 ),
+                                maxLines = 2,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 
@@ -228,7 +230,6 @@ fun LoginScreen(
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(55.dp)
                             )
                         }
 

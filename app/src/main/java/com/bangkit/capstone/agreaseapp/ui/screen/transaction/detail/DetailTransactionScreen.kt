@@ -26,7 +26,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,6 +70,12 @@ fun DetailTransactionScreen(
 
     val shippingFee = 20000
 
+    val role by viewModel.userRole
+
+    LaunchedEffect(key1 = role) {
+        viewModel.getUserRole()
+    }
+
     fun formattedPrice(price: Int): String {
         return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)
     }
@@ -102,7 +110,17 @@ fun DetailTransactionScreen(
                     when(transaction){
                         is UiState.Loading -> {
                             LoadingIndicator()
-                            viewModel.getDetailTransactions(id)
+                            when(role) {
+                                is UiState.Success -> {
+                                    if ((role as UiState.Success<String>).data == "seller") {
+                                        viewModel.getDetailTransactions("seller", id)
+                                    }
+                                    if ((role as UiState.Success<String>).data == "buyer") {
+                                        viewModel.getDetailTransactions("buyer", id)
+                                    }
+                                }
+                                else -> {}
+                            }
                         }
                         is UiState.Success -> {
                             Row(
@@ -202,7 +220,17 @@ fun DetailTransactionScreen(
             when(transaction){
                 is UiState.Loading -> {
                     LoadingIndicator()
-                    viewModel.getDetailTransactions(id)
+                    when(role) {
+                        is UiState.Success -> {
+                            if ((role as UiState.Success<String>).data == "seller") {
+                                viewModel.getDetailTransactions("seller", id)
+                            }
+                            if ((role as UiState.Success<String>).data == "buyer") {
+                                viewModel.getDetailTransactions("buyer", id)
+                            }
+                        }
+                        else -> {}
+                    }
                 }
                 is UiState.Success -> {
                     ElevatedCard(
@@ -232,20 +260,35 @@ fun DetailTransactionScreen(
 
                                     )
                                 Spacer(modifier = Modifier.weight(1f))
-                                Image(
-                                    painter = painterResource(id = R.drawable.baseline_add_business_24),
-                                    colorFilter = ColorFilter.tint(Color(0xFF00BF63)),
-                                    contentDescription = "shop",
-                                    modifier = Modifier
-                                        .size(23.dp)
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = transaction.data.product.sellerId.toUpperCase(Locale.getDefault()),
-                                    fontSize = 15.sp,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = Color(0xFF00BF63),
-                                )
+                                when(role){
+                                    is UiState.Success -> {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.baseline_add_business_24),
+                                            colorFilter = ColorFilter.tint(
+                                                if ((role as UiState.Success<String>).data == "seller") {
+                                                    Color(0xFF2C98EE)
+                                                } else {
+                                                    Color(0xFF00BF63)
+                                                }
+                                            ),
+                                            contentDescription = "shop",
+                                            modifier = Modifier
+                                                .size(23.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(5.dp))
+                                        Text(
+                                            text = transaction.data.product.sellerId.toUpperCase(Locale.getDefault()),
+                                            fontSize = 15.sp,
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = if ((role as UiState.Success<String>).data == "seller") {
+                                                Color(0xFF2C98EE)
+                                            } else {
+                                                Color(0xFF00BF63)
+                                            },
+                                        )
+                                    }
+                                    else -> { }
+                                }
                             }
                             ElevatedCard(
                                 elevation = CardDefaults.cardElevation(
@@ -360,6 +403,36 @@ fun DetailTransactionScreen(
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                                 )
+                            }
+                            when(role) {
+                                is UiState.Success -> {
+                                    Row(
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ) {
+                                        Text(
+                                            text = if ((role as UiState.Success<String>).data == "seller") {
+                                                "Product Recipient"
+                                            } else {
+                                                "Product Sender"
+                                            },
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                        )
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(
+                                            text = if ((role as UiState.Success<String>).data == "seller") {
+                                                transaction.data.idBuyer
+                                            } else {
+                                                transaction.data.product.sellerId
+                                            },
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                        )
+                                    }
+                                }
+                                else -> {}
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                         }
@@ -500,67 +573,79 @@ fun DetailTransactionScreen(
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 5.dp),
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-            thickness = 1.dp
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = "Recomendation For You",
-            fontSize = 18.sp,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(start = 15.dp, end = 15.dp)
-                .fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(7.dp))
-        viewModel.products.collectAsState(initial = UiState.Loading).value.let { products ->
-            when (products) {
-                is UiState.Loading -> {
-                    LoadingIndicator()
-                    viewModel.getProducts()
-                }
-                is UiState.Success -> {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        when(role) {
+            is UiState.Success -> {
+                if ((role as UiState.Success<String>).data == "buyer") {
+                    Divider(
                         modifier = Modifier
                             .fillMaxWidth()
-                    ) {
-                        items(products.data.size) { product ->
-                            ProductItem(
-                                name = products.data[product].productName,
-                                price = products.data[product].price,
-                                image = products.data[product].image,
-                                rating = products.data[product].rating,
-                                seller = products.data[product].sellerId,
-                                onNavigateToDetailScreen = {
-                                    activity.startActivity(
-                                        Intent(context, DetailProductActivity::class.java).putExtra(
-                                            "id",
-                                            product
+                            .padding(vertical = 8.dp, horizontal = 5.dp),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                        thickness = 1.dp
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "Recomendation For You",
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .padding(start = 15.dp, end = 15.dp)
+                            .fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(7.dp))
+                    viewModel.products.collectAsState(initial = UiState.Loading).value.let { products ->
+                        when (products) {
+                            is UiState.Loading -> {
+                                LoadingIndicator()
+                                viewModel.getProducts()
+                            }
+                            is UiState.Success -> {
+                                LazyRow(
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    items(products.data.size) { product ->
+                                        ProductItem(
+                                            name = products.data[product].productName,
+                                            price = products.data[product].price,
+                                            image = products.data[product].image,
+                                            rating = products.data[product].rating,
+                                            seller = products.data[product].sellerId,
+                                            onNavigateToDetailScreen = {
+                                                activity.startActivity(
+                                                    Intent(context, DetailProductActivity::class.java).apply {
+                                                        putExtra("id", product)
+                                                        when(role){
+                                                            is UiState.Success -> {
+                                                                putExtra("role", (role as UiState.Success<String>).data)
+                                                            }
+                                                            else -> {}
+                                                        }
+                                                    }
+                                                )
+                                            },
+                                            id = product,
                                         )
-                                    )
-                                },
-                                id = product,
-                            )
+                                    }
+                                }
+                            }
+                            is UiState.Error -> {
+                                ErrorMessage(message = products.errorMessage)
+                            }
+                            is UiState.Unauthorized -> {
+                                DisposableEffect(key1 = products ){
+                                    redirectToWelcome()
+                                    onDispose { }
+                                }
+                            }
+
                         }
                     }
                 }
-                is UiState.Error -> {
-                    ErrorMessage(message = products.errorMessage)
-                }
-                is UiState.Unauthorized -> {
-                    DisposableEffect(key1 = products ){
-                        redirectToWelcome()
-                        onDispose { }
-                    }
-                }
-
             }
+            else -> {}
         }
     }
 

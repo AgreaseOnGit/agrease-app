@@ -1,4 +1,4 @@
-package com.bangkit.capstone.agreaseapp.ui.screen.profile.account
+package com.bangkit.capstone.agreaseapp.ui.screen.product.update
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -21,14 +21,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -44,15 +43,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.bangkit.capstone.agreaseapp.data.model.UserModel
+import com.bangkit.capstone.agreaseapp.data.model.ProductModel
 import com.bangkit.capstone.agreaseapp.ui.component.respond.LoadingIndicator
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
@@ -60,23 +62,32 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
+class UpdateProductScreen {
+}
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyAccountScreen(
+fun UpdateProductScreen(
+    id: Int,
     redirectToWelcome: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MyAccountViewModel = viewModel(
+    viewModel: UpdateProductViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
 ) {
     var submit by remember { mutableStateOf("Submit") }
     var error by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var photo by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var user by remember { mutableStateOf(UserModel("", "", "", "", "", "", "",false)) }
     var message by remember { mutableStateOf("") }
+
+    var product by remember { mutableStateOf(ProductModel("","","", 0.0,"",0,0,"","")) }
+
+    var productName by remember { mutableStateOf("") }
+    var image by remember { mutableStateOf("") }
+    var productDescription by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf("") }
+    var stock by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    var selectedCategory by remember { mutableStateOf("") }
+    val categories = listOf("Obat Tanaman", "Produk Segar", "Peralatan Pertanian", "Logistik Pertanian", "Teknologi Pertanian", "Produk Olahan","Perlengkapan Pembibitan","Bibit Tanaman","Pupuk Tanaman","Mesin Pertanian")
 
     val context = LocalContext.current
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -88,7 +99,7 @@ fun MyAccountScreen(
 
     fun createCustomTempFile(context: Context): File {
         val filesDir = context.externalCacheDir
-        return File.createTempFile("profile", ".jpg", filesDir)
+        return File.createTempFile("product", ".jpg", filesDir)
     }
 
     fun uriToFile(uri: Uri): File {
@@ -105,27 +116,28 @@ fun MyAccountScreen(
 
     }
 
-    LaunchedEffect(key1 = user) {
-        viewModel.getUser()
+    LaunchedEffect(key1 = product) {
+        viewModel.getDetail(id)
     }
 
-    viewModel.user.collectAsState(initial = UiState.Loading).value.let { respond ->
+    viewModel.product.collectAsState(initial = UiState.Loading).value.let { respond ->
         when (respond) {
             is UiState.Loading -> {
                 LoadingIndicator()
             }
 
             is UiState.Success -> {
-                user = respond.data
-                if (submit == "Loading...") message = "Update Success"
+                product = respond.data
+                if (submit == "Loading...") message = "Success"
                 submit = "Submit"
 
-                DisposableEffect(key1 = user){
-                    if (name == "") name = user.nama
-                    if (email == "") email = user.email
-                    if (photo == "") photo = user.photo
-                    if (phone == "") phone = user.phone
-                    if (address == "") address = user.address
+                DisposableEffect(key1 = product){
+                    if (productName == "") productName = product.productName
+                    if (productDescription == "") productDescription = product.productDescription
+                    if (price == "") price = product.price.toString()
+                    if (image == "") image = product.image
+                    if (stock == "") stock = product.stock.toString()
+                    if (selectedCategory == "") selectedCategory = product.category
 
                     onDispose { }
                 }
@@ -186,7 +198,7 @@ fun MyAccountScreen(
                 ) {
                     Image(
                         bitmap = it.asImageBitmap(),
-                        contentDescription = "Profile Image",
+                        contentDescription = "Product Image",
                         contentScale = ContentScale.Crop,
                         modifier = modifier
                             .padding(4.dp)
@@ -201,6 +213,7 @@ fun MyAccountScreen(
         }
 
         if (imageUri == null) {
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -209,63 +222,112 @@ fun MyAccountScreen(
                     .padding(4.dp),
             ) {
                 AsyncImage(
-                    model = photo,
+                    model = image,
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = modifier
                         .padding(4.dp)
                         .size(120.dp)
-                        .clip(CircleShape)
+                        .clip(RectangleShape)
                         .clickable {
                             launcher.launch("image/*")
                         }
                 )
             }
         }
-        Text("Name")
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            "Product Image",
+            modifier = Modifier
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = {  },
-            leadingIcon = { Icon(Icons.Filled.Person, contentDescription = null) },
+            value = productName,
+            onValueChange = { productName = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            ),
+            label = { Text("Product Name", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             modifier = Modifier
                 .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(10.dp))
-        Text("Email")
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = {  },
-            enabled = false,
-            leadingIcon = { Icon(Icons.Filled.MailOutline, contentDescription = null) },
+            value = productDescription,
+            onValueChange = { productDescription = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text,
+            ),
+            maxLines = 10,
+            label = { Text("Product Description", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             modifier = Modifier
                 .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(10.dp))
-        Text("Phone Number")
         OutlinedTextField(
-            value = phone,
-            onValueChange = { phone = it },
-            label = {  },
-            leadingIcon = { Icon(Icons.Filled.Phone, contentDescription = null) },
+            value = price,
+            onValueChange = { price = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            label = { Text("Price", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             modifier = Modifier
                 .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(10.dp))
-        Text("Address")
         OutlinedTextField(
-            value = address,
-            onValueChange = { address = it },
-            label = {  },
-            leadingIcon = { Icon(Icons.Filled.LocationOn, contentDescription = null) },
-            maxLines = 5,
+            value = stock,
+            onValueChange = { stock = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
+            label = { Text("Stock", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             modifier = Modifier
                 .fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(10.dp))
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded },
+        ) {
+            OutlinedTextField(
+                value = selectedCategory,
+                onValueChange = { selectedCategory = it },
+                readOnly = true,
+                label = { Text("Select Product Category", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                categories.forEach { category ->
+                    DropdownMenuItem(
+                        text = { Text(category) },
+                        onClick = {
+                            selectedCategory = category
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -273,7 +335,8 @@ fun MyAccountScreen(
             onClick = { },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(45.dp)
+                .padding(start = 10.dp, end = 10.dp),
         ) {
             Text(
                 submit,
@@ -282,13 +345,4 @@ fun MyAccountScreen(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyAccountScreenPreview() {
-    MyAccountScreen(
-        redirectToWelcome = {},
-        modifier = Modifier
-    )
 }

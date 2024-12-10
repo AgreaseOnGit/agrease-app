@@ -12,7 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.bangkit.capstone.agreaseapp.ui.component.DetailBottomBar
+import com.bangkit.capstone.agreaseapp.ui.component.bottombar.DetailBottomBar
 import com.bangkit.capstone.agreaseapp.ui.screen.product.ProductScreen
 import com.bangkit.capstone.agreaseapp.ui.theme.AgreaseTheme
 
@@ -21,6 +21,7 @@ class DetailProductActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val idProduct = intent.getIntExtra("id", 0)
+        val role = intent.getStringExtra("role")
 
         setContent {
             AgreaseTheme {
@@ -33,17 +34,19 @@ class DetailProductActivity : ComponentActivity() {
 
                     Scaffold(
                         bottomBar = {
-                            DetailBottomBar(
-                                onBuyClicked = {
-                                    activity.startActivity(
-                                        Intent(context, CheckoutActivity::class.java).putExtra(
-                                            "id",
-                                            idProduct
+                            if (role == "buyer") {
+                                DetailBottomBar(
+                                    onBuyClicked = {
+                                        activity.startActivity(
+                                            Intent(context, CheckoutActivity::class.java).putExtra(
+                                                "id",
+                                                idProduct
+                                            )
                                         )
-                                    )
-                                },
+                                    },
 //                                onSaveClicked = {}
-                            )
+                                )
+                            }
                         }
                     )
                     { innerPadding ->

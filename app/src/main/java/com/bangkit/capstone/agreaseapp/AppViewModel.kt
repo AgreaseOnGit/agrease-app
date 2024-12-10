@@ -15,9 +15,19 @@ class AppViewModel (
     val isVerified: MutableState<UiState<Boolean>>
         get() = _isVerified
 
+    private val _userRole: MutableState<UiState<String>> = mutableStateOf(UiState.Loading)
+    val userRole: MutableState<UiState<String>>
+        get() = _userRole
+
     fun checkVerified() {
         viewModelScope.launch {
             _isVerified.value = UiState.Success(userRepository.getVerified())
+        }
+    }
+
+    fun getUserRole() {
+        viewModelScope.launch {
+            _userRole.value = UiState.Success(userRepository.getRole())
         }
     }
 }

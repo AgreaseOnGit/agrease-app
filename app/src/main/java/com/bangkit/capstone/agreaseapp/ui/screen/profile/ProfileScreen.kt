@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CardDefaults
@@ -24,18 +23,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.bangkit.capstone.agreaseapp.R
 import com.bangkit.capstone.agreaseapp.ui.component.respond.ErrorMessage
@@ -46,24 +48,28 @@ import com.bangkit.capstone.agreaseapp.ui.state.UiState
 @Composable
 fun ProfileScreen(
     redirectToWelcome: (String) -> Unit,
-    navController: NavController,
     redirectToMyAccount: () -> Unit,
     redirectToChatbot: () -> Unit,
     viewModel: ProfileViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
-    modifier: Modifier = Modifier
 ) {
+    val role by viewModel.userRole
+
+    LaunchedEffect(key1 = role) {
+        viewModel.getUserRole()
+    }
+
     viewModel.user.collectAsState(initial = UiState.Loading).value.let { user ->
         when (user) {
             is UiState.Loading -> {
-                LoadingIndicator(modifier = modifier)
+                LoadingIndicator(modifier = Modifier)
                 viewModel.getUser()
             }
 
             is UiState.Success -> {
                 LazyColumn(
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(20.dp)
                         .fillMaxSize()
                 ) {
@@ -82,7 +88,7 @@ fun ProfileScreen(
                             ) {
                                 Row (
                                     verticalAlignment = Alignment.CenterVertically,
-                                    modifier = modifier
+                                    modifier = Modifier
                                         .fillMaxWidth()
                                         .background(Color.White)
                                         .padding(20.dp)
@@ -91,28 +97,61 @@ fun ProfileScreen(
                                         model = photo,
                                         contentDescription = "Profile Image",
                                         contentScale = ContentScale.Crop,
-                                        modifier = modifier
+                                        modifier = Modifier
                                             .padding(4.dp)
                                             .size(60.dp)
                                             .clip(CircleShape)
                                     )
-                                    Spacer(modifier = modifier.width(20.dp))
+                                    Spacer(modifier = Modifier.width(20.dp))
                                     Column {
-                                        Text(
-                                            text = nama,
-                                            style = MaterialTheme.typography.titleMedium,
-                                        )
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = nama,
+                                                style = MaterialTheme.typography.titleMedium,
+                                            )
+                                            Spacer(modifier = Modifier.width(5.dp))
+                                            when(role) {
+                                                is UiState.Success -> {
+                                                    ElevatedCard(
+                                                        elevation = CardDefaults.cardElevation(
+                                                            defaultElevation = 15.dp
+                                                        ),
+                                                        colors = if ((role as UiState.Success<String>).data == "seller") {
+                                                            CardDefaults.cardColors(Color(0xFF2C98EE))
+                                                        } else {
+                                                            CardDefaults.cardColors(Color(0xFF00BF63))
+                                                        },
+                                                        modifier = Modifier
+                                                            .clip(shape = CardDefaults.shape)
+                                                            .shadow(
+                                                                elevation = 0.dp,
+                                                                spotColor = Color.Transparent,
+                                                                shape = CardDefaults.shape
+                                                            )
+                                                    ){
+                                                        Text(
+                                                            text = if ((role as UiState.Success<String>).data == "seller") {
+                                                                "Seller"
+                                                            } else {
+                                                                "Buyer"
+                                                            },
+                                                            fontSize = 12.sp,
+                                                            color = Color.White,
+                                                            modifier = Modifier.padding(vertical = 2.dp, horizontal = 7.dp)
+                                                        )
+                                                    }
+                                                }
+                                                else -> { "$nama (Guest)" }
+                                            }
+                                        }
                                         Text(
                                             text = email,
                                             style = MaterialTheme.typography.titleMedium,
                                             color = Color.Gray
                                         )
                                     }
-                                    Spacer(modifier = modifier.weight(1f))
-                                    Icon(
-                                        imageVector = Icons.Default.Edit,
-                                        contentDescription = "Edit Button",
-                                    )
                                 }
                             }
                         }
@@ -120,19 +159,19 @@ fun ProfileScreen(
 
                     item {
                         user.data.apply {
-                            Spacer(modifier = modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(20.dp))
                             ElevatedCard(
                                 elevation = CardDefaults.cardElevation(
                                     defaultElevation = 6.dp
                                 ),
 
-                                modifier = modifier
+                                modifier = Modifier
                                     .fillMaxWidth()
                             ) {
                                 Column {
                                     Row (
                                         verticalAlignment = Alignment.CenterVertically,
-                                        modifier = modifier
+                                        modifier = Modifier
                                             .fillMaxWidth()
                                             .background(Color.White)
                                             .padding(20.dp)
@@ -144,12 +183,12 @@ fun ProfileScreen(
                                             imageVector = Icons.Default.Person,
                                             contentDescription = "My Account",
                                         )
-                                        Spacer(modifier = modifier.width(20.dp))
+                                        Spacer(modifier = Modifier.width(20.dp))
                                         Text(
                                             text = "My Account",
                                             style = MaterialTheme.typography.titleMedium,
                                         )
-                                        Spacer(modifier = modifier.weight(1f))
+                                        Spacer(modifier = Modifier.weight(1f))
                                         Icon(
                                             imageVector = Icons.Default.KeyboardArrowRight,
                                             contentDescription = "",
@@ -159,67 +198,74 @@ fun ProfileScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .background(Color.White)
-                                            .padding( horizontal = 15.dp),
+                                            .padding(horizontal = 15.dp),
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                                         thickness = 1.dp
                                     )
-                                    Row (
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = modifier
-                                            .fillMaxWidth()
-                                            .background(Color.White)
-                                            .padding(20.dp)
-                                            .clickable {
-                                                redirectToChatbot()
+                                    when(role){
+                                        is UiState.Success -> {
+                                            if ((role as UiState.Success<String>).data == "buyer") {
+                                                Row (
+                                                    verticalAlignment = Alignment.CenterVertically,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .background(Color.White)
+                                                        .padding(20.dp)
+                                                        .clickable {
+                                                            redirectToChatbot()
+                                                        }
+                                                ){
+                                                    Icon(
+                                                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_chat_24),
+                                                        contentDescription = "Chatbot",
+                                                    )
+                                                    Spacer(modifier = Modifier.width(20.dp))
+                                                    Text(
+                                                        text = "Chatbot",
+                                                        style = MaterialTheme.typography.titleMedium,
+                                                    )
+                                                }
+                                                Divider(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .background(Color.White)
+                                                        .padding(horizontal = 15.dp),
+                                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                                    thickness = 1.dp
+                                                )
+                                                Row (
+                                                    verticalAlignment = Alignment.CenterVertically,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .background(Color.White)
+                                                        .padding(20.dp)
+                                                        .clickable { }
+                                                ){
+                                                    Icon(
+                                                        imageVector = ImageVector.vectorResource(id = R.drawable.baseline_room_preferences_24),
+                                                        contentDescription = "Preference",
+                                                    )
+                                                    Spacer(modifier = Modifier.width(20.dp))
+                                                    Text(
+                                                        text = "User Preference",
+                                                        style = MaterialTheme.typography.titleMedium,
+                                                    )
+                                                }
+                                                Divider(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .background(Color.White)
+                                                        .padding(horizontal = 15.dp),
+                                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                                                    thickness = 1.dp
+                                                )
                                             }
-                                    ){
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_chat_24),
-                                            contentDescription = "Chatbot",
-                                        )
-                                        Spacer(modifier = modifier.width(20.dp))
-                                        Text(
-                                            text = "Chatbot",
-                                            style = MaterialTheme.typography.titleMedium,
-                                        )
+                                        }
+                                        else -> {}
                                     }
-                                    Divider(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .background(Color.White)
-                                            .padding( horizontal = 15.dp),
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                                        thickness = 1.dp
-                                    )
                                     Row (
                                         verticalAlignment = Alignment.CenterVertically,
-                                        modifier = modifier
-                                            .fillMaxWidth()
-                                            .background(Color.White)
-                                            .padding(20.dp)
-                                            .clickable { }
-                                    ){
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_room_preferences_24),
-                                            contentDescription = "Preference",
-                                        )
-                                        Spacer(modifier = modifier.width(20.dp))
-                                        Text(
-                                            text = "User Preference",
-                                            style = MaterialTheme.typography.titleMedium,
-                                        )
-                                    }
-                                    Divider(
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .background(Color.White)
-                                            .padding( horizontal = 15.dp),
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-                                        thickness = 1.dp
-                                    )
-                                    Row (
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = modifier
                                             .fillMaxWidth()
                                             .background(Color.White)
                                             .padding(20.dp)
@@ -229,7 +275,7 @@ fun ProfileScreen(
                                             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_settings_24),
                                             contentDescription = "Settings",
                                         )
-                                        Spacer(modifier = modifier.width(20.dp))
+                                        Spacer(modifier = Modifier.width(20.dp))
                                         Text(
                                             text = "Settings",
                                             style = MaterialTheme.typography.titleMedium,
@@ -239,14 +285,14 @@ fun ProfileScreen(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .background(Color.White)
-                                            .padding( horizontal = 15.dp),
+                                            .padding(horizontal = 15.dp),
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                                         thickness = 1.dp
                                     )
 
                                     Row (
                                         verticalAlignment = Alignment.CenterVertically,
-                                        modifier = modifier
+                                        modifier = Modifier
                                             .fillMaxWidth()
                                             .background(Color.White)
                                             .padding(20.dp)
@@ -259,7 +305,7 @@ fun ProfileScreen(
                                             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_logout),
                                             contentDescription = "Log Out",
                                         )
-                                        Spacer(modifier = modifier.width(20.dp))
+                                        Spacer(modifier = Modifier.width(20.dp))
                                         Text(
                                             text = "Log Out",
                                             style = MaterialTheme.typography.titleMedium,
@@ -273,7 +319,7 @@ fun ProfileScreen(
             }
 
             is UiState.Error -> {
-                ErrorMessage(message = user.errorMessage, modifier = modifier)
+                ErrorMessage(message = user.errorMessage, modifier = Modifier)
             }
 
             is UiState.Unauthorized -> {

@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.bangkit.capstone.agreaseapp.ui.component.BottomBar
+import com.bangkit.capstone.agreaseapp.ui.component.SellerBottomBar
 import com.bangkit.capstone.agreaseapp.ui.navigation.Screen
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.screen.auth.BuyerRegisterScreen
@@ -65,6 +66,7 @@ fun AgreaseApp(
     }
 
     val checkVerified by viewModel.isVerified
+    val role by viewModel.userRole
 
     LaunchedEffect(key1 = checkVerified) {
         viewModel.checkVerified()
@@ -86,13 +88,14 @@ fun AgreaseApp(
         }
 
         is UiState.Success -> {
+            viewModel.getUserRole()
             Scaffold(
                 topBar = {
                     if (currentRoute == Screen.MyAccount.route) {
                         TopAppBar(
                             title = {
                                 Text(
-                                    text = if(currentRoute == Screen.MyAccount.route) "Detail Account" else "Change Password",
+                                    text = "Agrease App",
                                     style = MaterialTheme.typography.titleMedium,
                                 )
                             },
@@ -113,7 +116,17 @@ fun AgreaseApp(
                 bottomBar =
                 {
                     if (currentRoute != Screen.Login.route && currentRoute != Screen.Welcome.route && currentRoute != Screen.BuyerRegister.route && currentRoute != Screen.SellerRegister.route  && currentRoute!= Screen.MyAccount.route  && currentRoute!= Screen.Chat.route && currentRoute != null) {
-                        BottomBar(navController)
+                        when(role) {
+                            is UiState.Success -> {
+                                if ((role as UiState.Success<String>).data == "seller") {
+                                    SellerBottomBar(navController = navController)
+                                }
+                                if((role as UiState.Success<String>).data == "buyer") {
+                                    BottomBar(navController = navController)
+                                }
+                            }
+                            else -> {}
+                        }
                     }
                 },
                 modifier = modifier
@@ -195,7 +208,6 @@ fun AgreaseApp(
                     }
                     composable(Screen.Profile.route) {
                         ProfileScreen(
-                            navController = navController,
                             redirectToWelcome = { redirectToWelcome("") },
                             redirectToMyAccount = { navController.navigate(Screen.MyAccount.route) },
                             redirectToChatbot = { navController.navigate(Screen.Chat.route) },

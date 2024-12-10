@@ -30,6 +30,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -61,7 +62,6 @@ fun SearchScreen(
     viewModel: SearchViewModel = viewModel(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
-    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
@@ -71,8 +71,14 @@ fun SearchScreen(
 
     var keyword by remember { mutableStateOf("") }
 
+    val role by viewModel.userRole
+
+    LaunchedEffect(key1 = role) {
+        viewModel.getUserRole()
+    }
+
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(
                 color = Color.White
@@ -80,7 +86,7 @@ fun SearchScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding( top = 10.dp, bottom = 20.dp)
         ) {
             ElevatedCard(
@@ -166,10 +172,15 @@ fun SearchScreen(
                                     seller = product.sellerId,
                                     onNavigateToDetailScreen = {
                                         activity.startActivity(
-                                            Intent(context, DetailProductActivity::class.java).putExtra(
-                                                "id",
-                                                products.data.indexOf(product)
-                                            )
+                                            Intent(context, DetailProductActivity::class.java).apply {
+                                                putExtra("id", products.data.indexOf(product))
+                                                when(role){
+                                                    is UiState.Success -> {
+                                                        putExtra("role", (role as UiState.Success<String>).data)
+                                                    }
+                                                    else -> {}
+                                                }
+                                            }
                                         )
                                     },
                                     id = products.data.indexOf(product),

@@ -1,13 +1,16 @@
 package com.bangkit.capstone.agreaseapp.ui.navigation
 
 sealed class Screen(val route: String) {
+    //Home
     data object Home : Screen("home")
 
+    //Transaction
     data object Transaction : Screen("transaction")
 
     // chatBot
     data object Chat : Screen("chat")
-    
+
+    //Search
     data object Search : Screen("search")
 
     // Account

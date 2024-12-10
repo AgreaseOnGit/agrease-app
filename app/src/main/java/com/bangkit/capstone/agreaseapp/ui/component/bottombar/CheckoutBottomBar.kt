@@ -1,4 +1,4 @@
-package com.bangkit.capstone.agreaseapp.ui.component
+package com.bangkit.capstone.agreaseapp.ui.component.bottombar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -13,10 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun DetailBottomBar(
+fun CheckoutBottomBar(
     modifier: Modifier = Modifier,
-    onBuyClicked: () -> Unit,
-//    onSaveClicked: () -> Unit
+    onPayClick: () -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -25,22 +24,16 @@ fun DetailBottomBar(
             .padding(15.dp)
     ) {
         Button(
-            onClick = onBuyClicked,
+            onClick = onPayClick,
             modifier = modifier
-                .weight(1f)
-                .padding(end = 8.dp)
+                .fillMaxWidth()
+                .padding(10.dp)
         ) {
             Text(
-                text = "Buy Now",
+                text = "Pay Now",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
         }
-//        Button(
-//            onClick = onSaveClicked,
-//            modifier = modifier
-//        ) {
-//            Icon(painter = painterResource(id = R.drawable.baseline_favorite_border_24), contentDescription = "Favorite" )
-//        }
     }
 }
