@@ -66,7 +66,7 @@ fun ProductScreen(
 
     val role by viewModel.userRole
 
-    fun formattedPrice(price: Int): String {
+    fun formattedPrice(price: Long): String {
         return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)
     }
 
@@ -107,7 +107,7 @@ fun ProductScreen(
                                     contentDescription = "$id Image",
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .aspectRatio(1.5f),
+                                        .aspectRatio(1f),
                                     alignment = Alignment.CenterStart,
                                     contentScale = ContentScale.Crop
                                 )
@@ -126,13 +126,43 @@ fun ProductScreen(
                                         style = MaterialTheme.typography.titleLarge,
                                     )
                                     Spacer(modifier = Modifier.height(5.dp))
-                                    Text(
-                                        text = "Rp ${formattedPrice(price)}",
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Light,
-                                        fontStyle = FontStyle.Italic,
-                                        color = MaterialTheme.colorScheme.onTertiaryContainer,
-                                    )
+                                    when (role) {
+                                        is UiState.Success -> {
+                                            if ((role as UiState.Success<String>).data == "seller") {
+                                                Text(
+                                                    text = "Rp ${formattedPrice(price)}",
+                                                    fontSize = 18.sp,
+                                                    fontWeight = FontWeight.Light,
+                                                    fontStyle = FontStyle.Italic,
+                                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                                )
+                                                Row {
+                                                    Text(
+                                                        text = "Sold : 45 Items",
+                                                        fontSize = 18.sp,
+                                                        fontWeight = FontWeight.Light,
+                                                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                                    )
+                                                    Spacer(modifier = Modifier.weight(1f))
+                                                    Text(
+                                                        text = "Stock : $stock Items",
+                                                        fontSize = 18.sp,
+                                                        fontWeight = FontWeight.Light,
+                                                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                                    )
+                                                }
+                                            } else {
+                                                Text(
+                                                    text = "Rp ${formattedPrice(price)}",
+                                                    fontSize = 18.sp,
+                                                    fontWeight = FontWeight.Light,
+                                                    fontStyle = FontStyle.Italic,
+                                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                                )
+                                            }
+                                        }
+                                        else -> { }
+                                    }
                                     Spacer(modifier = Modifier.height(10.dp))
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,

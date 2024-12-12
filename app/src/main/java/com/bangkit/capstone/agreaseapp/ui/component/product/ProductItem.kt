@@ -40,7 +40,7 @@ fun ProductItem(
     id: Int,
     name: String,
     image: String,
-    price: Int,
+    price: Long,
     rating: Double,
     seller: String,
     onNavigateToDetailScreen: (Int) -> Unit,
@@ -49,7 +49,7 @@ fun ProductItem(
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val orientation = LocalConfiguration.current.orientation
 
-    fun formattedPrice(price: Int): String {
+    fun formattedPrice(price: Long): String {
         return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)
     }
 

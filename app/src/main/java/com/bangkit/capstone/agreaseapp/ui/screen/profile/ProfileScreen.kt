@@ -94,7 +94,7 @@ fun ProfileScreen(
                                         .padding(20.dp)
                                 ){
                                     AsyncImage(
-                                        model = photo,
+                                        model = imageUrl,
                                         contentDescription = "Profile Image",
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier

@@ -159,7 +159,7 @@ fun HomeScreen(
                                     )
                                 }
                                 AsyncImage(
-                                    model = user.data.photo,
+                                    model = user.data.imageUrl,
                                     contentDescription = "Profile Image",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -247,6 +247,7 @@ fun HomeScreen(
                     when (products) {
                         is UiState.Loading -> {
                             LoadingIndicator()
+//                            viewModel.getProducts()
                             when(role) {
                                 is UiState.Success -> {
                                     if ((role as UiState.Success<String>).data == "seller") {

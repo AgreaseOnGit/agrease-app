@@ -1,6 +1,5 @@
 package com.bangkit.capstone.agreaseapp.ui.screen.chat
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -37,9 +36,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.bangkit.capstone.agreaseapp.data.model.UserModel
@@ -47,7 +46,7 @@ import com.bangkit.capstone.agreaseapp.ui.component.respond.LoadingIndicator
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
 
-data class Message(val sender: String, val content: String, val timestamp: String, val isMe: Boolean = false)
+data class Message(val sender: String, val content: String, val isMe: Boolean = false)
 
 @Composable
 fun ChatScreen(
@@ -102,7 +101,7 @@ fun ChatScreen(
                             keyboardActions = KeyboardActions(
                                 onSend = {
                                     if (message.isNotEmpty()) {
-                                        val newMessage = Message("You", message, "now", true)
+                                        val newMessage = Message("You", message, true)
                                         messages = messages + newMessage
                                         message = ""
                                     }
@@ -113,10 +112,17 @@ fun ChatScreen(
                         IconButton(
                             onClick = {
                                 if (message.isNotEmpty()) {
-                                    Log.d("ChatScreen", "Message: $message")
-                                    val newMessage = Message("You", message, "now", true)
-                                    messages = messages + newMessage
-                                    message = ""
+                                    if (message == "Hai"){
+                                        val newMessage = Message("You", message, true)
+                                        messages = messages + newMessage
+                                        message = ""
+                                        val botMessage = Message("Agrease Bot", "Hai Mr.Vincent, Apakah ada yang bisa saya bantu seputar produk pertanian untuk ladang anda?", false)
+                                        messages = messages + botMessage
+                                    } else {
+                                        val newMessage = Message("You", message, true)
+                                        messages = messages + newMessage
+                                        message = ""
+                                    }
                                 }
                             }
                         ) {
@@ -143,20 +149,27 @@ fun ChatScreen(
 @Composable
 fun ChatItem(message: Message, user: UserModel) {
     Column(
+        horizontalAlignment = if (message.isMe) Alignment.End else Alignment.Start,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(5.dp)
     ) {
+        Text(
+            text = message.sender,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = if (message.isMe) Modifier.padding( end = 60.dp) else Modifier.padding(start = 60.dp)
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp),
+                .padding(start = 4.dp, end = 4.dp),
             horizontalArrangement = if (message.isMe) Arrangement.End else Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (!message.isMe) {
                 AsyncImage(
-                    model = "https://st4.depositphotos.com/15585482/29380/v/450/depositphotos_293804478-stock-illustration-robot-chatbot-icon-sign-flat.jpg",
+                    model = "https://miro.medium.com/v2/resize:fit:1024/0*LGm5TYiNCOZAv2Xj.jpg",
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -165,6 +178,7 @@ fun ChatItem(message: Message, user: UserModel) {
                         .clip(CircleShape)
                 )
             }
+
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -185,17 +199,12 @@ fun ChatItem(message: Message, user: UserModel) {
                         textAlign = if (message.isMe) TextAlign.End else TextAlign.Start,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Text(
-                        text = message.timestamp,
-                        fontSize = 12.sp,
-                        color = Color.Gray
-                    )
                 }
             }
 
             if (message.isMe) {
                 AsyncImage(
-                    model = user.photo,
+                    model = user.imageUrl,
                     contentDescription = "Profile Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -210,66 +219,64 @@ fun ChatItem(message: Message, user: UserModel) {
 
 fun generateDummyData(): List<Message> {
     val contents = listOf(
-//        Message(
-//            "Agrease Bot",
-//            "Halo, bagaimana perkembangan tanaman di ladangmu?",
-//            "20 minutes ago",
-//        ),
+        Message(
+            "Agrease Bot",
+            "Halo, bagaimana perkembangan tanaman di ladang anda?",
+        ),
 //        Message(
 //            "You",
 //            "Saya khawatir karena hasil panen terakhir terlihat kurang optimal.",
-//            "15 minutes ago",
 //            true
 //        ),
-        Message(
-            "Agrease Bot",
-            "Nah itu, ambil nasi pak vincent \uD83C\uDF59",
-            "10 minutes ago",
-        ),
-        Message(
-            "You",
-            "Dua lah! \uD83C\uDF59 \uD83C\uDF59",
-            "5 minutes ago",
-            true
-        ),
-        Message(
-            "Agrease Bot",
-            "Satu! ☝\uD83C\uDFFB",
-            "3 minutes ago",
-        ),
-        Message(
-            "You",
-            "Dua lahhhh ✌\uD83C\uDFFB",
-            "3 minutes ago",
-            true
-        ),
-        Message(
-            "Agrease Bot",
-            "Hm Ngeyel, gak bisa \uD83D\uDE20 \uD83D\uDC4A",
-            "2 minutes ago",
-        ),
-        Message(
-            "You",
-            "Kan saya kan, orang dua! ✌\uD83C\uDFFB \uD83D\uDE01",
-            "2 minutes ago",
-            true
-        ),
-        Message(
-            "Agrease Bot",
-            "Sama siapa!? \uD83E\uDD28",
-            "2 minutes ago",
-        ),
-        Message(
-            "You",
-            "Sama konci satu ☝\uD83C\uDFFB \uD83D\uDE0B",
-            "1 minute ago",
-            true
-        ),
-        Message(
-            "Agrease Bot",
-            "...",
-            "1 minute ago",
-        ),
+//        Message(
+//            "Agrease Bot",
+//            "Nah itu, ambil nasi pak vincent \uD83C\uDF59",
+//            "10 minutes ago",
+//        ),
+//        Message(
+//            "You",
+//            "Dua lah! \uD83C\uDF59 \uD83C\uDF59",
+//            "5 minutes ago",
+//            true
+//        ),
+//        Message(
+//            "Agrease Bot",
+//            "Satu! ☝\uD83C\uDFFB",
+//            "3 minutes ago",
+//        ),
+//        Message(
+//            "You",
+//            "Dua lahhhh ✌\uD83C\uDFFB",
+//            "3 minutes ago",
+//            true
+//        ),
+//        Message(
+//            "Agrease Bot",
+//            "Hm Ngeyel, gak bisa \uD83D\uDE20 \uD83D\uDC4A",
+//            "2 minutes ago",
+//        ),
+//        Message(
+//            "You",
+//            "Kan saya kan, orang dua! ✌\uD83C\uDFFB \uD83D\uDE01",
+//            "2 minutes ago",
+//            true
+//        ),
+//        Message(
+//            "Agrease Bot",
+//            "Sama siapa!? \uD83E\uDD28",
+//            "2 minutes ago",
+//        ),
+//        Message(
+//            "You",
+//            "Sama konci satu ☝\uD83C\uDFFB \uD83D\uDE0B",
+//            "1 minute ago",
+//            true
+//        ),
+//        Message(
+//            "Agrease Bot",
+//            "...",
+//            "1 minute ago",
+//        ),
     )
 
     val messages = mutableListOf<Message>()

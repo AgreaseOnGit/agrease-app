@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,7 +51,7 @@ fun CategoryScreen(
     val gridColumns = if (orientation == Configuration.ORIENTATION_PORTRAIT) 2 else 4
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(
                 color = Color.White
@@ -69,17 +68,13 @@ fun CategoryScreen(
                 is UiState.Success -> {
                     val rowCount = (products.data.size + gridColumns - 1) / gridColumns
                     val gridHeight = (300.dp * rowCount) + (10.dp * (rowCount - 1))
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                    Text(
+                        text = "$category : ${products.data.size} products",
+                        style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = 20.dp, end = 20.dp)
-                    ) {
-                        Text(
-                            text = "Hasil : ${products.data.size} products",
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                    }
+                    )
                     Spacer(modifier = Modifier.height(7.dp))
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(gridColumns),
