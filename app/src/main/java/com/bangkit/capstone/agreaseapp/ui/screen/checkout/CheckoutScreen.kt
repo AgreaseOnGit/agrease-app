@@ -62,9 +62,9 @@ fun CheckoutScreen(
 ) {
     val (selectedPaymentMethod, setSelectedPaymentMethod) = remember { mutableStateOf("Cash On Delivery (COD)") }
     val (quantity, setQuantity) = remember { mutableIntStateOf(1) }
-    val shippingFee = 20000
+    val shippingFee : Long = 20000
 
-    fun formattedPrice(price: Int): String {
+    fun formattedPrice(price: Long): String {
         return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)
     }
 

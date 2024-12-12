@@ -23,7 +23,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     private val phone = stringPreferencesKey("phone")
     private val address = stringPreferencesKey("address")
     private val role = stringPreferencesKey("role")
-    private val photo = stringPreferencesKey("photo")
+    private val imageUrl = stringPreferencesKey("imageUrl")
     private val isVerified = booleanPreferencesKey("isVerified")
 
     suspend fun saveUser(user: UserModel) {
@@ -34,7 +34,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             it[phone] = user.phone
             it[address] = user.address
             it[role] = user.role
-            it[photo] = user.photo
+            it[imageUrl] = user.imageUrl
             it[isVerified] = user.isVerified
         }
     }
@@ -54,7 +54,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             it[phone] ?: "",
             it[address] ?: "",
             it[role] ?: "",
-            it[photo] ?: "",
+            it[imageUrl] ?: "",
             it[isVerified] ?: false
         )
     }

@@ -68,7 +68,7 @@ fun DetailTransactionScreen(
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
-    val shippingFee = 20000
+    val shippingFee: Long = 20000
 
     val role by viewModel.userRole
 
@@ -76,7 +76,7 @@ fun DetailTransactionScreen(
         viewModel.getUserRole()
     }
 
-    fun formattedPrice(price: Int): String {
+    fun formattedPrice(price: Long): String {
         return NumberFormat.getNumberInstance(Locale("id", "ID")).format(price)
     }
 

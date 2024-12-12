@@ -123,7 +123,7 @@ fun MyAccountScreen(
                 DisposableEffect(key1 = user){
                     if (name == "") name = user.nama
                     if (email == "") email = user.email
-                    if (photo == "") photo = user.photo
+                    if (photo == "") photo = user.imageUrl
                     if (phone == "") phone = user.phone
                     if (address == "") address = user.address
 

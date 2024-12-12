@@ -32,7 +32,7 @@ class UserRepository(
         }
 
         login.body()?.let {
-            saveUser(it.data.uid, it.data.email, it.data.nama, it.data.phone, it.data.address, it.data.role, it.data.photo, it.data.isVerified)
+            saveUser(it.data.uid, it.data.email, it.data.nama, it.data.phone, it.data.address, it.data.role, if(it.data.imageUrl == "https://storage.cloud.google.com/agrease-capstone-17/user-profile-images/profile-image.jpg") "https://freeimghost.net/images/2024/12/10/man53661f0ddd4d0648.md.png" else it.data.imageUrl, it.data.isVerified)
             emit(it)
         }
     }.catch { e ->
@@ -155,11 +155,11 @@ class UserRepository(
     }
     fun saveDummyUserLogin(role: String)= flow {
         val user = if (role == "user.buyer@gmail.com"){
-            UserModel("user01", "user.buyer@gmail.com", "Mr. Vincent", "081234567890", "Jl. Merdeka No 7, Semarang, Jawa Tengah", "buyer", "https://static.wikia.nocookie.net/character-stats-and-profiles/images/7/71/Pak_Vincent.png/revision/latest?cb=20241115022726", true)
+            UserModel("user01", "user.buyer@gmail.com", "Mr. Vincent", "081234567890", "Jl. Merdeka No 7, Semarang, Jawa Tengah", "buyer", "https://freeimghost.net/images/2024/12/10/man53661f0ddd4d0648.md.png", true)
         } else {
             UserModel("user02", "user.seller@gmail.com", "Panda Farm", "081234567890", "Jl. Merauke No 9, Kediri, Jawa Timur", "seller", "https://hips.hearstapps.com/hbu.h-cdn.co/assets/16/15/1460404413-1460150763-1460127682-oregon-farm.jpg?crop=0.665xw:1.00xh;0.0442xw,0&resize=980:*", true)
         }
-        saveUser(user.uid, user.email, user.nama, user.phone, user.address, user.role, user.photo, user.isVerified)
+        saveUser(user.uid, user.email, user.nama, user.phone, user.address, user.role, user.imageUrl, user.isVerified)
         emit(user)
     }
 

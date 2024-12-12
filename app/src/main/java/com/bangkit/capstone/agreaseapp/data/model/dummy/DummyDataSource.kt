@@ -25,7 +25,7 @@ object DummyDataSource {
             "she-basmi",
             38000,
             96653,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/9a6345e2-6ae6-4a44-b7cd-042a0a0e6f8b.jpg",
             "Pestisida dan Obat tanaman",
         ),
         ProductModel(
@@ -61,7 +61,7 @@ object DummyDataSource {
             "Panda Farm",
             25500,
             91,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/d6c84881-2df0-4211-8d33-b452a62b3005.png.webp",
             "Pestisida dan Obat tanaman",
         ),
         ProductModel(
@@ -93,7 +93,7 @@ object DummyDataSource {
             "benihkita",
             49550,
             33,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/3603111_2f32cce9-11e1-4106-8c35-ce50f50f69f3_700_700.md.jpg",
             "Pestisida dan Obat tanaman",
         ),
         ProductModel(
@@ -121,7 +121,7 @@ object DummyDataSource {
             "she-basmi",
             35000,
             95969,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/e6dc4ec2-d4be-4565-b2db-8e51b1624dc2.md.jpg",
             "Pestisida dan Obat tanaman",
         ),
         ProductModel(
@@ -170,7 +170,7 @@ object DummyDataSource {
             "she-basmi",
             35000,
             95886,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/618a27c5-a666-4d96-91b0-29f7d74fcc11.md.jpg",
             "Pestisida dan Obat tanaman",
         ),
         ProductModel(
@@ -206,7 +206,7 @@ object DummyDataSource {
             "Sayurbox",
             14000,
             103,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/035f3f8d-da29-4ac5-83f6-2a5ca02c9641.md.jpeg",
             "Produk Pertanian Segar",
         ),
         ProductModel(
@@ -231,7 +231,7 @@ object DummyDataSource {
             "Bakoel Sayur Online",
             4800,
             35579,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/2492b60b-0d2a-40a4-a44d-64dd6c79db95.jpg.webp",
             "Produk Pertanian Segar",
         ),
         ProductModel(
@@ -266,7 +266,7 @@ object DummyDataSource {
             "Sayurbox",
             13100,
             91,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/14d831e2-3fc1-4515-9065-e1f3b7c70770.jpeg",
             "Produk Pertanian Segar",
         ),
         ProductModel(
@@ -301,7 +301,7 @@ object DummyDataSource {
             "Sayurbox",
             18700,
             56,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/24352824_becc8246-2ee2-4796-8c98-4e205eec0f6f_500_500.webp",
             "Produk Pertanian Segar",
         ),
         ProductModel(
@@ -339,7 +339,7 @@ object DummyDataSource {
             "Sayurbox",
             26500,
             207,
-            "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+            "https://freeimghost.net/images/2024/12/10/30610c94-ab35-4868-8b07-1ac37053f15c.md.jpg",
             "Produk Pertanian Segar",
         ),
     )
@@ -347,19 +347,19 @@ object DummyDataSource {
     val dummyCatgories = listOf(
         CategoryModel(
             1,
-            "Obat Tanaman",
+            "Pestisida dan Obat tanaman",
         ),
         CategoryModel(
             2,
-            "Produk Segar",
+            "Produk Pertanian Segar",
         ),
         CategoryModel(
             3,
-            "Peralatan Pertanian",
+            "Sarana dan PeralatanIrigasi",
         ),
         CategoryModel(
             4,
-            "Logistik Pertanian",
+            "Bahan Pengemasan dan Logistik",
         ),
         CategoryModel(
             5,
@@ -367,23 +367,23 @@ object DummyDataSource {
         ),
         CategoryModel(
             6,
-            "Produk Olahan",
+            "Produk Olahan Pertanian",
         ),
         CategoryModel(
             7,
-            "Perlengkapan Pembibitan",
+            "Perlengkapan Rumah Kaca dan Pembibitan",
         ),
         CategoryModel(
             8,
-            "Bibit Tanaman"
+            "Bibit dan Benih Tanaman"
         ),
         CategoryModel(
             9,
-            "Pupuk Tanaman",
+            "Pupuk dan Nutrisi Tanaman",
         ),
         CategoryModel(
             10,
-            "Mesin Pertanian",
+            "Alat dan Mesin Pertanian",
         ),
     )
 
@@ -424,7 +424,7 @@ object DummyDataSource {
                 "Panda Farm",
                 25500,
                 91,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/d6c84881-2df0-4211-8d33-b452a62b3005.png.webp",
                 "Pestisida dan Obat tanaman",
             ),
             method = "BRI Virtual Account",
@@ -465,7 +465,7 @@ object DummyDataSource {
                 "benihkita",
                 49550,
                 33,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/3603111_2f32cce9-11e1-4106-8c35-ce50f50f69f3_700_700.md.jpg",
                 "Pestisida dan Obat tanaman",
             ),
             method = "BCA Virtual Account",
@@ -502,7 +502,7 @@ object DummyDataSource {
                 "she-basmi",
                 35000,
                 95969,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/e6dc4ec2-d4be-4565-b2db-8e51b1624dc2.md.jpg",
                 "Pestisida dan Obat tanaman",
             ),
             method = "Cash On Delivery (COD)",
@@ -560,7 +560,7 @@ object DummyDataSource {
                 "she-basmi",
                 35000,
                 95886,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/618a27c5-a666-4d96-91b0-29f7d74fcc11.md.jpg",
                 "Pestisida dan Obat tanaman",
             )   ,
             method = "BCA Virtual Account",
@@ -605,7 +605,7 @@ object DummyDataSource {
                 "Sayurbox",
                 14000,
                 103,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/035f3f8d-da29-4ac5-83f6-2a5ca02c9641.md.jpeg",
                 "Produk Pertanian Segar",
             ),
             method = "BCA Virtual Account",
@@ -639,7 +639,7 @@ object DummyDataSource {
                 "Bakoel Sayur Online",
                 4800,
                 35579,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/2492b60b-0d2a-40a4-a44d-64dd6c79db95.jpg.webp",
                 "Produk Pertanian Segar",
             ),
             method = "BRI Virtual Account",
@@ -683,7 +683,7 @@ object DummyDataSource {
                 "Sayurbox",
                 13100,
                 91,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/14d831e2-3fc1-4515-9065-e1f3b7c70770.jpeg",
                 "Produk Pertanian Segar",
             ),
             method = "BCA Virtual Account",
@@ -727,7 +727,7 @@ object DummyDataSource {
                 "Sayurbox",
                 18700,
                 56,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/24352824_becc8246-2ee2-4796-8c98-4e205eec0f6f_500_500.webp",
                 "Produk Pertanian Segar",
             ),
             method = "BCA Virtual Account",
@@ -774,7 +774,7 @@ object DummyDataSource {
                 "Sayurbox",
                 26500,
                 207,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/30610c94-ab35-4868-8b07-1ac37053f15c.md.jpg",
                 "Produk Pertanian Segar",
             ),
             method = "Cash On Delivery (COD)",
@@ -818,7 +818,7 @@ object DummyDataSource {
                 "Sayurbox",
                 18700,
                 56,
-                "https://agrowell.com.tr/wp-content/uploads/2023/04/storing-agricutural-products.jpg",
+                "https://freeimghost.net/images/2024/12/10/24352824_becc8246-2ee2-4796-8c98-4e205eec0f6f_500_500.webp",
                 "Produk Pertanian Segar",
             ),
             method = "Cash On Delivery (COD)",
