@@ -45,6 +45,10 @@ import com.bangkit.capstone.agreaseapp.data.model.UserModel
 import com.bangkit.capstone.agreaseapp.ui.component.respond.LoadingIndicator
 import com.bangkit.capstone.agreaseapp.ui.screen.ViewModelFactory
 import com.bangkit.capstone.agreaseapp.ui.state.UiState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 data class Message(val sender: String, val content: String, val isMe: Boolean = false)
 
@@ -74,6 +78,7 @@ fun ChatScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .background(Color(0xFFEEEEEE))
                 ) {
                     LazyColumn(
                         modifier = Modifier
@@ -112,16 +117,49 @@ fun ChatScreen(
                         IconButton(
                             onClick = {
                                 if (message.isNotEmpty()) {
-                                    if (message == "Hai"){
-                                        val newMessage = Message("You", message, true)
-                                        messages = messages + newMessage
-                                        message = ""
-                                        val botMessage = Message("Agrease Bot", "Hai Mr.Vincent, Apakah ada yang bisa saya bantu seputar produk pertanian untuk ladang anda?", false)
-                                        messages = messages + botMessage
-                                    } else {
-                                        val newMessage = Message("You", message, true)
-                                        messages = messages + newMessage
-                                        message = ""
+                                    when (message){
+                                        "Hai" -> {
+                                            val newMessage = Message("You", message, true)
+                                            messages = messages + newMessage
+                                            message = ""
+                                            CoroutineScope(Dispatchers.Main).launch {
+                                                delay(1500)
+                                                val botMessage = Message(
+                                                    "Agrease Bot",
+                                                    "Hai Mr.Vincent, Apakah ada yang bisa saya bantu seputar produk pertanian untuk ladang anda?",
+                                                    false
+                                                )
+                                                messages = messages + botMessage
+                                            }
+                                        }
+                                        "Apa tanaman yang cocok untuk ditanam apabila hanya sebaatas hobi?" -> {
+                                            val newMessage = Message("You", message, true)
+                                            messages = messages + newMessage
+                                            message = ""
+                                            CoroutineScope(Dispatchers.Main).launch {
+                                                delay(1500)
+                                                val botMessage = Message(
+                                                    "Agrease Bot",
+                                                    "Anda dapat memilih tanaman berupa Tomato, Bawang Merah, atau Jagung yang lebih mudah dicaraikan dengan skala kecil.",
+                                                    false
+                                                )
+                                                messages = messages + botMessage
+                                            }
+                                        }
+                                        "Apakah ada alat untuk membantu penanaman ini?" -> {
+                                            val newMessage = Message("You", message, true)
+                                            messages = messages + newMessage
+                                            message = ""
+                                            CoroutineScope(Dispatchers.Main).launch {
+                                                delay(1500)
+                                                val botMessage = Message(
+                                                    "Agrease Bot",
+                                                    "Ya, kami merekomendasikan Seedling Trays dan Styrofoam Cups yang bisa mempermudah proses penanaman.",
+                                                    false
+                                                )
+                                                messages = messages + botMessage
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -185,7 +223,7 @@ fun ChatItem(message: Message, user: UserModel) {
                     .clip(MaterialTheme.shapes.small)
                     .border(1.dp, Color.Gray, MaterialTheme.shapes.small)
                     .shadow(1.dp)
-                    .background(if (message.isMe) Color(0xFFEEEEEE) else Color.White)
+                    .background(if (message.isMe) Color.White else Color.White)
             ) {
                 Column(
                     horizontalAlignment = if (message.isMe) Alignment.End else Alignment.Start,

@@ -91,11 +91,11 @@ fun AgreaseApp(
             viewModel.getUserRole()
             Scaffold(
                 topBar = {
-                    if (currentRoute == Screen.MyAccount.route) {
+                    if (currentRoute == Screen.MyAccount.route || currentRoute == Screen.Chat.route) {
                         TopAppBar(
                             title = {
                                 Text(
-                                    text = "Agrease App",
+                                    text = if (currentRoute == Screen.MyAccount.route) "Detail Account" else "Agrease ChatBot",
                                     style = MaterialTheme.typography.titleMedium,
                                 )
                             },

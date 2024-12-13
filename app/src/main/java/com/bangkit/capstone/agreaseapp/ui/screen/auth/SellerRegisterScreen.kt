@@ -346,7 +346,7 @@ fun SellerRegisterScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                         Button(
                             onClick = {
-//                                if (register != "Loading...") viewModel.register( email, password, confirm_password, displayName, phone, address, "seller")
+                                if (register != "Loading...") viewModel.register( email, password, confirm_password, displayName, phone, address, "seller")
 
                             },
                             colors = ButtonDefaults.buttonColors(

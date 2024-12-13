@@ -355,7 +355,7 @@ object DummyDataSource {
         ),
         CategoryModel(
             3,
-            "Sarana dan PeralatanIrigasi",
+            "Sarana dan Peralatan Irigasi",
         ),
         CategoryModel(
             4,
