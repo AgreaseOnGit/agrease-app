@@ -32,7 +32,7 @@ class UserRepository(
         }
 
         login.body()?.let {
-            saveUser(it.data.uid, it.data.email, it.data.nama, it.data.phone, it.data.address, it.data.role, if(it.data.imageUrl == "https://storage.cloud.google.com/agrease-capstone-17/user-profile-images/profile-image.jpg") "https://freeimghost.net/images/2024/12/10/man53661f0ddd4d0648.md.png" else it.data.imageUrl, it.data.isVerified)
+            saveUser(it.data.uid, it.data.email, it.data.nama, it.data.phone, it.data.address, it.data.role, it.data.imageUrl, it.data.isVerified)
             emit(it)
         }
     }.catch { e ->
